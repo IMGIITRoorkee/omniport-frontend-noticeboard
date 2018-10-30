@@ -7,7 +7,7 @@
     align: center;
 }
 
-.notice-list-container {
+.notice-list {
     margin-top: 60px;
 }
 
@@ -61,6 +61,6 @@
 }
 
 .cell-width-2 {
-    width: 10.5%;
+    width: 9.5%;
     text-align: center;
 }

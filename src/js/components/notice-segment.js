@@ -1,38 +1,49 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Table, Container, Button } from 'semantic-ui-react'
 import Notice from './notice';
 import Pagination from "./pagination";
-import "../../css/notice.css"
+import "../../css/notice.css";
+import { connect } from "react-redux";
 
-export default class NoticeListView extends Component {
-    render() {
+
+const NoticeListView = (props) => {
+    const {notices} = props;
+
+    const notice_list = notices.map(notice_info => {
+        const {id, time, date, banner, title} = notice_info;
+
+        console.log(notice_info);
         return (
-                <div className='notice-list-container'>
-                    {/* Select all button */}
-                    <Container className='select-all-container'>
-                        <Button basic content='Select all' icon='square outline' labelPosition='left' />
-                    </Container>
+            <Notice key={id}
+                    time={time}
+                    date={date}
+                    banner={banner}
+                    title={title}/>
+        );
+    });
 
-                    {/* Notice Table */}
-                    <Container>
-                        <Table basic compact>
-                            <Table.Body>
-                                <Notice/>
-                                <Notice/>
-                                <Notice/>
-                                <Notice/>
-                                <Notice/>
-                                <Notice/>
-                                <Notice/>
-                                <Notice/>
-                                <Notice/>
-                                <Notice/>
-                            </Table.Body>
-                        </Table>
-                    </Container>
 
-                    <Pagination/>
-                </div>
-        )
-    }
-}
+    return (
+        <div className='notice-list'>
+            {/* Select all button */}
+            <Container className='select-all-container'>
+                <Button basic content='Select all' icon='square outline' labelPosition='left' />
+            </Container>
+
+            {/* Notice Table */}
+            <Container>
+                <Table basic compact>
+                    <Table.Body>
+                        <div className="notice-list-container">
+                            {notice_list}
+                        </div>
+                    </Table.Body>
+                </Table>
+            </Container>
+
+            <Pagination/>
+        </div>
+    );
+};
+
+export default NoticeListView;

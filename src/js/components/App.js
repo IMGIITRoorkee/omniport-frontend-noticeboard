@@ -10,6 +10,18 @@ import { Route} from "react-router-dom";
 
 export default class App extends Component {
     render () {
+
+        const notices = [
+            {id : 1, title: "Unit Info", time: "8:00 PM", date: "today", banner: "DOSW"},
+            {id : 2, title: "Schedule of company", time: "7:30 PM", date: "Sept 18", banner: "Placement office"},
+            {id : 3, title: "Guest Lecture on Plasma", time: "11:00 AM", date: "Oct 19", banner: "Physics"},
+            {id : 4, title: "Blood donation camp", time: "8:00 PM", date: "Yesterday", banner: "NSS"},
+            {id : 5, title: "Unit Info", time: "8:00 PM", date: "today", banner: "Academic Section"},
+            {id : 6, title: "Call for interviews", time: "8:00 PM", date: "today", banner: "Dean SRIC"},
+            {id : 7, title: "Scholarship openings", time: "8:00 PM", date: "today", banner: "Scholarship"},
+
+        ];
+
       return (
           <div className="App">
               <div className="App-header">
@@ -17,7 +29,9 @@ export default class App extends Component {
               </div>
               <div className='notice-container'>
                   <TabList/>
-                  <Route exact path="/" component={NoticeListView} />
+                  <Route exact path="/"
+                         render={(props) => <NoticeListView {...props} notices={notices} />}
+                   />
                   <Route exact path="/notice" component={NoticeView} />
               </div>
           </div>
