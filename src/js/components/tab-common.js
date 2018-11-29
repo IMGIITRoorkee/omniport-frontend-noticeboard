@@ -6,7 +6,7 @@ export default class TabCommonElements extends Component {
     render () {
         return (
             <div className='tab-common-elements'>
-                <Search className='search-bar'></Search>
+                <Search className='search-bar'/>
 
                 <Button basic className='tab-button'>Bookmarks</Button>
                 <Button basic className='tab-button'>Home</Button>

@@ -11,6 +11,28 @@
     margin-top: 60px;
 }
 
+.notice-list-view {
+    min-height: 350px;
+}
+
+.notice-box {
+    margin-top: 70px;
+}
+
+.notice-posted-by {
+    margin-bottom: 5px;
+}
+
+.notice-box-header {
+    margin-bottom: 30px !important;
+    text-align: center;
+}
+
+.notice-view-container {
+    padding: 2em 5em 3em 5em;
+    min-height: 350px;
+}
+
 .select-all-container {
     padding-bottom: 10px;
 }
@@ -48,6 +70,10 @@
 
 .tab-button {
     box-shadow: none !important;
+}
+
+.tab-single-button {
+    margin-left: 45px !important;
 }
 
 .tab-list {

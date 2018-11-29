@@ -12,7 +12,6 @@ const NoticeListView = (props) => {
     const notice_list = notices.map(notice_info => {
         const {id, time, date, banner, title} = notice_info;
 
-        console.log(notice_info);
         return (
             <Notice key={id}
                     time={time}
@@ -31,12 +30,10 @@ const NoticeListView = (props) => {
             </Container>
 
             {/* Notice Table */}
-            <Container>
+            <Container className='notice-list-view'>
                 <Table basic compact>
                     <Table.Body>
-                        <div className="notice-list-container">
-                            {notice_list}
-                        </div>
+                        {notice_list}
                     </Table.Body>
                 </Table>
             </Container>

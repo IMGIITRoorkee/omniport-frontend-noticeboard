@@ -5,10 +5,10 @@ import { Header } from "semantic-ui-react";
 import "semantic-ui-css/semantic.css";
 import TabList from "./tab-list";
 import "../../css/notice.css";
-import { Route} from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
 
 
-export default class App extends Component {
+class App extends Component {
     render () {
 
         const notices = [
@@ -19,7 +19,9 @@ export default class App extends Component {
             {id : 5, title: "Unit Info", time: "8:00 PM", date: "today", banner: "Academic Section"},
             {id : 6, title: "Call for interviews", time: "8:00 PM", date: "today", banner: "Dean SRIC"},
             {id : 7, title: "Scholarship openings", time: "8:00 PM", date: "today", banner: "Scholarship"},
-
+            {id : 8, title: "Scholarship openings", time: "8:00 PM", date: "today", banner: "Scholarship"},
+            {id : 9, title: "Scholarship", time: "4:00 PM", date: "today", banner: "Department"},
+            {id : 10, title: "Scholarship openings", time: "8:00 PM", date: "today", banner: "Scholarship"},
         ];
 
       return (
@@ -27,6 +29,7 @@ export default class App extends Component {
               <div className="App-header">
                   <Header as="h1" textAlign='center' block>NoticeBoard</Header>
               </div>
+
               <div className='notice-container'>
                   <TabList/>
                   <Route exact path="/"
@@ -38,3 +41,5 @@ export default class App extends Component {
       );
     }
 }
+
+export default withRouter(App);
