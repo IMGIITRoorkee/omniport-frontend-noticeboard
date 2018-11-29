@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Button } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 import "../../css/notice.css";
 import TabCommonElements from "./tab-common";
 import DropdownView from "./dropdowns";

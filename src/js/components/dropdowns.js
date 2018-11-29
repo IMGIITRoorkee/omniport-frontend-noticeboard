@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Dropdown } from 'semantic-ui-react';
 import "../../css/notice.css";
+import 'rc-calendar/assets/index.css';
 
 export default class DropdownView extends Component {
     render () {
@@ -12,6 +13,7 @@ export default class DropdownView extends Component {
                         <Dropdown.Item text='Authorities' />
                         <Dropdown.Item text='Departments' />
                         <Dropdown.Item text='Placement Office' />
+                        <Dropdown.Divider />
                         <Dropdown.Item text='Expired' />
                     </Dropdown.Menu>
                 </Dropdown>

@@ -6,8 +6,11 @@ import "../../css/notice.css";
 import { connect } from "react-redux";
 
 
-const NoticeListView = (props) => {
-    const {notices} = props;
+const mapStateToProps = state => {
+  return { notices: state.notices };
+};
+
+const NoticeListView = ({notices}) => {
 
     const notice_list = notices.map(notice_info => {
         const {id, time, date, banner, title} = notice_info;
@@ -43,4 +46,4 @@ const NoticeListView = (props) => {
     );
 };
 
-export default NoticeListView;
+export default connect(mapStateToProps)(NoticeListView);
