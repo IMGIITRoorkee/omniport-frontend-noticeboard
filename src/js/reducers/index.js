@@ -1,7 +1,7 @@
-import { ADD_NOTICE } from "../constants/action-types";
+import {GET_NOTICES, REQUEST_NOTICES} from "../constants/action-types";
+import { combineReducers } from 'redux'
 
-const initialState = {
-   notices: [
+const sample_notices = [
             {id : 1, title: "Unit Info", time: "8:00 PM", date: "today", banner: "DOSW"},
             {id : 2, title: "Schedule of company", time: "7:30 PM", date: "Sept 18", banner: "Placement office"},
             {id : 3, title: "Guest Lecture on Plasma", time: "11:00 AM", date: "Oct 19", banner: "Physics"},
@@ -12,16 +12,28 @@ const initialState = {
             {id : 8, title: "Scholarship openings", time: "8:00 PM", date: "today", banner: "Scholarship"},
             {id : 9, title: "Scholarship", time: "4:00 PM", date: "today", banner: "Department"},
             {id : 10, title: "Scholarship openings", time: "8:00 PM", date: "today", banner: "Scholarship"},
-   ]
+];
+
+const initialState = {
+    page: 1,
+    notices: sample_notices,
+    is_fetching_notices: true,
 };
 
-const rootReducer = (state = initialState, action) => {
+function GetNoticeReducer(state = 'reactjs', action) {
+
   switch (action.type) {
-    case ADD_NOTICE:
-      return { ...state, notices: [...state.notices, action.payload] };
-    default:
-      return state;
+      case GET_NOTICES:
+          return { notices: sample_notices, is_fetching_notices: false, page: action.payload.page };
+      case REQUEST_NOTICES:
+          return {is_fetching_notices: true, notices: sample_notices};
+      default:
+          return initialState;
   }
-};
+}
+
+const rootReducer = combineReducers({
+    GetNotice : GetNoticeReducer
+});
 
 export default rootReducer;

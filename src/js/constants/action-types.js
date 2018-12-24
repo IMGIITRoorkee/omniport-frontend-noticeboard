@@ -1,1 +1,2 @@
-export const ADD_NOTICE = "ADD_NOTICE";
+export const GET_NOTICES="GET_NOTICES";
+export const REQUEST_NOTICES="REQUEST_NOTICES";

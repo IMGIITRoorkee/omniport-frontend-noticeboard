@@ -12,7 +12,18 @@
 }
 
 .notice-list-view {
-    min-height: 350px;
+    min-height: 342px;
+}
+
+.notice-list-loading {
+    border: 1px solid rgba(34, 36, 38, 0.15);
+    border-radius: 0.28571429rem;
+    background: #f4f4f4;
+}
+
+.loader-element {
+    margin: 160px auto auto auto !important;
+    position: inherit !important;
 }
 
 .notice-box {

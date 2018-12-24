@@ -9,7 +9,7 @@ export default class NoticeView extends Component {
         return <Container className="notice-box">
 
             <Segment.Group raised>
-                <Segment as='h5'>Subject:  Schedule for interview</Segment>
+                <Segment as='h5'>Subject:  Schedule for interview </Segment>
 
                 <Segment>
                     <p className="notice-posted-by">Posted by:  Placement Office</p>

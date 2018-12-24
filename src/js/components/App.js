@@ -1,14 +1,34 @@
 import React, { Component } from 'react';
 import NoticeListView from "./notice-segment";
 import NoticeView from "./notice-view"
-import { Header } from "semantic-ui-react";
+import { Header, Loader } from "semantic-ui-react";
 import "semantic-ui-css/semantic.css";
 import TabList from "./tab-list";
 import "../../css/notice.css";
 import { Route, withRouter } from "react-router-dom";
+import {connect} from "react-redux";
+import GetNotices from "../actions";
+
+
+const mapStateToProps = state => {
+    return { notices: state };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    GetNotices: () => {
+      dispatch(GetNotices(1))
+    }
+  }
+};
 
 
 class App extends Component {
+
+    componentDidMount () {
+        this.props.GetNotices();
+    }
+
     render () {
 
       return (
@@ -29,4 +49,4 @@ class App extends Component {
     }
 }
 
-export default withRouter(App);
+export default connect(mapStateToProps, mapDispatchToProps) (withRouter(App));
