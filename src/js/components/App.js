@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import NoticeListView from "./notice-segment";
 import NoticeView from "./notice-view"
-import { Header, Loader } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 import "semantic-ui-css/semantic.css";
 import TabList from "./tab-list";
 import "../../css/notice.css";
 import { Route, withRouter } from "react-router-dom";
 import {connect} from "react-redux";
 import GetNotices from "../actions";
+import {initial_page} from "../constants/constants";
 
 
 const mapStateToProps = state => {
@@ -15,9 +16,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
+
   return {
-    GetNotices: () => {
-      dispatch(GetNotices(1))
+    GetNotices: (page) => {
+      dispatch(GetNotices(page))
     }
   }
 };
@@ -26,8 +28,10 @@ const mapDispatchToProps = dispatch => {
 class App extends Component {
 
     componentDidMount () {
-        this.props.GetNotices();
+        this.props.GetNotices(initial_page);
     }
+
+    handlePaginationChange = (e, { activePage }) => this.setState({ activePage });
 
     render () {
 
@@ -40,6 +44,7 @@ class App extends Component {
               <div className='notice-container'>
                   <TabList/>
                   <Route exact path="/"
+                         method={this.handlePaginationChange}
                          render={(props) => <NoticeListView {...props}/>}
                    />
                   <Route exact path="/notice" component={NoticeView} />

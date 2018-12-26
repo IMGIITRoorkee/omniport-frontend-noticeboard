@@ -1,27 +1,42 @@
 import React from 'react';
-import { Table, Container, Button, Loader } from 'semantic-ui-react'
+import { Table, Container, Button, Loader, Pagination } from 'semantic-ui-react'
 import Notice from './notice';
-import Pagination from "./pagination";
 import "../../css/notice.css";
 import { connect } from "react-redux";
+import {initial_page} from "../constants/constants";
+import GetNotices from "../actions";
 
 
 const mapStateToProps = state => {
 
+    console.log(state);
     if (!state.GetNotice.is_fetching_notices) {
         return {
             notices: state.GetNotice.notices,
+            total_pages: state.GetNotice.total_pages,
             is_fetching_notices: state.GetNotice.is_fetching_notices,
         };
     } else {
         return {
             is_fetching_notices: state.GetNotice.is_fetching_notices,
+            total_pages: state.GetNotice.total_pages,
         };
     }
 };
 
-const NoticeListView = ({notices, is_fetching_notices}) => {
+const mapDispatchToProps = dispatch => {
+  return {
+    GetNotices: (page) => {
+      dispatch(GetNotices(page))
+    }
+  }
+};
+
+
+
+const NoticeListView = ({notices, total_pages, is_fetching_notices, GetNotices}) => {
     var notice_list;
+    var active_page = 1;
 
     if (!is_fetching_notices) {
         notice_list = notices.map(notice_info => {
@@ -38,6 +53,11 @@ const NoticeListView = ({notices, is_fetching_notices}) => {
     } else {
         notice_list = [];
     }
+
+    const handlePaginationChange = (e, { activePage }) => {
+        active_page = activePage;
+        GetNotices(active_page);
+    };
 
 
     return (
@@ -61,9 +81,15 @@ const NoticeListView = ({notices, is_fetching_notices}) => {
                 </Container>
             )}
 
-            <Pagination/>
+            <Container className='pagination'>
+                 <Pagination totalPages={total_pages}
+                             firstItem={null}
+                             onPageChange={handlePaginationChange}
+                             defaultActivePage={active_page}
+                             lastItem={null} />
+            </Container>
         </div>
     );
 };
 
-export default connect(mapStateToProps) (NoticeListView);
+export default connect(mapStateToProps, mapDispatchToProps) (NoticeListView);

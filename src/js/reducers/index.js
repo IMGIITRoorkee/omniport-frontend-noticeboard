@@ -16,17 +16,22 @@ const sample_notices = [
 
 const initialState = {
     page: 1,
-    notices: sample_notices,
     is_fetching_notices: true,
+    total_pages: 1,
 };
 
 function GetNoticeReducer(state = 'reactjs', action) {
 
   switch (action.type) {
       case GET_NOTICES:
-          return { notices: sample_notices, is_fetching_notices: false, page: action.payload.page };
+          return {
+              notices: sample_notices,
+              is_fetching_notices: false,
+              page: action.payload.page,
+              total_pages: 30
+          };
       case REQUEST_NOTICES:
-          return {is_fetching_notices: true, notices: sample_notices};
+          return {is_fetching_notices: true, total_pages: 30};
       default:
           return initialState;
   }

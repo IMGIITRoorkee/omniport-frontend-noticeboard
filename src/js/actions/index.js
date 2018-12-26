@@ -11,13 +11,14 @@ function requestNotices(page) {
 }
 
 
-function receiveNotices(page, notices) {
+function receiveNotices(page, notice_data) {
 
   return {
     type: GET_NOTICES,
     payload: {
-        notices: notices,
-        page: page
+        notices: notice_data.data,
+        total_pages: notice_data.total_pages,
+        page: page,
     }
   }
 }
@@ -27,6 +28,6 @@ export default function GetNotices(page) {
     dispatch(requestNotices(page));
     return fetch(`https://reqres.in/api/users?page=${page}`)
       .then(response => response.json())
-      .then(json => dispatch(receiveNotices(page, json.data)))
+      .then(json => dispatch(receiveNotices(page, json)))
   }
 }
