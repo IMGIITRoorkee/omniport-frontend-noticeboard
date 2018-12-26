@@ -97,7 +97,12 @@
     border-right: 1px solid rgba(34, 36, 38, 0.1);
 }
 
+
 .cell-width-2 {
     width: 9.5%;
     text-align: center;
+}
+
+.cell-hover {
+    cursor: pointer;
 }

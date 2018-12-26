@@ -14,14 +14,15 @@ const sample_notices = [
             {id : 10, title: "Scholarship openings", time: "8:00 PM", date: "today", banner: "Scholarship"},
 ];
 
+const sample_notice = {id: 1, title: "Unit Info", time: "8:00 PM", date: "today", banner: "DOSW"};
+
 const initialState = {
     page: 1,
     is_fetching_notices: true,
     total_pages: 1,
 };
 
-function GetNoticeReducer(state = 'reactjs', action) {
-
+function GetNoticesReducer(state = 'reactjs', action) {
   switch (action.type) {
       case GET_NOTICES:
           return {
@@ -37,8 +38,21 @@ function GetNoticeReducer(state = 'reactjs', action) {
   }
 }
 
+function GetNoticeReducer(state='reactjs', action) {
+  console.log(action);
+  switch (action.type) {
+      case GET_NOTICES:
+          return {
+              notice: sample_notice
+          };
+      default:
+          return initialState;
+  }
+}
+
 const rootReducer = combineReducers({
-    GetNotice : GetNoticeReducer
+    GetNotices : GetNoticesReducer,
+    GetNotice: GetNoticeReducer
 });
 
 export default rootReducer;

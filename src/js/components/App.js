@@ -7,7 +7,8 @@ import TabList from "./tab-list";
 import "../../css/notice.css";
 import { Route, withRouter } from "react-router-dom";
 import {connect} from "react-redux";
-import GetNotices from "../actions";
+import GetNotices from "../actions/get_notices";
+import GetNotice from "../actions/get_notice"
 import {initial_page} from "../constants/constants";
 
 
@@ -20,15 +21,33 @@ const mapDispatchToProps = dispatch => {
   return {
     GetNotices: (page) => {
       dispatch(GetNotices(page))
-    }
+    },
+    GetNotice: (notice_id) => {
+      dispatch(GetNotice(notice_id))
+    },
   }
+};
+
+const get_id_from_notice_url = (url) => {
+    let id = +url.split('/')[2];
+    return id;
 };
 
 
 class App extends Component {
 
     componentDidMount () {
-        this.props.GetNotices(initial_page);
+        if (this.props.location.pathname.startsWith('/notice/')) {
+            let id = get_id_from_notice_url(this.props.location.pathname);
+            console.log(id);
+            this.props.GetNotice(id);
+        } else {
+            this.props.GetNotices(initial_page);
+        }
+
+        this.unlisten = this.props.history.listen((location, action) => {
+            console.log(location, action);
+        });
     }
 
     handlePaginationChange = (e, { activePage }) => this.setState({ activePage });
@@ -45,9 +64,9 @@ class App extends Component {
                   <TabList/>
                   <Route exact path="/"
                          method={this.handlePaginationChange}
-                         render={(props) => <NoticeListView {...props}/>}
+                         render={(props) => <NoticeListView {...props} history={this.props.history}/>}
                    />
-                  <Route exact path="/notice" component={NoticeView} />
+                  <Route path="/notice" component={NoticeView} />
               </div>
           </div>
       );

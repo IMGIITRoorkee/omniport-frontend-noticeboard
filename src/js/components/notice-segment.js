@@ -9,16 +9,16 @@ import GetNotices from "../actions";
 
 const mapStateToProps = state => {
 
-    if (!state.GetNotice.is_fetching_notices) {
+    if (!state.GetNotices.is_fetching_notices) {
         return {
-            notices: state.GetNotice.notices,
-            total_pages: state.GetNotice.total_pages,
-            is_fetching_notices: state.GetNotice.is_fetching_notices,
+            notices: state.GetNotices.notices,
+            total_pages: state.GetNotices.total_pages,
+            is_fetching_notices: state.GetNotices.is_fetching_notices,
         };
     } else {
         return {
-            is_fetching_notices: state.GetNotice.is_fetching_notices,
-            total_pages: state.GetNotice.total_pages,
+            is_fetching_notices: state.GetNotices.is_fetching_notices,
+            total_pages: state.GetNotices.total_pages,
         };
     }
 };
@@ -33,20 +33,23 @@ const mapDispatchToProps = dispatch => {
 
 
 
-const NoticeListView = ({notices, total_pages, is_fetching_notices, GetNotices}) => {
-    var notice_list;
-    var active_page = 1;
+const NoticeListView = ({history, notices, total_pages, is_fetching_notices, GetNotices}) => {
+    let notice_list;
+    let active_page = initial_page;
 
     if (!is_fetching_notices) {
+
         notice_list = notices.map(notice_info => {
             const {id, time, date, banner, title} = notice_info;
 
             return (
                 <Notice key={id}
+                        id={id}
                         time={time}
                         date={date}
                         banner={banner}
-                        title={title}/>
+                        title={title}
+                        history={history}/>
             );
         });
     } else {

@@ -5,6 +5,8 @@ import { Editor } from '@tinymce/tinymce-react';
 
 
 export default class NoticeView extends Component {
+
+
     render () {
         return <Container className="notice-box">
 

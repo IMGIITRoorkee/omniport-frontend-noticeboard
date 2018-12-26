@@ -10,7 +10,7 @@ export default class TabList extends Component {
     render () {
         return (
             <Container className='tab-list'>
-                <Route exact path="/notice" component={AllNoticesLink}/>
+                <Route path="/notice" component={AllNoticesLink}/>
                 <Route exact path="/" component={DropdownView}/>
                 <TabCommonElements/>
             </Container>

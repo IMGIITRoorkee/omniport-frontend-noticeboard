@@ -1,2 +1,4 @@
 export const GET_NOTICES="GET_NOTICES";
 export const REQUEST_NOTICES="REQUEST_NOTICES";
+export const GET_NOTICE="GET_NOTICE";
+export const REQUEST_NOTICE="REQUEST_NOTICE";
