@@ -9,7 +9,6 @@ import GetNotices from "../actions";
 
 const mapStateToProps = state => {
 
-    console.log(state);
     if (!state.GetNotice.is_fetching_notices) {
         return {
             notices: state.GetNotice.notices,
