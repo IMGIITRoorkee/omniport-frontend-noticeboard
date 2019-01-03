@@ -2,6 +2,8 @@ import React from 'react';
 import { Icon, Table } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import BookmarkNotice from "../actions/bookmark";
+import Moment from 'react-moment';
+
 
 const mapStateToProps = state => {
     return state;
@@ -15,9 +17,7 @@ const mapDispatchToProps = dispatch => {
   }
 };
 
-const Notice = ({id, time, date, banner, title, history, read, bookmark, BookmarkNotice}) => {
-
-    const notice_info = {id, time, date, banner, title, read, bookmark};
+const Notice = ({id, date, banner, title, history, read, bookmark, BookmarkNotice}) => {
 
     const OpenNotice = (e) => {
         history.push('/notice/'+id);
@@ -33,20 +33,20 @@ const Notice = ({id, time, date, banner, title, history, read, bookmark, Bookmar
                 <Icon name='square outline'/>
             </Table.Cell>
             <Table.Cell className='cell-width-1' onClick={bookmarkNotice}>
-                {bookmark ? (
+                {!bookmark ? (
                     <Icon name='bookmark outline'/>
                 ) : (
                     <Icon name='bookmark'/>
                 )}
             </Table.Cell>
             <Table.Cell className='cell-width-2 cell-hover'>
-                {time}
+                <Moment format="MMM Do">{date}</Moment>
             </Table.Cell>
             <Table.Cell width={2} onClick={OpenNotice} className='cell-hover'>
-                {date}
+                <Moment format="LT">{date}</Moment>
             </Table.Cell>
             <Table.Cell width={3} onClick={OpenNotice} className='cell-hover'>
-                {banner}
+                {banner.name}
             </Table.Cell>
             <Table.Cell collapsing onClick={OpenNotice} className='cell-hover'>
                 {title}

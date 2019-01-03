@@ -4,6 +4,9 @@ import "../../css/notice.css";
 import { Editor } from '@tinymce/tinymce-react';
 import { connect } from "react-redux";
 import GetNotice from "../actions/get_notice";
+import Moment from 'react-moment';
+import renderHTML from 'react-render-html';
+
 
 
 const mapStateToProps = state => {
@@ -37,15 +40,16 @@ class NoticeView extends Component {
                         <Segment as='h5'>Subject: {notice.title} </Segment>
 
                         <Segment>
-                            <p className="notice-posted-by">Posted by: {notice.banner}</p>
-                            <p>Posted on: {notice.date} {notice.time}</p>
+                            <p className="notice-posted-by">Posted by: {notice.banner.name}</p>
+                            <p>Posted on: <Moment format="MMMM Do YYYY, h:mm:ss a">{notice.datetimeModified}</Moment>
+                            </p>
                         </Segment>
 
                         <Divider fitted/>
 
                         <Container textAlign='justified' className="notice-view-container">
                             <Header as='h2' className='notice-box-header'>{notice.title}</Header>
-                            <p>{notice.content}</p>
+                            {renderHTML(notice.content)}
                         </Container>
                     </Segment.Group>
                     </Container>

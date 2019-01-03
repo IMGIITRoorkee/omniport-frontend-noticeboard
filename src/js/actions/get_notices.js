@@ -1,4 +1,4 @@
-import { GET_NOTICES, REQUEST_NOTICES, GET_NOTICE, REQUEST_NOTICE } from "../constants/action-types";
+import { GET_NOTICES, REQUEST_NOTICES } from "../constants/action-types";
 
 function requestNotices(page) {
     return {
@@ -14,8 +14,8 @@ function receiveNotices(page, notice_data_list) {
   return {
     type: GET_NOTICES,
     payload: {
-        notices: notice_data_list.data,
-        total_pages: notice_data_list.total_pages,
+        notices: notice_data_list.results,
+        total_pages: Math.floor(notice_data_list.count/10)+1,
         page: page,
     }
   }
@@ -24,7 +24,7 @@ function receiveNotices(page, notice_data_list) {
 export default function GetNotices(page) {
   return (dispatch) => {
     dispatch(requestNotices(page));
-    return fetch(`https://reqres.in/api/users?page=${page}`)
+    return fetch(`http://192.168.121.228:60031/noticeboard/new/?page=${page}`)
       .then(response => response.json())
       .then(json => dispatch(receiveNotices(page, json)))
   }

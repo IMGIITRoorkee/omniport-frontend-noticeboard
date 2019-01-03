@@ -11,12 +11,10 @@ function requestNotice(notice_id) {
 }
 
 function receiveNotice(notice_data) {
-
-  console.log(notice_data);
   return {
     type: GET_NOTICE,
     payload: {
-        notice: notice_data.data
+        notice: notice_data
     }
   }
 }
@@ -24,7 +22,7 @@ function receiveNotice(notice_data) {
 export default function GetNotice(notice_id) {
   return (dispatch) => {
     dispatch(requestNotice(notice_id));
-    return fetch(`https://reqres.in/api/user/${notice_id}`)
+    return fetch(`http://192.168.121.228:60031/noticeboard/new/${notice_id}/`)
       .then(response => response.json())
       .then(json => dispatch(receiveNotice(json)))
   }

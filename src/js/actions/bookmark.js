@@ -12,4 +12,4 @@ export default function BookmarkNotice(notice_id, bookmark) {
         bookmark: bookmark
     }
   }
-}
+};

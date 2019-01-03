@@ -36,21 +36,21 @@ const mapDispatchToProps = dispatch => {
 const NoticeListView = ({history, notices, total_pages, is_fetching_notices, GetNotices}) => {
     let notice_list;
     let active_page = initial_page;
+    console.log(notices);
 
     if (!is_fetching_notices) {
 
         notice_list = notices.map(notice_info => {
-            const {id, time, date, banner, title, read, bookmark} = notice_info;
+            const {id, banner, datetimeModified, title, read, starred} = notice_info;
 
             return (
                 <Notice key={id}
                         id={id}
-                        time={time}
-                        date={date}
+                        date={datetimeModified}
                         banner={banner}
                         title={title}
                         read={read}
-                        bookmark={bookmark}
+                        bookmark={starred}
                         history={history}/>
             );
         });
