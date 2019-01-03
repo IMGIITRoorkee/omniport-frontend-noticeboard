@@ -44,6 +44,13 @@
     min-height: 350px;
 }
 
+.notice-view-loading {
+    background: transparent;
+    border-radius: 5px;
+    border: 1px solid rgba(34, 36, 38, 0.15);
+    max-height: 830px !important;
+}
+
 .select-all-container {
     padding-bottom: 10px;
 }
@@ -89,6 +96,10 @@
 
 .tab-list {
     line-height: 2em !important;
+}
+
+.notice-row-read {
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .cell-width-1 {

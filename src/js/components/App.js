@@ -39,14 +39,18 @@ class App extends Component {
     componentDidMount () {
         if (this.props.location.pathname.startsWith('/notice/')) {
             let id = get_id_from_notice_url(this.props.location.pathname);
-            console.log(id);
             this.props.GetNotice(id);
         } else {
             this.props.GetNotices(initial_page);
         }
 
         this.unlisten = this.props.history.listen((location, action) => {
-            console.log(location, action);
+            if (location.pathname.startsWith('/notice/')) {
+                let id = get_id_from_notice_url(location.pathname);
+                this.props.GetNotice(id);
+            } else {
+                this.props.GetNotices(initial_page);
+            }
         });
     }
 

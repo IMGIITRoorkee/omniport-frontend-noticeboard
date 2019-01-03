@@ -4,7 +4,7 @@ import Notice from './notice';
 import "../../css/notice.css";
 import { connect } from "react-redux";
 import {initial_page} from "../constants/constants";
-import GetNotices from "../actions";
+import GetNotices from "../actions/get_notices"
 
 
 const mapStateToProps = state => {
@@ -40,7 +40,7 @@ const NoticeListView = ({history, notices, total_pages, is_fetching_notices, Get
     if (!is_fetching_notices) {
 
         notice_list = notices.map(notice_info => {
-            const {id, time, date, banner, title} = notice_info;
+            const {id, time, date, banner, title, read, bookmark} = notice_info;
 
             return (
                 <Notice key={id}
@@ -49,6 +49,8 @@ const NoticeListView = ({history, notices, total_pages, is_fetching_notices, Get
                         date={date}
                         banner={banner}
                         title={title}
+                        read={read}
+                        bookmark={bookmark}
                         history={history}/>
             );
         });
