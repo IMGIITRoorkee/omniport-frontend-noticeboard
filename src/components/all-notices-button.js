@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
 import notice_css from "../css/notice.css";
 import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+
+const mapStateToProps = state => {
+
+    console.log(state);
+};
 
 class AllNoticesLink extends Component {
     render () {

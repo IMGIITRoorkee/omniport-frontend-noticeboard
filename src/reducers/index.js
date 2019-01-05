@@ -1,4 +1,10 @@
-import {GET_NOTICES, REQUEST_NOTICES, GET_NOTICE, REQUEST_NOTICE, BOOKMARK_NOTICE} from "../constants/action-types";
+import {
+    GET_NOTICES,
+    REQUEST_NOTICES,
+    GET_NOTICE,
+    REQUEST_NOTICE,
+    BOOKMARK_NOTICE
+} from "../constants/action-types";
 import { combineReducers } from 'redux'
 
 
@@ -9,6 +15,7 @@ const initialState = {
     total_pages: 0,
     notices: [],
     search_keyword: null,
+    isLoaded: false,
 };
 
 function GetNoticesReducer(state = initialState, action) {
@@ -66,7 +73,7 @@ function BookmarkReducer(state=initialState, action) {
 const rootReducer = combineReducers({
     GetNotices : GetNoticesReducer,
     GetNotice: GetNoticeReducer,
-    BookmarkNotice: BookmarkReducer
+    BookmarkNotice: BookmarkReducer,
 });
 
 export default rootReducer;
