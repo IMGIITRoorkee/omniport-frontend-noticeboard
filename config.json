@@ -1,0 +1,8 @@
+{
+    "nomenclature": {
+        "name": "noticeboard",
+        "verboseName": "Noticeboard"
+    },
+    "baseUrl": "/noticeboard",
+    "source": "noticeboard/src/index"
+}
