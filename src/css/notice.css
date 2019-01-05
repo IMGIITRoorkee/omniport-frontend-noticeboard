@@ -71,6 +71,10 @@
     width: 320px !important;
 }
 
+.search-form {
+    display: inherit;
+}
+
 .tab-common-elements {
     display: inline;
 }

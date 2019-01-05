@@ -3,7 +3,6 @@ import { Container, Divider, Segment, Header, Loader } from 'semantic-ui-react';
 import "../../css/notice.css";
 import { Editor } from '@tinymce/tinymce-react';
 import { connect } from "react-redux";
-import GetNotice from "../actions/get_notice";
 import Moment from 'react-moment';
 import renderHTML from 'react-render-html';
 
@@ -26,7 +25,6 @@ const mapStateToProps = state => {
 
 
 class NoticeView extends Component {
-
 
     render () {
         const notice = this.props.notice;

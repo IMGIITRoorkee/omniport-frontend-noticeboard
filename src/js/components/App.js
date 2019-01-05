@@ -9,18 +9,18 @@ import { Route, withRouter } from "react-router-dom";
 import {connect} from "react-redux";
 import GetNotices from "../actions/get_notices";
 import GetNotice from "../actions/get_notice"
-import {initial_page} from "../constants/constants";
+import {initial_page, search_keyword} from "../constants/constants";
 
 
 const mapStateToProps = state => {
-    return { notices: state };
+    return { notices: state, search: state.GetNotices.search_keyword };
 };
 
 const mapDispatchToProps = dispatch => {
 
   return {
-    GetNotices: (page) => {
-      dispatch(GetNotices(page))
+    GetNotices: (page, search_keyword) => {
+      dispatch(GetNotices(page, search_keyword))
     },
     GetNotice: (notice_id) => {
       dispatch(GetNotice(notice_id))
@@ -41,15 +41,15 @@ class App extends Component {
             let id = get_id_from_notice_url(this.props.location.pathname);
             this.props.GetNotice(id);
         } else {
-            this.props.GetNotices(initial_page);
+            this.props.GetNotices(initial_page, search_keyword);
         }
 
-        this.unlisten = this.props.history.listen((location, action) => {
+        this.props.history.listen((location, action) => {
             if (location.pathname.startsWith('/notice/')) {
                 let id = get_id_from_notice_url(location.pathname);
                 this.props.GetNotice(id);
             } else {
-                this.props.GetNotices(initial_page);
+                this.props.GetNotices(initial_page, search_keyword);
             }
         });
     }
