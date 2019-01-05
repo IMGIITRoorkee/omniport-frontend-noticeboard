@@ -3,10 +3,21 @@ import { Button } from 'semantic-ui-react';
 import notice_css from "../css/notice.css";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import GetNotices from "../actions/get_notices";
+
 
 const mapStateToProps = state => {
+    return {
+        page: state.GetNotices.page,
+    }
+};
 
-    console.log(state);
+const mapDispatchToProps = dispatch => {
+  return {
+    GetNotices: (page, search_keyword) => {
+      dispatch(GetNotices(page, search_keyword))
+    }
+  }
 };
 
 class AllNoticesLink extends Component {
@@ -21,8 +32,8 @@ class AllNoticesLink extends Component {
     };
 
     all_notices(path) {
-      this.props.history.push(path);
+      this.props.history.push({pathname: path, state: {page: this.props.page}});
     }
 }
 
-export default withRouter(AllNoticesLink);
+export default withRouter(connect (mapStateToProps, mapDispatchToProps) (AllNoticesLink));
