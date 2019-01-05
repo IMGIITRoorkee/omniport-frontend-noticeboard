@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Container, Divider, Segment, Header, Loader } from 'semantic-ui-react';
-import "../../css/notice.css";
+import notice_css from "../css/notice.css";
 import { Editor } from '@tinymce/tinymce-react';
 import { connect } from "react-redux";
-import Moment from 'react-moment';
+import moment from 'moment';
 import renderHTML from 'react-render-html';
 
 
@@ -33,27 +33,27 @@ class NoticeView extends Component {
         return (
           <div>
                 {!is_fetching_notice ? (
-                    <Container className="notice-box">
+                    <Container styleName="notice_css.notice-box">
                     <Segment.Group raised>
                         <Segment as='h5'>Subject: {notice.title} </Segment>
 
                         <Segment>
-                            <p className="notice-posted-by">Posted by: {notice.banner.name}</p>
-                            <p>Posted on: <Moment format="MMMM Do YYYY, h:mm:ss a">{notice.datetimeModified}</Moment>
+                            <p styleName="notice_css.notice-posted-by">Posted by: {notice.banner.name}</p>
+                            <p>Posted on: {moment(notice.datetimeModified).format("MMMM Do YYYY, h:mm:ss a")}
                             </p>
                         </Segment>
 
                         <Divider fitted/>
 
-                        <Container textAlign='justified' className="notice-view-container">
-                            <Header as='h2' className='notice-box-header'>{notice.title}</Header>
+                        <Container textAlign='justified' styleName="notice_css.notice-view-container">
+                            <Header as='h2' styleName='notice_css.notice-box-header'>{notice.title}</Header>
                             {renderHTML(notice.content)}
                         </Container>
                     </Segment.Group>
                     </Container>
                 ) : (
-                    <Container className="notice-box notice-view-loading">
-                       <Loader active className='loader-element'/>
+                    <Container styleName="notice_css.notice-box notice_css.notice-view-loading">
+                       <Loader active styleName='notice_css.loader-element'/>
                     </Container>
                 )
              }

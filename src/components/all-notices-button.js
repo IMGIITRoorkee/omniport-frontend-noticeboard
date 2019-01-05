@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
-import "../../css/notice.css";
+import notice_css from "../css/notice.css";
 import { withRouter } from "react-router-dom";
 
 class AllNoticesLink extends Component {
     render () {
         return (
-            <div className='tab-common-elements'>
-                <Button basic className='tab-button tab-single-button'
-                        onClick={() => this.all_notices('/')}
+            <div styleName='notice_css.tab-common-elements'>
+                <Button basic styleName='notice_css.tab-button notice_css.tab-single-button'
+                        onClick={() => this.all_notices('/noticeboard/')}
                         icon='arrow left' content='All Notices'/>
             </div>
         )

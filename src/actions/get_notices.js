@@ -1,4 +1,8 @@
 import { GET_NOTICES, REQUEST_NOTICES } from "../constants/action-types";
+import { urlNotices, urlSearchNotices } from "../urls";
+import axios from 'axios'
+import { urlWhoAmI, urlGetMaintainers, getCookie } from 'formula_one'
+
 
 function requestNotices(page, search_keyword) {
     return {
@@ -25,13 +29,13 @@ function receiveNotices(page, notice_data_list, search_keyword) {
 
 export default function GetNotices(page, search_keyword) {
   return (dispatch) => {
-    dispatch(requestNotices(page));
+    dispatch(requestNotices(page, search_keyword));
     let url;
 
     if (search_keyword === undefined) {
-        url = `http://192.168.121.228:60031/noticeboard/new/?page=${page}`;
+        url = urlNotices(page);
     } else {
-        url = `http://192.168.121.228:60031/noticeboard/new/?page=${page}&keyword=${search_keyword}`;
+        url = urlSearchNotices(page, search_keyword);
     }
 
     return fetch(url)

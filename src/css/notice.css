@@ -79,10 +79,13 @@
     display: inline;
 }
 
-.pagination {
+.pagination-box {
     text-align: center;
     margin-top: 12px !important;
     min-height: 2px !important;
+}
+
+.pagination {
     font-size: 0.8rem !important;
 }
 

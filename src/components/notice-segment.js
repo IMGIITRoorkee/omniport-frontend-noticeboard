@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Container, Button, Loader, Pagination } from 'semantic-ui-react'
 import Notice from './notice';
-import "../../css/notice.css";
+import notice_css from "../css/notice.css";
 import { connect } from "react-redux";
 import GetNotices from "../actions/get_notices"
 
@@ -57,7 +57,6 @@ const NoticeListView = ({history, notices, total_pages, is_fetching_notices, Get
             );
         });
 
-        console.log(notice_list.length);
         if (notice_list.length === 0) {
             no_notices = true;
         } else {
@@ -72,24 +71,22 @@ const NoticeListView = ({history, notices, total_pages, is_fetching_notices, Get
         GetNotices(active_page, search_keyword);
     };
 
-    console.log(page);
-    console.log(no_notices);
 
     return (
 
-        <div className='notice-list'>
+        <div styleName='notice_css.notice-list'>
             {/* Select all button */}
-            <Container className='select-all-container'>
+            <Container styleName='notice_css.select-all-container'>
                 <Button basic content='Select all' icon='square outline' labelPosition='left' />
             </Container>
 
             {/* Notice Table */}
             {is_fetching_notices ? (
-                <Container className='notice-list-view notice-list-loading'>
-                    <Loader active className='loader-element'/>
+                <Container styleName='notice_css.notice-list-view notice_css.notice-list-loading'>
+                    <Loader active styleName='notice_css.loader-element'/>
                 </Container>
             ) : (
-                <Container className='notice-list-view'>
+                <Container styleName='notice_css.notice-list-view'>
                     {!no_notices ? (
                         <Table basic compact>
                             <Table.Body>{notice_list}</Table.Body>
@@ -100,12 +97,13 @@ const NoticeListView = ({history, notices, total_pages, is_fetching_notices, Get
                 </Container>
             )}
 
-            <Container className='pagination'>
-                 <Pagination totalPages={total_pages}
+            <Container styleName='notice_css.pagination-box'>
+                 <Pagination styleName='notice_css.pagination'
+                             totalPages={total_pages}
                              firstItem={null}
                              onPageChange={handlePaginationChange}
                              defaultActivePage={page}
-                             lastItem={null} />
+                             lastItem={null}/>
             </Container>
         </div>
     );

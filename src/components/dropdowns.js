@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Dropdown } from 'semantic-ui-react';
-import "../../css/notice.css";
+import notice_css from "../css/notice.css";
 import 'rc-calendar/assets/index.css';
 
 export default class DropdownView extends Component {
     render () {
         return (
-            <div className='tab-common-elements'>
-                <Dropdown text='All Notices' className='tab-dropdown'>
+            <div styleName='notice_css.tab-common-elements'>
+                <Dropdown text='All Notices' styleName='notice_css.tab-dropdown'>
                     <Dropdown.Menu>
                         <Dropdown.Item text='All Notices' />
                         <Dropdown.Item text='Authorities' />
@@ -18,7 +18,7 @@ export default class DropdownView extends Component {
                     </Dropdown.Menu>
                 </Dropdown>
 
-                 <Dropdown text='Date' className='tab-dropdown'>
+                 <Dropdown text='Date' styleName='notice_css.tab-dropdown'>
                 </Dropdown>
             </div>
         )

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Search, Button } from 'semantic-ui-react';
-import "../../css/notice.css";
+import notice_css from "../css/notice.css";
 import GetNotices from "../actions/get_notices";
 import { connect } from "react-redux";
 import {initial_page, search_keyword} from "../constants/constants";
@@ -45,16 +45,16 @@ class TabCommonElements extends Component {
     render () {
 
         return (
-            <div className='tab-common-elements'>
-                <Form onSubmit={this.handleSubmit} className='search-form'>
-                    <Search className='search-bar'
+            <div styleName='notice_css.tab-common-elements'>
+                <Form onSubmit={this.handleSubmit} styleName='notice_css.search-form'>
+                    <Search styleName='notice_css.search-bar'
                             onSearchChange={this.handleChange}
                             type='text'
                             value={this.state.value}/>
                 </Form>
 
-                <Button basic className='tab-button'>Bookmarks</Button>
-                <Button basic className='tab-button'>Home</Button>
+                <Button basic styleName='notice_css.tab-button'>Bookmarks</Button>
+                <Button basic styleName='notice_css.tab-button'>Home</Button>
             </div>
         )
     }

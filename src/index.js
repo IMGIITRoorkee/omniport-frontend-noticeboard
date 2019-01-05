@@ -1,15 +1,25 @@
-import React from 'react'
-import ReactDOM from 'react-dom';
-import { Provider } from "react-redux";
-import store from "./js/store/index";
-import App from './js/components/App';
-import { BrowserRouter } from 'react-router-dom';
+import React, { Component } from 'react'
+import { Route } from 'react-router-dom'
+import App from './components/app.js'
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
+import rootReducers from './reducers'
 
-ReactDOM.render(
-  <Provider store={store}>
-      <BrowserRouter>
-          <App />
-      </BrowserRouter>
-  </Provider>,
-  document.getElementById("root")
-);
+
+export default class AppRouter extends Component {
+    constructor (props) {
+        super(props);
+        this.store = createStore(rootReducers, applyMiddleware(thunk))
+    }
+
+    render () {
+        const { match } = this.props;
+        return (
+                <Provider store={this.store}>
+                <Route path={`${match.path}/`} component={App} />
+                </Provider>
+       )
+    }
+}
+

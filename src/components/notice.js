@@ -2,7 +2,10 @@ import React from 'react';
 import { Icon, Table } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import BookmarkNotice from "../actions/bookmark";
-import Moment from 'react-moment';
+import moment from 'moment';
+import notice_css from "../css/notice.css";
+import { Link } from 'react-router-dom'
+
 
 
 const mapStateToProps = state => {
@@ -20,7 +23,7 @@ const mapDispatchToProps = dispatch => {
 const Notice = ({id, date, banner, title, history, read, bookmark, BookmarkNotice}) => {
 
     const OpenNotice = (e) => {
-        history.push('/notice/'+id);
+        history.push('/noticeboard/notice/'+id);
     };
     const bookmarkNotice = (e) => {
         bookmark = !bookmark;
@@ -28,27 +31,27 @@ const Notice = ({id, date, banner, title, history, read, bookmark, BookmarkNotic
     };
 
     return (
-        <Table.Row className={read ? 'notice-row-read': ''} >
-            <Table.Cell className='cell-width-1'>
+        <Table.Row styleName={read ? 'notice_css.notice-row-read': ''} >
+            <Table.Cell styleName='notice_css.cell-width-1'>
                 <Icon name='square outline'/>
             </Table.Cell>
-            <Table.Cell className='cell-width-1' onClick={bookmarkNotice}>
+            <Table.Cell styleName='notice_css.cell-width-1' onClick={bookmarkNotice}>
                 {!bookmark ? (
                     <Icon name='bookmark outline'/>
                 ) : (
                     <Icon name='bookmark'/>
                 )}
             </Table.Cell>
-            <Table.Cell className='cell-width-2 cell-hover'>
-                <Moment format="MMM Do">{date}</Moment>
+            <Table.Cell styleName='notice_css.cell-width-2 notice_css.cell-hover'>
+                {moment(date).format("MMM Do")}
             </Table.Cell>
-            <Table.Cell width={2} onClick={OpenNotice} className='cell-hover'>
-                <Moment format="LT">{date}</Moment>
+            <Table.Cell width={2} onClick={OpenNotice} styleName='notice_css.cell-hover'>
+                {moment(date).format("LT")}
             </Table.Cell>
-            <Table.Cell width={3} onClick={OpenNotice} className='cell-hover'>
+            <Table.Cell width={3} onClick={OpenNotice} styleName='notice_css.cell-hover'>
                 {banner.name}
             </Table.Cell>
-            <Table.Cell collapsing onClick={OpenNotice} className='cell-hover'>
+            <Table.Cell collapsing onClick={OpenNotice} styleName='notice_css.cell-hover'>
                 {title}
             </Table.Cell>
         </Table.Row>
