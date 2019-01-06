@@ -12,7 +12,7 @@ export default class TabList extends Component {
             <Container styleName='notice_css.tab-list'>
                 <Route path="/noticeboard/notice" component={AllNoticesLink}/>
                 <Route exact path="/noticeboard/" component={DropdownView}/>
-                <TabCommonElements/>
+                <TabCommonElements history={this.props.history}/>
             </Container>
         )
     }

@@ -1,6 +1,5 @@
 import { GET_NOTICES, REQUEST_NOTICES } from "../constants/action-types";
 import { urlNotices, urlSearchNotices } from "../urls";
-import axios from 'axios'
 import { urlWhoAmI, urlGetMaintainers, getCookie } from 'formula_one'
 
 

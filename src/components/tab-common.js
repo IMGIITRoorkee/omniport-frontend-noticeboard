@@ -3,12 +3,10 @@ import { Form, Search, Button } from 'semantic-ui-react';
 import notice_css from "../css/notice.css";
 import GetNotices from "../actions/get_notices";
 import { connect } from "react-redux";
-import {initial_page, search_keyword} from "../constants/constants";
-
+import {initial_page} from "../constants/constants";
 
 
 const mapStateToProps = state => {
-    console.log(state);
     return {
         state: state,
     };
@@ -37,10 +35,12 @@ class TabCommonElements extends Component {
     }
 
     handleSubmit() {
-         console.log(this.state.value);
          this.props.GetNotices(initial_page, this.state.value);
     }
 
+    goHome(path) {
+      this.props.history.push({pathname: path, state: {page: initial_page}});
+    }
 
     render () {
 
@@ -54,7 +54,8 @@ class TabCommonElements extends Component {
                 </Form>
 
                 <Button basic styleName='notice_css.tab-button'>Bookmarks</Button>
-                <Button basic styleName='notice_css.tab-button'>Home</Button>
+                <Button basic styleName='notice_css.tab-button'
+                        onClick={() => this.goHome('/noticeboard/')}>Home</Button>
             </div>
         )
     }

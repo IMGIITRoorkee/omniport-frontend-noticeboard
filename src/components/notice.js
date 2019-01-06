@@ -25,6 +25,7 @@ const Notice = ({id, date, banner, title, history, read, bookmark, BookmarkNotic
     const OpenNotice = (e) => {
         history.push('/noticeboard/notice/'+id);
     };
+
     const bookmarkNotice = (e) => {
         bookmark = !bookmark;
         BookmarkNotice(id, bookmark);
@@ -33,13 +34,13 @@ const Notice = ({id, date, banner, title, history, read, bookmark, BookmarkNotic
     return (
         <Table.Row styleName={read ? 'notice_css.notice-row-read': ''} >
             <Table.Cell styleName='notice_css.cell-width-1'>
-                <Icon name='square outline'/>
+                <Icon name='square outline' color='blue'/>
             </Table.Cell>
             <Table.Cell styleName='notice_css.cell-width-1' onClick={bookmarkNotice}>
                 {!bookmark ? (
-                    <Icon name='bookmark outline'/>
+                    <Icon name='bookmark outline' color='yellow'/>
                 ) : (
-                    <Icon name='bookmark'/>
+                    <Icon name='bookmark' color='yellow'/>
                 )}
             </Table.Cell>
             <Table.Cell styleName='notice_css.cell-width-2 notice_css.cell-hover'>

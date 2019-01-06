@@ -36,12 +36,11 @@ class App extends React.PureComponent {
         }
 
         this.props.history.listen((location) => {
-
-            console.log(location);
             if (location.pathname.startsWith('/noticeboard/notice/')) {
                 let id = get_id_from_notice_url(location.pathname);
                 this.props.GetNotice(id);
             } else {
+                console.log(location.state.page);
                 this.props.GetNotices(location.state.page, search_keyword);
             }
         });
@@ -69,7 +68,7 @@ class App extends React.PureComponent {
                           {isBrowser && <Sidebar />}
                           <Scrollbars autoHide>
                               <div styleName='notice_css.notice-container'>
-                                  <TabList/>
+                                  <TabList history={this.props.history}/>
                                   <Route exact path="/noticeboard"
                                          render={
                                              (props) => <NoticeListView {...props}

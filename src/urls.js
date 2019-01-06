@@ -13,3 +13,7 @@ export function urlSearchNotices (page, search_keyword) {
 export function urlNotice (id) {
     return `${urlMainApp()}new/${id}/`
 }
+
+export function urlStarRead () {
+    return `${urlMainApp()}star_read/`
+}
