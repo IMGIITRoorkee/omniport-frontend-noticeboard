@@ -16,6 +16,7 @@ const initialState = {
     notices: [],
     search_keyword: null,
     isLoaded: false,
+    narrow_bookmark: false,
 };
 
 function GetNoticesReducer(state = initialState, action) {
@@ -28,7 +29,8 @@ function GetNoticesReducer(state = initialState, action) {
               search_keyword: action.payload.search_keyword,
               is_fetching_notices: false,
               page: action.payload.page,
-              total_pages: action.payload.total_pages
+              total_pages: action.payload.total_pages,
+              narrow_bookmark: action.payload.narrow_bookmark
           });
       case REQUEST_NOTICES:
           return { ...state,

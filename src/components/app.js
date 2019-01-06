@@ -40,8 +40,8 @@ class App extends React.PureComponent {
                 let id = get_id_from_notice_url(location.pathname);
                 this.props.GetNotice(id);
             } else {
-                console.log(location.state.page);
-                this.props.GetNotices(location.state.page, search_keyword);
+                this.props.GetNotices(location.state.page,
+                    search_keyword, location.state.narrow_bookmark);
             }
         });
     }
@@ -92,8 +92,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 
   return {
-    GetNotices: (page, search_keyword) => {
-      dispatch(GetNotices(page, search_keyword))
+    GetNotices: (page, search_keyword, narrow_bookmark) => {
+      dispatch(GetNotices(page, search_keyword, narrow_bookmark))
     },
     GetNotice: (notice_id) => {
       dispatch(GetNotice(notice_id))

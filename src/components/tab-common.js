@@ -39,7 +39,11 @@ class TabCommonElements extends Component {
     }
 
     goHome(path) {
-      this.props.history.push({pathname: path, state: {page: initial_page}});
+      this.props.history.push({pathname: path, state: {page: initial_page, narrow_bookmark: false}});
+    }
+
+    narrowBookmarks(path) {
+       this.props.history.push({pathname: path, state: {page: initial_page, narrow_bookmark: true}});
     }
 
     render () {
@@ -50,10 +54,12 @@ class TabCommonElements extends Component {
                     <Search styleName='notice_css.search-bar'
                             onSearchChange={this.handleChange}
                             type='text'
+                            showNoResults={false}
                             value={this.state.value}/>
                 </Form>
 
-                <Button basic styleName='notice_css.tab-button'>Bookmarks</Button>
+                <Button basic styleName='notice_css.tab-button'
+                        onClick={() => this.narrowBookmarks('/noticeboard/')}>Bookmarks</Button>
                 <Button basic styleName='notice_css.tab-button'
                         onClick={() => this.goHome('/noticeboard/')}>Home</Button>
             </div>

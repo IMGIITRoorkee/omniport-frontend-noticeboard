@@ -7,7 +7,7 @@ import GetNotices from "../actions/get_notices"
 
 
 const mapStateToProps = state => {
-
+    
     if (!state.GetNotices.is_fetching_notices) {
         return {
             notices: state.GetNotices.notices,
@@ -15,6 +15,7 @@ const mapStateToProps = state => {
             page: state.GetNotices.page,
             search_keyword: state.GetNotices.search_keyword,
             is_fetching_notices: state.GetNotices.is_fetching_notices,
+            narrow_bookmark: state.GetNotices.narrow_bookmark
         };
     } else {
         return {
@@ -28,14 +29,15 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    GetNotices: (page, search_keyword) => {
-      dispatch(GetNotices(page, search_keyword))
+    GetNotices: (page, search_keyword, narrow_bookmark) => {
+      dispatch(GetNotices(page, search_keyword, narrow_bookmark))
     }
   }
 };
 
 
-const NoticeListView = ({history, notices, total_pages, is_fetching_notices, GetNotices, search_keyword, page}) => {
+const NoticeListView = ({history, notices, total_pages, narrow_bookmark,
+                            is_fetching_notices, GetNotices, search_keyword, page}) => {
     let notice_list;
     let active_page;
     let no_notices;
@@ -68,7 +70,7 @@ const NoticeListView = ({history, notices, total_pages, is_fetching_notices, Get
 
     const handlePaginationChange = (e, { activePage }) => {
         active_page = activePage;
-        GetNotices(active_page, search_keyword);
+        GetNotices(active_page, search_keyword, narrow_bookmark);
     };
 
 
@@ -88,7 +90,7 @@ const NoticeListView = ({history, notices, total_pages, is_fetching_notices, Get
             ) : (
                 <Container styleName='notice_css.notice-list-view'>
                     {!no_notices ? (
-                        <Table basic compact>
+                        <Table fixed basic singleLine compact>
                             <Table.Body>{notice_list}</Table.Body>
                         </Table>
                     ) : (

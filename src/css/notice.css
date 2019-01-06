@@ -106,14 +106,19 @@
 }
 
 .cell-width-1 {
-    width: 0.5%;
+    width: 0.206% !important;
     text-align: center;
     border-right: 1px solid rgba(34, 36, 38, 0.1);
 }
 
 
 .cell-width-2 {
-    width: 9.5%;
+    width: 0.4% !important;
+    text-align: center;
+}
+
+.cell-width-3 {
+    width: 0.9% !important;
     text-align: center;
 }
 

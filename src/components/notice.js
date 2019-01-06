@@ -46,10 +46,10 @@ const Notice = ({id, date, banner, title, history, read, bookmark, BookmarkNotic
             <Table.Cell styleName='notice_css.cell-width-2 notice_css.cell-hover'>
                 {moment(date).format("MMM Do")}
             </Table.Cell>
-            <Table.Cell width={2} onClick={OpenNotice} styleName='notice_css.cell-hover'>
+            <Table.Cell onClick={OpenNotice} styleName='notice_css.cell-width-2 notice_css.cell-hover'>
                 {moment(date).format("LT")}
             </Table.Cell>
-            <Table.Cell width={3} onClick={OpenNotice} styleName='notice_css.cell-hover'>
+            <Table.Cell onClick={OpenNotice} styleName='notice_css.cell-width-3 notice_css.cell-hover'>
                 {banner.name}
             </Table.Cell>
             <Table.Cell collapsing onClick={OpenNotice} styleName='notice_css.cell-hover'>
