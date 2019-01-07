@@ -32,11 +32,20 @@ function GetNoticesReducer(state = initialState, action) {
               total_pages: action.payload.total_pages,
               narrow_bookmark: action.payload.narrow_bookmark
           });
+
       case REQUEST_NOTICES:
           return { ...state,
               is_fetching_notices: true,
               page: action.payload.page,
               search_keyword: action.payload.search_keyword};
+
+      case BOOKMARK_NOTICE:
+          for (let i = 0; i < state.notices.length; i++) {
+              if (state.notices[i].id === action.payload.notice_id) {
+                   state.notices[i].starred = !state.notices[i].starred;
+              }
+          }
+          return {...state};
       default:
           return state;
   }
@@ -62,20 +71,9 @@ function GetNoticeReducer(state=initialState, action) {
   }
 }
 
-function BookmarkReducer(state=initialState, action) {
-
-    switch (action.type) {
-        case BOOKMARK_NOTICE:
-            return state;
-        default:
-            return state;
-    }
-}
-
 const rootReducer = combineReducers({
     GetNotices : GetNoticesReducer,
-    GetNotice: GetNoticeReducer,
-    BookmarkNotice: BookmarkReducer,
+    GetNotice: GetNoticeReducer
 });
 
 export default rootReducer;

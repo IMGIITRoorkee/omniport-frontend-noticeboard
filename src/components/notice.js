@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon, Table } from 'semantic-ui-react';
 import { connect } from "react-redux";
-import BookmarkNotice from "../actions/bookmark";
+import NoticeBookmark from "../actions/bookmark";
 import moment from 'moment';
 import notice_css from "../css/notice.css";
 import { Link } from 'react-router-dom'
@@ -14,13 +14,13 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    BookmarkNotice: (notice_id, bookmark) => {
-      dispatch(BookmarkNotice(notice_id, bookmark))
+    NoticeBookmark: (notice_id, bookmark) => {
+      dispatch(NoticeBookmark(notice_id, bookmark))
     },
   }
 };
 
-const Notice = ({id, date, banner, title, history, read, bookmark, BookmarkNotice}) => {
+const Notice = ({id, date, banner, title, history, read, bookmark, NoticeBookmark}) => {
 
     const OpenNotice = (e) => {
         history.push('/noticeboard/notice/'+id);
@@ -28,15 +28,15 @@ const Notice = ({id, date, banner, title, history, read, bookmark, BookmarkNotic
 
     const bookmarkNotice = (e) => {
         bookmark = !bookmark;
-        BookmarkNotice(id, bookmark);
+        NoticeBookmark(id, bookmark);
     };
 
     return (
-        <Table.Row styleName={read ? 'notice_css.notice-row-read': ''} >
-            <Table.Cell styleName='notice_css.cell-width-1'>
+        <Table.Row styleName={read ? 'notice_css.notice-row-read notice_css.notice-row': 'notice_css.notice-row'} >
+            <Table.Cell styleName='notice_css.cell-width-1 notice_css.cell-hover'>
                 <Icon name='square outline' color='blue'/>
             </Table.Cell>
-            <Table.Cell styleName='notice_css.cell-width-1' onClick={bookmarkNotice}>
+            <Table.Cell styleName='notice_css.cell-width-1 notice_css.cell-hover' onClick={bookmarkNotice}>
                 {!bookmark ? (
                     <Icon name='bookmark outline' color='yellow'/>
                 ) : (

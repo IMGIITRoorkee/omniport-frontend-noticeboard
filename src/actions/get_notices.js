@@ -15,6 +15,8 @@ function requestNotices(page, search_keyword) {
 }
 
 function receiveNotices(page, notice_data_list, search_keyword, narrow_bookmark) {
+
+
     return {
         type: GET_NOTICES,
         payload: {

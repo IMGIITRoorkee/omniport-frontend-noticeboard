@@ -34,7 +34,7 @@ class NoticeView extends Component {
           <div>
                 {!is_fetching_notice ? (
                     <Container styleName="notice_css.notice-box">
-                    <Segment.Group raised>
+                    <Segment.Group>
                         <Segment as='h5'>Subject: {notice.title} </Segment>
 
                         <Segment>

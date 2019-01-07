@@ -1,6 +1,6 @@
 import { GET_NOTICE, REQUEST_NOTICE } from "../constants/action-types";
 import { urlNotice, urlStarRead } from "../urls";
-import { urlWhoAmI, urlGetMaintainers, getCookie } from 'formula_one'
+import { urlWhoAmI, urlGetMaintainers, getCookie } from 'formula_one';
 
 
 function requestNotice(notice_id) {
