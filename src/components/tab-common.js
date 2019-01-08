@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Search, Button } from 'semantic-ui-react';
+import { Form, Search, Button, Menu } from 'semantic-ui-react';
 import notice_css from "../css/notice.css";
-import GetNotices from "../actions/get_notices";
 import { connect } from "react-redux";
 import {initial_page} from "../constants/constants";
 
@@ -10,14 +9,6 @@ const mapStateToProps = state => {
     return {
         expired: state.GetNotices.expired,
     };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    GetNotices: (page, search_keyword, expired) => {
-      dispatch(GetNotices(page, search_keyword, false, expired))
-    }
-  }
 };
 
 class TabCommonElements extends Component {
@@ -35,7 +26,11 @@ class TabCommonElements extends Component {
     }
 
     handleSubmit() {
-         this.props.GetNotices(initial_page, this.state.value, this.props.expired);
+        this.props.history.push({pathname: '/noticeboard/',
+            state: {page: initial_page,
+                    search_keyword: this.state.value,
+                    narrow_bookmark: false,
+                    expired: this.props.expired}});
     }
 
     goHome(path) {
@@ -50,22 +45,25 @@ class TabCommonElements extends Component {
 
 
         return (
-            <div styleName='notice_css.tab-common-elements'>
-                <Form onSubmit={this.handleSubmit} styleName='notice_css.search-form'>
-                    <Search styleName='notice_css.search-bar'
+            <Menu.Menu position='right'>
+                <Menu.Item>
+                    <Form onSubmit={this.handleSubmit}>
+                        <Search styleName='notice_css.input-bar'
                             onSearchChange={this.handleChange}
                             type='text'
                             showNoResults={false}
                             value={this.state.value}/>
-                </Form>
-
-                <Button basic styleName='notice_css.tab-button'
+                    </Form>
+                </Menu.Item>
+                <Menu.Item>
+                    <Button basic styleName='notice_css.tab-button'
                         onClick={() => this.narrowBookmarks('/noticeboard/')}>Bookmarks</Button>
-                <Button basic styleName='notice_css.tab-button'
+                    <Button basic styleName='notice_css.tab-button'
                         onClick={() => this.goHome('/noticeboard/')}>Home</Button>
-            </div>
+                </Menu.Item>
+            </Menu.Menu>
         )
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) (TabCommonElements);
+export default connect(mapStateToProps) (TabCommonElements);

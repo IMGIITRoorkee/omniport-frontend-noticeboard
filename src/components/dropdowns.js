@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Dropdown } from 'semantic-ui-react';
+import { Dropdown, Form, Menu } from 'semantic-ui-react';
 import notice_css from "../css/notice.css";
 import 'rc-calendar/assets/index.css';
 import { connect } from "react-redux";
 import NoticeBookmark from "../actions/bookmark";
 import {initial_page} from "../constants/constants";
+import {DatesRangeInput} from 'semantic-ui-calendar-react'
 
 
 const mapStateToProps = state => {
@@ -15,32 +16,85 @@ const mapStateToProps = state => {
 
 class DropdownView extends Component {
 
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            datesRange: ''
+        };
+    }
+
+    renderInnerDropdownItems(items) {
+        if (items.length > 0) {
+            return items.map((item, index) => (
+                <Dropdown.Item key={index}>{item.name}</Dropdown.Item>
+            ));
+        }
+        else return [];
+    }
+
+    renderOuterDropdownItems(items) {
+        if (items.length > 0) {
+            return items.map((item, index) => (
+                <Dropdown.Item key={index}>
+                    <Dropdown text={item.name} pointing='left'>
+                        <Dropdown.Menu styleName='notice_css.dropdown-left'>
+                            {this.renderInnerDropdownItems(item.banner)}
+                            </Dropdown.Menu>
+                    </Dropdown>
+                </Dropdown.Item>
+            ));
+        }
+        else return [];
+    }
+
+    handleChange = (event, {name, value}) => {
+        if (this.state.hasOwnProperty(name)) {
+            this.setState({ [name]: value });
+        }
+    };
+
+    goHome(path) {
+      this.props.history.push({pathname: path, state: {page: initial_page, narrow_bookmark: false}});
+    }
+
     expiredNotices(path) {
         this.props.history.push({pathname: path, state: {page: initial_page, expired: true}})
     }
 
     render () {
-
         console.log(this.props.filters);
 
         return (
-            <div styleName='notice_css.tab-common-elements'>
-                <Dropdown text='All Notices' styleName='notice_css.tab-dropdown'>
-                    <Dropdown.Menu>
-                        <Dropdown.Item text='All Notices' />
-                        <Dropdown.Item text='Authorities' />
-                        <Dropdown.Item text='Departments' />
-                        <Dropdown.Item text='Placement Office' />
+            <Menu.Menu position='left'>
+                <Menu.Item>
+                    <Dropdown text='All Notices'>
+                        <Dropdown.Menu>
+                            <Dropdown.Item text='All Notices'
+                                           onClick={() => this.goHome('/noticeboard/')}/>
 
-                        <Dropdown.Divider />
-                        <Dropdown.Item text='Expired'
+                            {this.renderOuterDropdownItems(this.props.filters)}
+                            
+                            <Dropdown.Divider styleName='notice_css.dropdown-divider'/>
+                            <Dropdown.Item text='Expired'
                                        onClick={() => this.expiredNotices('/noticeboard/')}/>
-                    </Dropdown.Menu>
-                </Dropdown>
-
-                 <Dropdown text='Date' styleName='notice_css.tab-dropdown'>
-                </Dropdown>
-            </div>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </Menu.Item>
+                <Menu.Item>
+                    <Form>
+                        <DatesRangeInput
+                            styleName='notice_css.input-bar'
+                            name="datesRange"
+                            placeholder="Date: From - To"
+                            iconPosition="left"
+                            closeOnMouseLeave={true}
+                            value={this.state.datesRange}
+                            onChange={this.handleChange}/>
+                    </Form>
+                </Menu.Item>
+            </Menu.Menu>
         )
     }
 }

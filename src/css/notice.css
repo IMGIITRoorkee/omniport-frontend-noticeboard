@@ -79,22 +79,13 @@
     margin-right: 15px;
 }
 
-.search-bar input {
-    width: 320px;
+.input-bar input {
     border-radius: 4px !important;
     height: 29px;
 }
 
-.search-bar .results {
-    width: 320px !important;
-}
-
-.search-form {
-    display: inherit;
-}
-
-.tab-common-elements {
-    display: inline;
+.calendar-element {
+    font-size: 0.8rem !important;
 }
 
 .pagination-box {
@@ -107,20 +98,8 @@
     font-size: 0.8rem !important;
 }
 
-.tab-dropdown {
-    margin-left: 40px;
-}
-
 .tab-button {
     box-shadow: none !important;
-}
-
-.tab-single-button {
-    margin-left: 45px !important;
-}
-
-.tab-list {
-    line-height: 2em !important;
 }
 
 .notice-row {
@@ -144,10 +123,18 @@
 }
 
 .cell-width-3 {
-    width: 0.9% !important;
+    width: 0.6% !important;
     text-align: center;
 }
 
 .cell-hover {
     cursor: pointer;
+}
+
+.dropdown-left {
+    margin: 0px 50px !important
+}
+
+.dropdown-divider {
+    margin: 0px !important;
 }

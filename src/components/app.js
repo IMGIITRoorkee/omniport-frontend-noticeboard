@@ -36,6 +36,7 @@ class App extends React.PureComponent {
 
         this.props.GetFilters();
 
+        // Direct url hit
         if (this.props.location.pathname.startsWith('/noticeboard/notice/')) {
             if (this.props.location.pathname.startsWith('/noticeboard/notice/old/')) {
                 let id = get_id_from_notice_url(this.props.location.pathname, true);
@@ -48,14 +49,15 @@ class App extends React.PureComponent {
             this.props.GetNotices(initial_page, search_keyword);
         }
 
+        // on page change
         this.props.history.listen((location) => {
             if (location.pathname.startsWith('/noticeboard/notice/')) {
                 let id = get_id_from_notice_url(location.pathname, location.state.expired);
                 this.props.GetNotice(id, location.state.expired);
             } else {
-                console.log(location.state.expired);
+                console.log(search_keyword);
                 this.props.GetNotices(location.state.page,
-                    search_keyword, location.state.narrow_bookmark, location.state.expired);
+                    location.state.search_keyword, location.state.narrow_bookmark, location.state.expired);
             }
         });
     }
