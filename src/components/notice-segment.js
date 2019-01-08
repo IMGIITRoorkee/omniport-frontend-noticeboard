@@ -12,9 +12,9 @@ const mapStateToProps = state => {
         return {
             notices: state.GetNotices.notices,
             total_pages: state.GetNotices.total_pages,
+            is_fetching_notices: state.GetNotices.is_fetching_notices,
             page: state.GetNotices.page,
             search_keyword: state.GetNotices.search_keyword,
-            is_fetching_notices: state.GetNotices.is_fetching_notices,
             narrow_bookmark: state.GetNotices.narrow_bookmark,
             expired: state.GetNotices.expired,
             banner_id: state.GetNotices.banner_id,
