@@ -8,14 +8,14 @@ import {initial_page} from "../constants/constants";
 
 const mapStateToProps = state => {
     return {
-        state: state,
+        expired: state.GetNotices.expired,
     };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    GetNotices: (page, search_keyword) => {
-      dispatch(GetNotices(page, search_keyword))
+    GetNotices: (page, search_keyword, expired) => {
+      dispatch(GetNotices(page, search_keyword, false, expired))
     }
   }
 };
@@ -35,7 +35,7 @@ class TabCommonElements extends Component {
     }
 
     handleSubmit() {
-         this.props.GetNotices(initial_page, this.state.value);
+         this.props.GetNotices(initial_page, this.state.value, this.props.expired);
     }
 
     goHome(path) {
@@ -47,6 +47,7 @@ class TabCommonElements extends Component {
     }
 
     render () {
+
 
         return (
             <div styleName='notice_css.tab-common-elements'>

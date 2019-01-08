@@ -13,14 +13,20 @@ import TabList from "./tab-list";
 import { Route, withRouter } from "react-router-dom";
 import GetNotices from "../actions/get_notices";
 import GetNotice from "../actions/get_notice";
+import GetFilters from "../actions/filters";
 
 import main from 'formula_one/src/css/app.css'
 import notice_css from "../css/notice.css";
 
 
 
-const get_id_from_notice_url = (url) => {
-    let notice_id = +url.split('/')[3];
+const get_id_from_notice_url = (url, expired) => {
+    let notice_id;
+    if (!expired){
+        notice_id = +url.split('/')[3];
+    } else {
+        notice_id = +url.split('/')[4];
+    }
     return notice_id;
 };
 
@@ -28,20 +34,28 @@ class App extends React.PureComponent {
 
     componentDidMount () {
 
+        this.props.GetFilters();
+
         if (this.props.location.pathname.startsWith('/noticeboard/notice/')) {
-            let id = get_id_from_notice_url(this.props.location.pathname);
-            this.props.GetNotice(id);
+            if (this.props.location.pathname.startsWith('/noticeboard/notice/old/')) {
+                let id = get_id_from_notice_url(this.props.location.pathname, true);
+                this.props.GetNotice(id, true);
+            } else {
+                let id = get_id_from_notice_url(this.props.location.pathname, false);
+                this.props.GetNotice(id, false);
+            }
         } else {
             this.props.GetNotices(initial_page, search_keyword);
         }
 
         this.props.history.listen((location) => {
             if (location.pathname.startsWith('/noticeboard/notice/')) {
-                let id = get_id_from_notice_url(location.pathname);
-                this.props.GetNotice(id);
+                let id = get_id_from_notice_url(location.pathname, location.state.expired);
+                this.props.GetNotice(id, location.state.expired);
             } else {
+                console.log(location.state.expired);
                 this.props.GetNotices(location.state.page,
-                    search_keyword, location.state.narrow_bookmark);
+                    search_keyword, location.state.narrow_bookmark, location.state.expired);
             }
         });
     }
@@ -92,12 +106,15 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 
   return {
-    GetNotices: (page, search_keyword, narrow_bookmark) => {
-      dispatch(GetNotices(page, search_keyword, narrow_bookmark))
+    GetNotices: (page, search_keyword, narrow_bookmark, expired) => {
+        dispatch(GetNotices(page, search_keyword, narrow_bookmark, expired))
     },
-    GetNotice: (notice_id) => {
-      dispatch(GetNotice(notice_id))
+    GetNotice: (notice_id, expired) => {
+        dispatch(GetNotice(notice_id, expired))
     },
+    GetFilters: () => {
+        dispatch(GetFilters())
+    }
   }
 };
 

@@ -3,7 +3,8 @@ import {
     REQUEST_NOTICES,
     GET_NOTICE,
     REQUEST_NOTICE,
-    BOOKMARK_NOTICE
+    BOOKMARK_NOTICE,
+    GET_FILTERS
 } from "../constants/action-types";
 import { combineReducers } from 'redux'
 
@@ -16,7 +17,9 @@ const initialState = {
     notices: [],
     search_keyword: null,
     isLoaded: false,
+    expired: false,
     narrow_bookmark: false,
+    filters: [],
 };
 
 function GetNoticesReducer(state = initialState, action) {
@@ -29,6 +32,7 @@ function GetNoticesReducer(state = initialState, action) {
               search_keyword: action.payload.search_keyword,
               is_fetching_notices: false,
               page: action.payload.page,
+              expired: action.payload.expired,
               total_pages: action.payload.total_pages,
               narrow_bookmark: action.payload.narrow_bookmark
           });
@@ -71,9 +75,22 @@ function GetNoticeReducer(state=initialState, action) {
   }
 }
 
+function GetFiltersReducer(state=initialState, action) {
+  switch (action.type) {
+      case GET_FILTERS:
+          return {
+              ...state,
+              filters: action.payload.filters
+          };
+      default:
+          return state;
+  }
+}
+
 const rootReducer = combineReducers({
     GetNotices : GetNoticesReducer,
-    GetNotice: GetNoticeReducer
+    GetNotice: GetNoticeReducer,
+    GetFilters: GetFiltersReducer,
 });
 
 export default rootReducer;

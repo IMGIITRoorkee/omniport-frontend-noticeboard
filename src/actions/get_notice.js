@@ -22,13 +22,16 @@ function receiveNotice(notice_data) {
   }
 }
 
-export default function GetNotice(notice_id) {
+export default function GetNotice(notice_id, expired) {
   return (dispatch) => {
+    let url;
+
     dispatch(requestNotice(notice_id));
-    return fetch(urlNotice(notice_id))
+    return fetch(urlNotice(notice_id, expired))
       .then(response => response.json())
       .then(json => dispatch(receiveNotice(json)))
       .then(json => {
+         if (!expired) {
           if (!json.payload.notice.read) {
            let headers = {
               'Content-Type': 'application/json',
@@ -40,6 +43,7 @@ export default function GetNotice(notice_id) {
            })
            fetch(urlStarRead(),
            {method: 'post', headers: headers, body: body})};
+          }
       })
   }
 }

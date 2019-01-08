@@ -15,7 +15,8 @@ const mapStateToProps = state => {
             page: state.GetNotices.page,
             search_keyword: state.GetNotices.search_keyword,
             is_fetching_notices: state.GetNotices.is_fetching_notices,
-            narrow_bookmark: state.GetNotices.narrow_bookmark
+            narrow_bookmark: state.GetNotices.narrow_bookmark,
+            expired: state.GetNotices.expired,
         };
     } else {
         return {
@@ -29,15 +30,15 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    GetNotices: (page, search_keyword, narrow_bookmark) => {
-      dispatch(GetNotices(page, search_keyword, narrow_bookmark))
+    GetNotices: (page, search_keyword, narrow_bookmark, expired) => {
+      dispatch(GetNotices(page, search_keyword, narrow_bookmark, expired))
     }
   }
 };
 
 
 const NoticeListView = ({history, notices, total_pages, narrow_bookmark,
-                            is_fetching_notices, GetNotices, search_keyword, page}) => {
+                            is_fetching_notices, GetNotices, search_keyword, page, expired}) => {
     let notice_list;
     let active_page;
     let no_notices;
@@ -46,16 +47,22 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark,
     if (!is_fetching_notices) {
 
         notice_list = notices.map(notice_info => {
-            const {id, banner, datetimeModified, title, read, starred} = notice_info;
+            let notice_id;
+
+            if (!expired) {
+                notice_id = notice_info.id;
+            } else {
+                notice_id = notice_info.noticeId;
+            }
 
             return (
-                <Notice key={id}
-                        id={id}
-                        date={datetimeModified}
-                        banner={banner}
-                        title={title}
-                        read={read}
-                        bookmark={starred}
+                <Notice key={notice_id}
+                        id={notice_id}
+                        date={notice_info.datetimeModified}
+                        banner={notice_info.banner}
+                        title={notice_info.title}
+                        read={notice_info.read}
+                        bookmark={notice_info.starred}
                         history={history}/>
             );
         });
@@ -74,7 +81,7 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark,
 
     const handlePaginationChange = (e, { activePage }) => {
         active_page = activePage;
-        GetNotices(active_page, search_keyword, narrow_bookmark);
+        GetNotices(active_page, search_keyword, narrow_bookmark, expired);
     };
 
 
