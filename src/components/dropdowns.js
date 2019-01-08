@@ -28,7 +28,10 @@ class DropdownView extends Component {
     renderInnerDropdownItems(items) {
         if (items.length > 0) {
             return items.map((item, index) => (
-                <Dropdown.Item key={index}>{item.name}</Dropdown.Item>
+                <Dropdown.Item key={index}
+                               onClick={() => this.filterNotices(item.id, '/noticeboard/')}>
+                    {item.name}
+                </Dropdown.Item>
             ));
         }
         else return [];
@@ -56,11 +59,24 @@ class DropdownView extends Component {
     };
 
     goHome(path) {
-      this.props.history.push({pathname: path, state: {page: initial_page, narrow_bookmark: false}});
+      this.props.history.push({
+          pathname: path,
+          state: {page: initial_page,
+                  narrow_bookmark: false}});
     }
 
     expiredNotices(path) {
-        this.props.history.push({pathname: path, state: {page: initial_page, expired: true}})
+        this.props.history.push({
+            pathname: path,
+            state: {page: initial_page,
+                    expired: true}})
+    }
+
+    filterNotices(banner_id, path) {
+        this.props.history.push({
+            pathname: path,
+            state: {page: initial_page,
+                    banner_id: banner_id}})
     }
 
     render () {
@@ -75,7 +91,7 @@ class DropdownView extends Component {
                                            onClick={() => this.goHome('/noticeboard/')}/>
 
                             {this.renderOuterDropdownItems(this.props.filters)}
-                            
+
                             <Dropdown.Divider styleName='notice_css.dropdown-divider'/>
                             <Dropdown.Item text='Expired'
                                        onClick={() => this.expiredNotices('/noticeboard/')}/>

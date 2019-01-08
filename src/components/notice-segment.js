@@ -17,6 +17,7 @@ const mapStateToProps = state => {
             is_fetching_notices: state.GetNotices.is_fetching_notices,
             narrow_bookmark: state.GetNotices.narrow_bookmark,
             expired: state.GetNotices.expired,
+            banner_id: state.GetNotices.banner_id,
         };
     } else {
         return {
@@ -30,14 +31,14 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    GetNotices: (page, search_keyword, narrow_bookmark, expired) => {
-      dispatch(GetNotices(page, search_keyword, narrow_bookmark, expired))
+    GetNotices: (page, search_keyword, narrow_bookmark, expired, banner_id) => {
+      dispatch(GetNotices(page, search_keyword, narrow_bookmark, expired, banner_id))
     }
   }
 };
 
 
-const NoticeListView = ({history, notices, total_pages, narrow_bookmark,
+const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_id,
                             is_fetching_notices, GetNotices, search_keyword, page, expired}) => {
     let notice_list;
     let active_page;
@@ -81,7 +82,7 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark,
 
     const handlePaginationChange = (e, { activePage }) => {
         active_page = activePage;
-        GetNotices(active_page, search_keyword, narrow_bookmark, expired);
+        GetNotices(active_page, search_keyword, narrow_bookmark, expired, banner_id);
     };
 
 

@@ -22,7 +22,7 @@ export function urlBookmarkedNotices (page) {
     return `${urlMainApp()}star_filter_view/?page=${page}`
 }
 
-export function urlFilterList(page) {
+export function urlFilterList() {
     return `${urlMainApp()}filter_list/`
 }
 
@@ -31,6 +31,14 @@ export function urlNotice (id, expired) {
        return `${urlMainApp()}new/${id}/`;
     } else {
         return `${urlMainApp()}old/${id}/`
+    }
+}
+
+export function urlFilter (page, banner_id, search_keyword) {
+    if (search_keyword === undefined) {
+        return `${urlMainApp()}filter/?banner=${banner_id}&page=${page}`
+    } else {
+        return `${urlMainApp()}filter/?banner=${banner_id}&page=${page}&keyword=${search_keyword}`
     }
 }
 

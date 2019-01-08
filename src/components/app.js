@@ -46,7 +46,7 @@ class App extends React.PureComponent {
                 this.props.GetNotice(id, false);
             }
         } else {
-            this.props.GetNotices(initial_page, search_keyword);
+            this.props.GetNotices(initial_page);
         }
 
         // on page change
@@ -55,9 +55,12 @@ class App extends React.PureComponent {
                 let id = get_id_from_notice_url(location.pathname, location.state.expired);
                 this.props.GetNotice(id, location.state.expired);
             } else {
-                console.log(search_keyword);
-                this.props.GetNotices(location.state.page,
-                    location.state.search_keyword, location.state.narrow_bookmark, location.state.expired);
+                this.props.GetNotices(
+                    location.state.page,
+                    location.state.search_keyword,
+                    location.state.narrow_bookmark,
+                    location.state.expired,
+                    location.state.banner_id);
             }
         });
     }
@@ -108,8 +111,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 
   return {
-    GetNotices: (page, search_keyword, narrow_bookmark, expired) => {
-        dispatch(GetNotices(page, search_keyword, narrow_bookmark, expired))
+    GetNotices: (page, search_keyword, narrow_bookmark, expired, banner_id) => {
+        dispatch(GetNotices(page, search_keyword, narrow_bookmark, expired, banner_id))
     },
     GetNotice: (notice_id, expired) => {
         dispatch(GetNotice(notice_id, expired))

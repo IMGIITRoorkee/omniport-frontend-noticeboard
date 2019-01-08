@@ -8,6 +8,7 @@ import {initial_page} from "../constants/constants";
 const mapStateToProps = state => {
     return {
         expired: state.GetNotices.expired,
+        banner_id: state.GetNotices.banner_id,
     };
 };
 
@@ -30,6 +31,7 @@ class TabCommonElements extends Component {
             state: {page: initial_page,
                     search_keyword: this.state.value,
                     narrow_bookmark: false,
+                    banner_id: this.props.banner_id,
                     expired: this.props.expired}});
     }
 
@@ -42,8 +44,6 @@ class TabCommonElements extends Component {
     }
 
     render () {
-
-
         return (
             <Menu.Menu position='right'>
                 <Menu.Item>

@@ -1,7 +1,9 @@
 import { GET_NOTICES, REQUEST_NOTICES } from "../constants/action-types";
-import {urlBookmarkedNotices,
-    urlExpiredNotices,
-    urlNotices} from "../urls";
+import {
+    urlBookmarkedNotices,
+    urlExpiredNotices, urlFilter,
+    urlNotices
+} from "../urls";
 import { urlWhoAmI, urlGetMaintainers, getCookie } from 'formula_one'
 
 
@@ -16,13 +18,15 @@ function requestNotices(page, search_keyword) {
     }
 }
 
-function receiveNotices(page, notice_data_list, search_keyword, narrow_bookmark, expired) {
+function receiveNotices(page, notice_data_list, search_keyword,
+                        narrow_bookmark, expired, banner_id) {
     
     return {
         type: GET_NOTICES,
         payload: {
             narrow_bookmark: narrow_bookmark,
             expired: expired,
+            banner_id: banner_id,
             notices: notice_data_list.results,
             search_keyword: search_keyword,
             total_pages: Math.ceil(notice_data_list.count/10),
@@ -31,21 +35,15 @@ function receiveNotices(page, notice_data_list, search_keyword, narrow_bookmark,
     }
 }
 
-export default function GetNotices(page, search_keyword, narrow_bookmark, expired) {
+export default function GetNotices(page, search_keyword, narrow_bookmark, expired, banner_id) {
   return (dispatch) => {
     dispatch(requestNotices(page, search_keyword));
     let url;
 
-    if (narrow_bookmark === undefined) {
-        narrow_bookmark = false;
-    }
-
-    if (expired === undefined) {
-        expired = false;
-    }
-
     if (expired) {
         url = urlExpiredNotices(page, search_keyword);
+    } else if (banner_id){
+        url = urlFilter(page, banner_id, search_keyword);
     } else if (narrow_bookmark) {
         url = urlBookmarkedNotices(page);
     } else {
@@ -54,6 +52,6 @@ export default function GetNotices(page, search_keyword, narrow_bookmark, expire
 
     return fetch(url)
       .then(response => response.json())
-      .then(json => dispatch(receiveNotices(page, json, search_keyword, narrow_bookmark, expired)))
+      .then(json => dispatch(receiveNotices(page, json, search_keyword, narrow_bookmark, expired, banner_id)))
   }
 }
