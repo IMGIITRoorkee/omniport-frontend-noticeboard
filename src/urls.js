@@ -2,28 +2,25 @@ export function urlMainApp () {
     return '/api/noticeboard/'
 }
 
-export function urlExpiredNotices (page, search_keyword) {
-    if (search_keyword === undefined) {
-        return `${urlMainApp()}old/?page=${page}`
-    } else {
-        return `${urlMainApp()}old/?page=${page}&keyword=${search_keyword}`
+export function url_search_get_param(url, search_keyword) {
+    if (search_keyword) {
+        url += `&keyword=${search_keyword}`;
     }
+    return url;
+}
+
+export function urlExpiredNotices (page, search_keyword) {
+    let url = `${urlMainApp()}old/?page=${page}`;
+    return url_search_get_param(url, search_keyword);
 }
 
 export function urlNotices (page, search_keyword) {
-    if (search_keyword === undefined) {
-        return `${urlMainApp()}new/?page=${page}`
-    } else {
-        return `${urlMainApp()}new/?page=${page}&keyword=${search_keyword}`
-    }
+    let url = `${urlMainApp()}new/?page=${page}`;
+    return url_search_get_param(url, search_keyword);
 }
 
 export function urlBookmarkedNotices (page) {
     return `${urlMainApp()}star_filter_view/?page=${page}`
-}
-
-export function urlFilterList() {
-    return `${urlMainApp()}filter_list/`
 }
 
 export function urlNotice (id, expired) {
@@ -34,12 +31,23 @@ export function urlNotice (id, expired) {
     }
 }
 
+export function urlFilterList() {
+    return `${urlMainApp()}filter_list/`
+}
+
 export function urlFilter (page, banner_id, search_keyword) {
-    if (search_keyword === undefined) {
-        return `${urlMainApp()}filter/?banner=${banner_id}&page=${page}`
-    } else {
-        return `${urlMainApp()}filter/?banner=${banner_id}&page=${page}&keyword=${search_keyword}`
+    let url = `${urlMainApp()}filter/?banner=${banner_id}&page=${page}`;
+    return url_search_get_param(url, search_keyword);
+}
+
+export function urlDateFilter(page, start, end, banner_id, search_keyword) {
+    let url;
+    url = `${urlMainApp()}date_filter_view/?start=${start}&end=${end}`;
+
+    if (banner_id) {
+        url += `&banner_id=${banner_id}`;
     }
+    return url_search_get_param(url, search_keyword);
 }
 
 export function urlStarRead () {
