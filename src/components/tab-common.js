@@ -9,6 +9,7 @@ const mapStateToProps = state => {
     return {
         expired: state.GetNotices.expired,
         banner_id: state.GetNotices.banner_id,
+        date_range: state.GetNotices.date_range,
     };
 };
 
@@ -32,6 +33,7 @@ class TabCommonElements extends Component {
                     search_keyword: this.state.value,
                     narrow_bookmark: false,
                     banner_id: this.props.banner_id,
+                    date_range: this.props.date_range,
                     expired: this.props.expired}});
     }
 

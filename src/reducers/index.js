@@ -21,6 +21,7 @@ const initialState = {
     narrow_bookmark: false,
     banner_id: null,
     filters: [],
+    date_range: null,
 };
 
 function GetNoticesReducer(state = initialState, action) {
@@ -37,6 +38,7 @@ function GetNoticesReducer(state = initialState, action) {
               total_pages: action.payload.total_pages,
               narrow_bookmark: action.payload.narrow_bookmark,
               banner_id: action.payload.banner_id,
+              date_range: action.payload.date_range
           });
 
       case REQUEST_NOTICES:

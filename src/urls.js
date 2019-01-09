@@ -11,6 +11,7 @@ export function url_search_get_param(url, search_keyword) {
 
 export function urlExpiredNotices (page, search_keyword) {
     let url = `${urlMainApp()}old/?page=${page}`;
+    console.log(url);
     return url_search_get_param(url, search_keyword);
 }
 
@@ -42,10 +43,10 @@ export function urlFilter (page, banner_id, search_keyword) {
 
 export function urlDateFilter(page, start, end, banner_id, search_keyword) {
     let url;
-    url = `${urlMainApp()}date_filter_view/?start=${start}&end=${end}`;
+    url = `${urlMainApp()}date_filter_view/?start=${start}&end=${end}&page=${page}`;
 
     if (banner_id) {
-        url += `&banner_id=${banner_id}`;
+        url += `&banner=${banner_id}`;
     }
     return url_search_get_param(url, search_keyword);
 }

@@ -2,7 +2,7 @@ import { GET_NOTICES, REQUEST_NOTICES } from "../constants/action-types";
 import {
     urlBookmarkedNotices,
     urlExpiredNotices, urlFilter,
-    urlNotices
+    urlNotices, urlDateFilter
 } from "../urls";
 import { urlWhoAmI, urlGetMaintainers, getCookie } from 'formula_one'
 
@@ -19,7 +19,7 @@ function requestNotices(page, search_keyword) {
 }
 
 function receiveNotices(page, notice_data_list, search_keyword,
-                        narrow_bookmark, expired, banner_id) {
+                        narrow_bookmark, expired, banner_id, date_range) {
     
     return {
         type: GET_NOTICES,
@@ -27,6 +27,7 @@ function receiveNotices(page, notice_data_list, search_keyword,
             narrow_bookmark: narrow_bookmark,
             expired: expired,
             banner_id: banner_id,
+            date_range: date_range,
             notices: notice_data_list.results,
             search_keyword: search_keyword,
             total_pages: Math.ceil(notice_data_list.count/10),
@@ -35,13 +36,15 @@ function receiveNotices(page, notice_data_list, search_keyword,
     }
 }
 
-export default function GetNotices(page, search_keyword, narrow_bookmark, expired, banner_id) {
+export default function GetNotices(page, search_keyword, narrow_bookmark, expired, banner_id, date_range) {
   return (dispatch) => {
     dispatch(requestNotices(page, search_keyword));
     let url;
 
     if (expired) {
         url = urlExpiredNotices(page, search_keyword);
+    } else if (date_range) {
+        url = urlDateFilter(page, date_range.start, date_range.end, banner_id, search_keyword)
     } else if (banner_id){
         url = urlFilter(page, banner_id, search_keyword);
     } else if (narrow_bookmark) {
@@ -52,6 +55,6 @@ export default function GetNotices(page, search_keyword, narrow_bookmark, expire
 
     return fetch(url)
       .then(response => response.json())
-      .then(json => dispatch(receiveNotices(page, json, search_keyword, narrow_bookmark, expired, banner_id)))
+      .then(json => dispatch(receiveNotices(page, json, search_keyword, narrow_bookmark, expired, banner_id, date_range)))
   }
 }

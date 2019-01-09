@@ -11,11 +11,13 @@ import {DatesRangeInput} from 'semantic-ui-calendar-react'
 const mapStateToProps = state => {
     return {
         filters: state.GetFilters.filters,
+        date_range: state.GetNotices.date_range,
+        search_keyword: state.GetNotices.search_keyword,
+        banner_id: state.GetNotices.banner_id,
     }
 };
 
 class DropdownView extends Component {
-
 
     constructor(props) {
         super(props);
@@ -52,11 +54,37 @@ class DropdownView extends Component {
         else return [];
     }
 
-    handleChange = (event, {name, value}) => {
+    handleDateFilterChange = (event, {name, value,}) => {
         if (this.state.hasOwnProperty(name)) {
-            this.setState({ [name]: value });
+            console.log(value);
+            this.setState({[name]: value});
         }
-        console.log(this.state);
+    };
+
+    handleDateFilterSubmit = (event) => {
+        let dates = this.state.datesRange.split(' ');
+        let start = dates[0];
+        let end = dates[2];
+
+        let date_range;
+
+        if (dates.length === 3) {
+            date_range =  {start: start, end: end};
+        } else {
+            date_range = null;
+        }
+
+        if (dates) {
+            this.props.history.push({
+                pathname: '/noticeboard/',
+                state: {
+                    page: initial_page,
+                    search_keyword: this.props.search_keyword,
+                    banner_id: this.props.banner_id,
+                    date_range: date_range
+                }
+            });
+        }
     };
 
     goHome(path) {
@@ -74,9 +102,12 @@ class DropdownView extends Component {
     }
 
     filterNotices(banner_id, path) {
+        console.log(this.props.date_range);
         this.props.history.push({
             pathname: path,
             state: {page: initial_page,
+                    search_keyword: this.props.search_keyword,
+                    date_range: this.props.date_range,
                     banner_id: banner_id}})
     }
 
@@ -99,15 +130,17 @@ class DropdownView extends Component {
                     </Dropdown>
                 </Menu.Item>
                 <Menu.Item>
-                    <Form>
+                    <Form onSubmit={this.handleDateFilterSubmit}>
                         <DatesRangeInput
                             styleName='notice_css.input-bar'
                             name="datesRange"
                             placeholder="Date: From - To"
                             iconPosition="left"
+                            closable={true}
                             closeOnMouseLeave={true}
                             value={this.state.datesRange}
-                            onChange={this.handleChange}/>
+                            dateFormat='YYYY-MM-DD'
+                            onChange={this.handleDateFilterChange}/>
                     </Form>
                 </Menu.Item>
             </Menu.Menu>

@@ -60,7 +60,8 @@ class App extends React.PureComponent {
                     location.state.search_keyword,
                     location.state.narrow_bookmark,
                     location.state.expired,
-                    location.state.banner_id);
+                    location.state.banner_id,
+                    location.state.date_range);
             }
         });
     }
@@ -111,8 +112,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 
   return {
-    GetNotices: (page, search_keyword, narrow_bookmark, expired, banner_id) => {
-        dispatch(GetNotices(page, search_keyword, narrow_bookmark, expired, banner_id))
+    GetNotices: (page, search_keyword, narrow_bookmark, expired, banner_id, date_range) => {
+        dispatch(GetNotices(page, search_keyword, narrow_bookmark, expired, banner_id, date_range))
     },
     GetNotice: (notice_id, expired) => {
         dispatch(GetNotice(notice_id, expired))

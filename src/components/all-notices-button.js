@@ -14,6 +14,7 @@ const mapStateToProps = state => {
         narrow_bookmark: state.GetNotices.narrow_bookmark,
         expired: state.GetNotices.expired,
         banner_id: state.GetNotices.banner_id,
+        date_range: state.GetNotices.date_range
     }
 };
 
@@ -45,7 +46,8 @@ class AllNoticesLink extends Component {
                   search_keyword: this.props.search_keyword,
                   narrow_bookmark: this.props.narrow_bookmark,
                   banner_id: this.props.banner_id,
-                  expired: this.props.expired
+                  expired: this.props.expired,
+                  date_range: this.props.date_range
           }});
     }
 }
