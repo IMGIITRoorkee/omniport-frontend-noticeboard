@@ -50,15 +50,9 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_
         notice_list = notices.map(notice_info => {
             let notice_id;
 
-            if (!expired) {
-                notice_id = notice_info.id;
-            } else {
-                notice_id = notice_info.noticeId;
-            }
-
             return (
-                <Notice key={notice_id}
-                        id={notice_id}
+                <Notice key={notice_info.id}
+                        id={notice_info.id}
                         date={notice_info.datetimeModified}
                         banner={notice_info.banner}
                         title={notice_info.title}

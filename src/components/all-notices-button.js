@@ -32,7 +32,7 @@ class AllNoticesLink extends Component {
                 <Menu.Item>
                 <Button basic styleName='notice_css.tab-button'
                         onClick={() => this.all_notices('/noticeboard/')}
-                        icon='arrow left' content='All Notices'/>
+                        icon='arrow left' content='Back'/>
                 </Menu.Item>
             </Menu.Menu>
         )

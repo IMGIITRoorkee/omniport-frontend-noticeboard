@@ -56,6 +56,7 @@ class DropdownView extends Component {
         if (this.state.hasOwnProperty(name)) {
             this.setState({ [name]: value });
         }
+        console.log(this.state);
     };
 
     goHome(path) {
@@ -80,7 +81,6 @@ class DropdownView extends Component {
     }
 
     render () {
-        console.log(this.props.filters);
 
         return (
             <Menu.Menu position='left'>
