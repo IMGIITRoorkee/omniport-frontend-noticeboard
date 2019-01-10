@@ -130,7 +130,7 @@ class DropdownView extends Component {
                     </Dropdown>
                 </Menu.Item>
                 <Menu.Item>
-                    <Form onSubmit={this.handleDateFilterSubmit}>
+                    <Form onSubmit={this.handleDateFilterSubmit} autoComplete="off">
                         <DatesRangeInput
                             styleName='notice_css.input-bar'
                             name="datesRange"

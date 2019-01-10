@@ -68,12 +68,11 @@ class App extends React.PureComponent {
 
     render () {
         const { match } = this.props;
-        const creators = [
-      {
-        name: 'Rhea Parekh',
-        role: 'Backend and Frontend Developer',
-        link: 'https://github.com/rheaparekh/'
-      }
+        const creators = [{
+            name: 'Rhea Parekh',
+            role: 'Backend and Frontend Developer',
+            link: 'https://github.com/rheaparekh/'
+        }
     ];
 
       return (

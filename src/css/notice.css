@@ -69,8 +69,17 @@
     min-height: 46px !important;
 }
 
+.select-all-activated-list {
+    display: inline-block;
+    margin: 0px !important;
+    padding: 7.3px !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+}
+
 .select-all-button {
     padding: .78571429em .89571429em .78571429em !important;
+    border-radius: 0px !important;
 }
 
 .search-bar {

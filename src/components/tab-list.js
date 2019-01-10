@@ -9,7 +9,7 @@ import { Route } from "react-router-dom";
 export default class TabList extends Component {
     render () {
         return (
-            <Container styleName='notice_css.tab-list'>
+            <Container>
                 <Menu secondary>
                     <Route path="/noticeboard/notice" component={AllNoticesLink}/>
                     <Route exact path="/noticeboard/" component={DropdownView}/>

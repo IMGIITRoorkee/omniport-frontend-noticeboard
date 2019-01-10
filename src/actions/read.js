@@ -1,12 +1,12 @@
-import { BOOKMARK_NOTICE } from "../constants/action-types";
+import { READ_NOTICE } from "../constants/action-types";
 import { urlWhoAmI, urlGetMaintainers, getCookie } from 'formula_one';
-import { urlNotice, urlStarRead } from "../urls";
+import { urlStarRead } from "../urls";
 
 
-function BookmarkNotice(notice_id_list, toggle) {
+function ReadNotice(notice_id_list, toggle) {
 
   return {
-    type: BOOKMARK_NOTICE,
+    type: READ_NOTICE,
     payload: {
         notice_id_list: notice_id_list,
         toggle: toggle
@@ -14,20 +14,14 @@ function BookmarkNotice(notice_id_list, toggle) {
   }
 }
 
-export default function NoticeBookmark(notice_id_list, toggle) {
+export default function NoticeRead(notice_id_list, toggle) {
 
   return (dispatch) => {
      let headers = {
          'Content-Type': 'application/json',
          'X-CSRFToken': getCookie('csrftoken')
      };
-     let keyword;
-
-     if (toggle) {
-         keyword = 'star';
-     } else {
-         keyword = 'unstar';
-     }
+     let keyword = 'read';
 
      let body = JSON.stringify({
          keyword: keyword,
@@ -35,6 +29,6 @@ export default function NoticeBookmark(notice_id_list, toggle) {
      });
      return fetch(urlStarRead(),
            {method: 'post', headers: headers, body: body})
-         .then(response => dispatch(BookmarkNotice(notice_id_list, toggle)));
+         .then(response => dispatch(ReadNotice(notice_id_list, toggle)));
   }
 }

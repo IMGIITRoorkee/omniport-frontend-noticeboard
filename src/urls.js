@@ -11,7 +11,6 @@ export function url_search_get_param(url, search_keyword) {
 
 export function urlExpiredNotices (page, search_keyword) {
     let url = `${urlMainApp()}old/?page=${page}`;
-    console.log(url);
     return url_search_get_param(url, search_keyword);
 }
 

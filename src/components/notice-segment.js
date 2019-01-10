@@ -1,9 +1,12 @@
 import React from 'react';
-import { Table, Container, Button, Loader, Pagination, Icon } from 'semantic-ui-react'
+import { Table, Container, Button, Loader, Pagination, Icon, Segment } from 'semantic-ui-react'
 import Notice from './notice';
 import notice_css from "../css/notice.css";
 import { connect } from "react-redux";
 import GetNotices from "../actions/get_notices"
+import SelectAll from "../actions/select_all"
+import NoticeBookmark from "../actions/bookmark";
+import NoticeRead from "../actions/read";
 
 
 const mapStateToProps = state => {
@@ -18,7 +21,9 @@ const mapStateToProps = state => {
             narrow_bookmark: state.GetNotices.narrow_bookmark,
             expired: state.GetNotices.expired,
             banner_id: state.GetNotices.banner_id,
-            date_range: state.GetNotices.date_range
+            date_range: state.GetNotices.date_range,
+            select_all_active: state.GetNotices.select_all_active,
+            selected_notices: state.GetNotices.selected_notices
         };
     } else {
         return {
@@ -34,26 +39,32 @@ const mapDispatchToProps = dispatch => {
   return {
     GetNotices: (page, search_keyword, narrow_bookmark, expired, banner_id, date_range) => {
       dispatch(GetNotices(page, search_keyword, narrow_bookmark, expired, banner_id, date_range))
-    }
+    },
+    SelectAll: (select_all_active) => {
+        dispatch(SelectAll(select_all_active));
+    },
+      NoticeBookmark: (notice_id_list, toggle) => {
+        dispatch(NoticeBookmark(notice_id_list, toggle));
+    },
+      NoticeRead: (notice_id_list, toggle) => {
+        dispatch(NoticeRead(notice_id_list, toggle));
+    },
   }
 };
 
 
-const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_id, date_range,
-                            is_fetching_notices, GetNotices, search_keyword, page, expired}) => {
-    let notice_list;
-    let active_page;
-    let no_notices;
-    let display_select_all;
+const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_id, NoticeBookmark,
+                            NoticeRead, date_range, SelectAll, select_all_active, is_fetching_notices,
+                            GetNotices, search_keyword, page, expired, selected_notices}) => {
+    let notice_list, active_page, no_notices, display_select_all, toggle;
 
     if (!is_fetching_notices) {
-
         notice_list = notices.map(notice_info => {
-            let notice_id;
 
             return (
                 <Notice key={notice_info.id}
                         id={notice_info.id}
+                        is_selected={notice_info.is_selected}
                         date={notice_info.datetimeModified}
                         banner={notice_info.banner}
                         title={notice_info.title}
@@ -80,6 +91,27 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_
         GetNotices(active_page, search_keyword, narrow_bookmark, expired, banner_id, date_range);
     };
 
+    const selectAll = (e) => {
+        SelectAll(!select_all_active);
+    };
+
+    const bookmark = (e) => {
+         toggle = true;
+         NoticeBookmark(selected_notices, toggle);
+         SelectAll(false);
+    };
+
+    const remove_bookmark = (e) => {
+         toggle = false;
+         NoticeBookmark(selected_notices, toggle);
+         SelectAll(false);
+    };
+
+    const read = (e) => {
+         toggle = true;
+         NoticeRead(selected_notices, toggle);
+         SelectAll(false);
+    };
 
     return (
 
@@ -88,9 +120,36 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_
 
             <Container styleName='notice_css.select-all-container'>
                 {display_select_all ? (
-                <Button basic icon styleName='notice_css.select-all-button'>
-                    <Icon name='square outline' color='blue'> </Icon>
-                </Button> ) : (
+                    <div >
+                        {select_all_active ? (
+                            <div>
+                                <Button basic icon styleName='notice_css.select-all-button'
+                                    onClick={selectAll}>
+                                    <Icon name='square' color='blue'></Icon>
+                                </Button>
+                                <Segment styleName='notice_css.select-all-activated-list'>
+                                    <Button basic icon onClick={read}>
+                                        <Icon name='envelope open outline' color='blue'></Icon>
+                                        Mark as Read
+                                    </Button>
+                                    <Button basic icon onClick={bookmark}>
+                                        <Icon name='bookmark' color='blue'></Icon>
+                                        Bookmark
+                                    </Button>
+                                    <Button basic icon onClick={remove_bookmark}>
+                                        <Icon name='bookmark outline' color='blue'></Icon>
+                                        Remove Bookmark
+                                    </Button>
+                                </Segment>
+                            </div>
+                        ) : (
+                            <Button basic icon styleName='notice_css.select-all-button'
+                                    onClick={selectAll}>
+                                <Icon name='square outline'> </Icon>
+                            </Button>
+                                )}
+                    </div>
+                ) : (
                     <div></div>
                 )}
             </Container>
