@@ -1,5 +1,5 @@
 .notice-container {
-    margin-top: 30px;
+    margin-top: 2em;
     margin-left: auto;
     margin-right: auto;
     padding-bottom: 10px;
@@ -7,7 +7,7 @@
 }
 
 .notice-list {
-    margin-top: 2em;
+    margin-top: 5.5em;
 }
 
 .notice-list-view {
@@ -66,15 +66,48 @@
 
 .select-all-container {
     padding-bottom: 10px;
-    min-height: 46px !important;
+    height: 48px !important;
+}
+
+.table-row {
+    display: table-row;
+    position: relative;
+}
+
+.display-filters {
+    width: 100%;
+    display: table-cell;
+    text-align: right;
+    margin-left: 30px !important;
+}
+
+.filter-block {
+    display: inline;
+    padding-right: 10px;
+    color: #acabab;
+}
+
+.select-all-list {
+    margin-top: 0px !important;
+    padding: 0px 20px !important;
+    border-radius: 1px !important;
+    box-shadow: none !important;
 }
 
 .select-all-activated-list {
     display: inline-block;
-    margin: 0px !important;
-    padding: 7.3px !important;
-    border-radius: 0px !important;
-    box-shadow: none !important;
+    color: #48A7F1 !important;
+    border: 1px solid #B7DFFF !important;
+    border-left: none !important;
+}
+
+.select-all-button-activated {
+    border: 1px solid #B7DFFF !important;
+    margin-right: 0px !important;
+}
+
+.select-all-button-not-activated {
+    margin-right: 10px !important;
 }
 
 .select-all-button {
@@ -123,17 +156,20 @@
     width: 0.1504% !important;
     text-align: center;
     border-right: 1px solid rgba(34, 36, 38, 0.1);
+    color: #acabab;
 }
 
 
 .cell-width-2 {
     width: 0.33% !important;
     text-align: center;
+    color: #acabab;
 }
 
 .cell-width-3 {
     width: 0.6% !important;
     text-align: center;
+    color: #acabab;
 }
 
 .cell-hover {

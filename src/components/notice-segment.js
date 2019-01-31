@@ -10,7 +10,7 @@ import NoticeRead from "../actions/read";
 
 
 const mapStateToProps = state => {
-    
+
     if (!state.GetNotices.is_fetching_notices) {
         return {
             notices: state.GetNotices.notices,
@@ -23,7 +23,8 @@ const mapStateToProps = state => {
             banner_id: state.GetNotices.banner_id,
             date_range: state.GetNotices.date_range,
             select_all_active: state.GetNotices.select_all_active,
-            selected_notices: state.GetNotices.selected_notices
+            selected_notices: state.GetNotices.selected_notices,
+            filters: state.GetFilters.filters,
         };
     } else {
         return {
@@ -37,26 +38,46 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    GetNotices: (page, search_keyword, narrow_bookmark, expired, banner_id, date_range) => {
-      dispatch(GetNotices(page, search_keyword, narrow_bookmark, expired, banner_id, date_range))
-    },
-    SelectAll: (select_all_active) => {
+      GetNotices: (page, search_keyword, narrow_bookmark,
+                 expired, banner_id, date_range) => {
+          dispatch(GetNotices(page, search_keyword, narrow_bookmark,
+              expired, banner_id, date_range))
+      },
+      SelectAll: (select_all_active) => {
         dispatch(SelectAll(select_all_active));
-    },
+        },
       NoticeBookmark: (notice_id_list, toggle) => {
         dispatch(NoticeBookmark(notice_id_list, toggle));
-    },
+        },
       NoticeRead: (notice_id_list, toggle) => {
         dispatch(NoticeRead(notice_id_list, toggle));
-    },
+        },
   }
 };
 
 
-const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_id, NoticeBookmark,
-                            NoticeRead, date_range, SelectAll, select_all_active, is_fetching_notices,
+const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_id,
+                            NoticeBookmark, NoticeRead, date_range, filters,
+                            SelectAll, select_all_active, is_fetching_notices,
                             GetNotices, search_keyword, page, expired, selected_notices}) => {
-    let notice_list, active_page, no_notices, display_select_all, toggle;
+    let notice_list, date_display, active_page, no_notices, display_select_all, toggle, banner_name;
+
+    if (banner_id) {
+        for (let index=0; index<filters.length; index++) {
+            for (let j=0; j<filters[index].banner.length; j++){
+                if (banner_id == filters[index].banner[j].id) {
+                    banner_name = filters[index].banner[j].name;
+                }
+            }
+        }
+    } else {
+        banner_name = null;
+    }
+
+    if (date_range) {
+        date_display = date_range.start + ' to ' + date_range.end;
+    }
+    console.log(date_display);
 
     if (!is_fetching_notices) {
         notice_list = notices.map(notice_info => {
@@ -123,31 +144,37 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_
                     <div >
                         {select_all_active ? (
                             <div>
-                                <Button basic icon styleName='notice_css.select-all-button'
+                                <Button basic icon styleName='notice_css.select-all-button-activated notice_css.select-all-button notice_css.tab-button'
                                     onClick={selectAll}>
                                     <Icon name='square' color='blue'></Icon>
                                 </Button>
-                                <Segment styleName='notice_css.select-all-activated-list'>
-                                    <Button basic icon onClick={read}>
+                                <Segment styleName='notice_css.select-all-list notice_css.select-all-activated-list'>
+                                    <Button basic styleName='notice_css.tab-button' icon onClick={read}>
                                         <Icon name='envelope open outline' color='blue'></Icon>
                                         Mark as Read
                                     </Button>
-                                    <Button basic icon onClick={bookmark}>
+                                    <Button basic styleName='notice_css.tab-button' icon onClick={bookmark}>
                                         <Icon name='bookmark' color='blue'></Icon>
                                         Bookmark
                                     </Button>
-                                    <Button basic icon onClick={remove_bookmark}>
+                                    <Button basic styleName='notice_css.tab-button' icon onClick={remove_bookmark}>
                                         <Icon name='bookmark outline' color='blue'></Icon>
                                         Remove Bookmark
                                     </Button>
                                 </Segment>
                             </div>
                         ) : (
-                            <Button basic icon styleName='notice_css.select-all-button'
-                                    onClick={selectAll}>
-                                <Icon name='square outline'> </Icon>
-                            </Button>
-                                )}
+                            <div styleName="notice_css.table-row">
+                                <Button basic icon styleName='notice_css.select-all-button-not-activated  notice_css.select-all-button'
+                                        onClick={selectAll}>
+                                    <Icon name='square outline'> </Icon>
+                                </Button>
+                                <Segment styleName='notice_css.select-all-list notice_css.display-filters'>
+                                    <div styleName='notice_css.filter-block'> {banner_name} </div>
+                                    <div styleName='notice_css.filter-block'> {date_display} </div>
+                                </Segment>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div></div>
