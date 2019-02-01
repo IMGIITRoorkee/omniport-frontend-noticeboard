@@ -20,6 +20,12 @@ function requestNotices(page, search_keyword) {
 
 function receiveNotices(page, notice_data_list, search_keyword,
                         narrow_bookmark, expired, banner_id, date_range) {
+
+    let total_pages = Math.ceil(notice_data_list.count/10);
+    if (total_pages == 0) {
+        // The total pages can't be 0 in Pagination component
+        total_pages = 1;
+    }
     
     return {
         type: GET_NOTICES,
@@ -30,7 +36,7 @@ function receiveNotices(page, notice_data_list, search_keyword,
             date_range: date_range,
             notices: notice_data_list.results,
             search_keyword: search_keyword,
-            total_pages: Math.ceil(notice_data_list.count/10),
+            total_pages: total_pages,
             page: page,
         }
     }

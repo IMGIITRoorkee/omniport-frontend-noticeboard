@@ -77,7 +77,6 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_
     if (date_range) {
         date_display = date_range.start + ' to ' + date_range.end;
     }
-    console.log(date_display);
 
     if (!is_fetching_notices) {
         notice_list = notices.map(notice_info => {
