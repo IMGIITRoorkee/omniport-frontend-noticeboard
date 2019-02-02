@@ -54,7 +54,7 @@ const Notice = ({id, date, banner, title, is_selected, select_all_active, Toggle
     };
 
     return (
-        <Table.Row styleName={read ? 'notice_css.notice-row-read notice_css.notice-row': 'notice_css.notice-row'} >
+        <Table.Row styleName={read ? 'notice_css.notice-row-read notice_css.notice-row': 'notice_css.notice-row-unread notice_css.notice-row'}>
             <Table.Cell styleName={expired ? 'notice_css.cell-width-1':
                                              'notice_css.cell-width-1 notice_css.cell-hover'}
                         onClick={selectNotice}>

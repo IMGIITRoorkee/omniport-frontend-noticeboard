@@ -5,8 +5,7 @@ import 'rc-calendar/assets/index.css';
 import { connect } from "react-redux";
 import NoticeBookmark from "../actions/bookmark";
 import {initial_page} from "../constants/constants";
-import {DatesRangeInput} from 'semantic-ui-calendar-react'
-
+import {DatesRangeInput} from 'semantic-ui-calendar-react';
 
 const mapStateToProps = state => {
     return {
@@ -31,28 +30,52 @@ class DropdownView extends Component {
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
     }
 
+
+    dateFormatMatch = (dates) => {
+         dates = dates.split(' ');
+
+        if (dates.length ===3 && dates[2]!='') {
+            let start = dates[0];
+            let end = dates[2];
+
+            let date_range =  {start: start, end: end};
+            return date_range;
+        } else {
+            return null;
+        }
+    }
+
     handleDateFilterChange = (event, {name, value,}) => {
         if (this.state.hasOwnProperty(name)) {
-            console.log(value);
             this.setState({[name]: value});
+
+            let date_range;
+            date_range = this.dateFormatMatch(value);
+
+            let flag = false;
+            if (date_range || value === '') {
+                flag = true;
+            }
+
+            if (flag) {
+                this.props.history.push({
+                    pathname: '/noticeboard/',
+                    state: {
+                        page: initial_page,
+                        search_keyword: this.props.search_keyword,
+                        banner_id: this.props.banner_id,
+                        date_range: date_range
+                    }
+                });
+            }
         }
     };
 
     handleDateFilterSubmit = () => {
-        let dates = this.state.datesRange.split(' ');
-        let start = dates[0];
-        let end = dates[2];
-
         let date_range;
+        date_range = this.dateFormatMatch(this.state.datesRange);
 
-        if (dates.length === 3) {
-            date_range =  {start: start, end: end};
-        } else {
-            date_range = null;
-        }
-        console.log(dates);
-
-        if (dates) {
+        if (true) {
             this.props.history.push({
                 pathname: '/noticeboard/',
                 state: {

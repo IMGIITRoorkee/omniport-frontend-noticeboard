@@ -43,6 +43,7 @@
 
 .notice-box {
     margin-top: 8em;
+    background: white !important;
 }
 
 .notice-posted-by {
@@ -113,6 +114,7 @@
 .select-all-button {
     padding: .78571429em .89571429em .78571429em !important;
     border-radius: 0px !important;
+    background: white !important;
 }
 
 .input-bar input {
@@ -174,6 +176,10 @@
 
 .notice-row-read {
     background: #f5f5f5 !important;
+}
+
+.notice-row-unread {
+    background: white !important;
 }
 
 .cell-width-1 {

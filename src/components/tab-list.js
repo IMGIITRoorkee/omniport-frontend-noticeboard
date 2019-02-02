@@ -17,8 +17,6 @@ const mapStateToProps = state => {
 
 class TabList extends Component {
     render () {
-
-        console.log(this.props.narrow_bookmark);
         let narrow_bookmark = this.props.narrow_bookmark;
 
         return (
