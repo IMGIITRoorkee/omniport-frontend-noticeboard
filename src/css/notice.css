@@ -1,9 +1,33 @@
+.side-nav {
+    position: absolute;
+    height: 100%;
+    width: 10em;
+}
+
+.main-div {
+    background: #F2F5F7;
+}
+
 .notice-container {
-    margin-top: 2em;
     margin-left: auto;
     margin-right: auto;
-    padding-bottom: 10px;
-    width: 75em;
+    width: calc(100% - 10em);
+    position: absolute;
+    left: 10em;
+    height: 100%;
+}
+
+.sidenav-menu {
+    width: 100% !important;
+    border: 1px solid #DDDDDD !important;
+    height: 100%;
+    margin-left: 0px !important;
+    background: white !important;
+}
+
+.top-bar {
+    margin-left: 0px !important;
+    margin-top: 2.5em !important;
 }
 
 .notice-list {
@@ -128,7 +152,9 @@
 
 .date-bar {
     padding-left: 0px !important;
+    padding-right: 0px !important;
     margin-left: 0px !important;
+    margin-right: 0px !important;
     width: 160px !important;
 }
 
@@ -160,10 +186,6 @@
     border: 1px solid #DDDDDD !important;
     border-right: none !important;
     border-radius: 0px !important;
-}
-
-.menu-button-all-notices {
-    margin-right: 0px !important;
 }
 
 .menu-right {

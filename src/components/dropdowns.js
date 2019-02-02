@@ -3,9 +3,10 @@ import { Dropdown, Form, Menu, Search } from 'semantic-ui-react';
 import notice_css from "../css/notice.css";
 import 'rc-calendar/assets/index.css';
 import { connect } from "react-redux";
-import NoticeBookmark from "../actions/bookmark";
 import {initial_page} from "../constants/constants";
 import {DatesRangeInput} from 'semantic-ui-calendar-react';
+
+
 
 const mapStateToProps = state => {
     return {
@@ -156,21 +157,6 @@ class DropdownView extends Component {
 
         return (
             <Menu.Menu position='left'>
-                <Menu.Item styleName='notice_css.menu-button-no-border notice_css.menu-button-all-notices'>
-                    <Dropdown text='All Notices'>
-                        <Dropdown.Menu>
-                            <Dropdown.Item text='All Notices'
-                                           onClick={() => this.goHome('/noticeboard/')}/>
-
-                            {this.renderOuterDropdownItems(this.props.filters)}
-
-                            <Dropdown.Divider styleName='notice_css.dropdown-divider'/>
-                            <Dropdown.Item text='Expired'
-                                       onClick={() => this.expiredNotices('/noticeboard/')}/>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </Menu.Item>
-
                 <Menu.Item styleName='notice_css.date-bar'>
                     <Form onSubmit={this.handleDateFilterSubmit} autoComplete="off">
                         <DatesRangeInput

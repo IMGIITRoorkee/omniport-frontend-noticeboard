@@ -10,6 +10,7 @@ import {initial_page, search_keyword} from "../constants/constants";
 import NoticeListView from "./notice-segment";
 import NoticeView from "./notice-view"
 import TabList from "./tab-list";
+import SideNav from "./sidenav"
 import { Route, withRouter } from "react-router-dom";
 import GetNotices from "../actions/get_notices";
 import GetNotice from "../actions/get_notice";
@@ -72,8 +73,17 @@ class App extends React.PureComponent {
             name: 'Rhea Parekh',
             role: 'Backend and Frontend Developer',
             link: 'https://github.com/rheaparekh/'
+        }, {
+            name: 'Gouranshi Choudhary',
+            role: 'Designer'
+        }, {
+            name: 'Harshit Khetan',
+            role: 'IOS Developer',
+        }, {
+            name: 'Aniket Goyal',
+            role: 'Android Developer'
         }
-    ];
+        ];
 
       return (
           <React.Fragment>
@@ -83,13 +93,18 @@ class App extends React.PureComponent {
                   <AppMain>
                       <div styleName='main.app-main'>
                           <Scrollbars autoHide>
-                              <div styleName='notice_css.notice-container'>
-                                  <TabList history={this.props.history}/>
-                                  <Route exact path="/noticeboard"
+                              <div styleName="notice_css.main-div">
+                                  <div styleName='notice_css.side-nav'>
+                                      <SideNav history={this.props.history}/>
+                                  </div>
+                                  <div styleName='notice_css.notice-container'>
+                                      <TabList history={this.props.history}/>
+                                      <Route exact path="/noticeboard"
                                          render={
                                              (props) => <NoticeListView {...props}
-                                              history={this.props.history}/>}/>
-                                  <Route path="/noticeboard/notice" component={NoticeView} />
+                                                                        history={this.props.history}/>}/>
+                                      <Route path="/noticeboard/notice" component={NoticeView} />
+                                  </div>
                               </div>
                           </Scrollbars>
                       </div>

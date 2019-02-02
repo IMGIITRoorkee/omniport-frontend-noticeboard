@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Menu } from 'semantic-ui-react';
 import notice_css from "../css/notice.css";
-import TabCommonElements from "./tab-common";
 import DropdownView from "./dropdowns";
 import AllNoticesLink from "./all-notices-button";
 import {Route, withRouter} from "react-router-dom";
@@ -21,7 +20,7 @@ class TabList extends Component {
 
         return (
             <Container>
-                <Menu secondary>
+                <Menu secondary styleName='notice_css.top-bar'>
                     {!narrow_bookmark ? (
                         <div>
                             <Route path="/noticeboard/notice" component={AllNoticesLink}/>
@@ -30,7 +29,6 @@ class TabList extends Component {
                         ) : (
                             <AllNoticesLink/>
                     )}
-                    <TabCommonElements history={this.props.history}/>
                 </Menu>
             </Container>
         )
