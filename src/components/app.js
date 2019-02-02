@@ -81,10 +81,8 @@ class App extends React.PureComponent {
                   <AppHeader appName='Noticeboard'
                              appLink={`http://${window.location.host}${match.path}`}
                              userDropdown/>
-                  {isMobile && <Sidebar />}
                   <AppMain>
                       <div styleName='main.app-main'>
-                          {isBrowser && <Sidebar />}
                           <Scrollbars autoHide>
                               <div styleName='notice_css.notice-container'>
                                   <TabList history={this.props.history}/>

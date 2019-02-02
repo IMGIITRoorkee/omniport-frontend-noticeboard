@@ -115,15 +115,19 @@
     border-radius: 0px !important;
 }
 
-.search-bar {
-    display: inline;
-    margin-left: 125px;
-    margin-right: 15px;
+.input-bar input {
+    border-radius: 0px !important;
+    height: 38px;
 }
 
-.input-bar input {
-    border-radius: 4px !important;
-    height: 29px;
+.search-bar input {
+    width: 300px !important;
+}
+
+.date-bar {
+    padding-left: 0px !important;
+    margin-left: 0px !important;
+    width: 160px !important;
 }
 
 .calendar-element {
@@ -142,6 +146,26 @@
 
 .tab-button {
     box-shadow: none !important;
+    border-radius: 0px !important;
+}
+
+.menu-button-border {
+    border: 1px solid #DDDDDD !important;
+    border-radius: 0px !important;
+}
+
+.menu-button-no-border {
+    border: 1px solid #DDDDDD !important;
+    border-right: none !important;
+    border-radius: 0px !important;
+}
+
+.menu-button-all-notices {
+    margin-right: 0px !important;
+}
+
+.menu-right {
+    padding-right: 0px !important;
 }
 
 .notice-row {
@@ -156,20 +180,20 @@
     width: 0.1504% !important;
     text-align: center;
     border-right: 1px solid rgba(34, 36, 38, 0.1);
-    color: #acabab;
+    color: #878787;
 }
 
 
 .cell-width-2 {
     width: 0.33% !important;
     text-align: center;
-    color: #acabab;
+    color: #878787;
 }
 
 .cell-width-3 {
     width: 0.6% !important;
     text-align: center;
-    color: #acabab;
+    color: #878787;
 }
 
 .cell-hover {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, Form, Menu } from 'semantic-ui-react';
+import { Dropdown, Form, Menu, Search } from 'semantic-ui-react';
 import notice_css from "../css/notice.css";
 import 'rc-calendar/assets/index.css';
 import { connect } from "react-redux";
@@ -23,35 +23,12 @@ class DropdownView extends Component {
         super(props);
 
         this.state = {
-            datesRange: ''
+            datesRange: '',
+            value: ''
         };
-    }
 
-    renderInnerDropdownItems(items) {
-        if (items.length > 0) {
-            return items.map((item, index) => (
-                <Dropdown.Item key={index}
-                               onClick={() => this.filterNotices(item.id, '/noticeboard/')}>
-                    {item.name}
-                </Dropdown.Item>
-            ));
-        }
-        else return [];
-    }
-
-    renderOuterDropdownItems(items) {
-        if (items.length > 0) {
-            return items.map((item, index) => (
-                <Dropdown.Item key={index}>
-                    <Dropdown text={item.name} pointing='left'>
-                        <Dropdown.Menu styleName='notice_css.dropdown-left'>
-                            {this.renderInnerDropdownItems(item.banner)}
-                            </Dropdown.Menu>
-                    </Dropdown>
-                </Dropdown.Item>
-            ));
-        }
-        else return [];
+        this.handleSearchChange = this.handleSearchChange.bind(this);
+        this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
     }
 
     handleDateFilterChange = (event, {name, value,}) => {
@@ -61,7 +38,7 @@ class DropdownView extends Component {
         }
     };
 
-    handleDateFilterSubmit = (event) => {
+    handleDateFilterSubmit = () => {
         let dates = this.state.datesRange.split(' ');
         let start = dates[0];
         let end = dates[2];
@@ -73,6 +50,7 @@ class DropdownView extends Component {
         } else {
             date_range = null;
         }
+        console.log(dates);
 
         if (dates) {
             this.props.history.push({
@@ -102,7 +80,6 @@ class DropdownView extends Component {
     }
 
     filterNotices(banner_id, path) {
-        console.log(this.props.date_range);
         this.props.history.push({
             pathname: path,
             state: {page: initial_page,
@@ -110,12 +87,53 @@ class DropdownView extends Component {
                     date_range: this.props.date_range,
                     banner_id: banner_id}})
     }
+    
+    renderInnerDropdownItems(items) {
+        if (items.length > 0) {
+            return items.map((item, index) => (
+                <Dropdown.Item key={index}
+                               onClick={() => this.filterNotices(item.id, '/noticeboard/')}>
+                    {item.name}
+                </Dropdown.Item>
+            ));
+        }
+        else return [];
+    }
+
+    renderOuterDropdownItems(items) {
+        if (items.length > 0) {
+            return items.map((item, index) => (
+                <Dropdown.Item key={index}>
+                    <Dropdown text={item.name} pointing='left'>
+                        <Dropdown.Menu styleName='notice_css.dropdown-left'>
+                            {this.renderInnerDropdownItems(item.banner)}
+                            </Dropdown.Menu>
+                    </Dropdown>
+                </Dropdown.Item>
+            ));
+        }
+        else return [];
+    }
+
+    handleSearchChange(event) {
+        this.setState({value: event.target.value});
+    }
+
+    handleSearchSubmit() {
+        this.props.history.push({pathname: '/noticeboard/',
+            state: {page: initial_page,
+                    search_keyword: this.state.value,
+                    narrow_bookmark: false,
+                    banner_id: this.props.banner_id,
+                    date_range: this.props.date_range,
+                    expired: this.props.expired}});
+    }
 
     render () {
 
         return (
             <Menu.Menu position='left'>
-                <Menu.Item>
+                <Menu.Item styleName='notice_css.menu-button-no-border notice_css.menu-button-all-notices'>
                     <Dropdown text='All Notices'>
                         <Dropdown.Menu>
                             <Dropdown.Item text='All Notices'
@@ -129,7 +147,8 @@ class DropdownView extends Component {
                         </Dropdown.Menu>
                     </Dropdown>
                 </Menu.Item>
-                <Menu.Item>
+
+                <Menu.Item styleName='notice_css.date-bar'>
                     <Form onSubmit={this.handleDateFilterSubmit} autoComplete="off">
                         <DatesRangeInput
                             styleName='notice_css.input-bar'
@@ -141,6 +160,16 @@ class DropdownView extends Component {
                             value={this.state.datesRange}
                             dateFormat='YYYY-MM-DD'
                             onChange={this.handleDateFilterChange}/>
+                    </Form>
+                </Menu.Item>
+
+                <Menu.Item>
+                    <Form onSubmit={this.handleSearchSubmit}>
+                        <Search styleName='notice_css.input-bar notice_css.search-bar'
+                            onSearchChange={this.handleSearchChange}
+                            type='text'
+                            showNoResults={false}
+                            value={this.state.value}/>
                     </Form>
                 </Menu.Item>
             </Menu.Menu>

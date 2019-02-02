@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Search, Button, Menu } from 'semantic-ui-react';
+import { Button, Menu } from 'semantic-ui-react';
 import notice_css from "../css/notice.css";
 import { connect } from "react-redux";
 import {initial_page} from "../constants/constants";
@@ -15,28 +15,6 @@ const mapStateToProps = state => {
 
 class TabCommonElements extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {value: ''};
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleChange(event) {
-        this.setState({value: event.target.value});
-    }
-
-    handleSubmit() {
-        this.props.history.push({pathname: '/noticeboard/',
-            state: {page: initial_page,
-                    search_keyword: this.state.value,
-                    narrow_bookmark: false,
-                    banner_id: this.props.banner_id,
-                    date_range: this.props.date_range,
-                    expired: this.props.expired}});
-    }
-
     goHome(path) {
       this.props.history.push({pathname: path, state: {page: initial_page, narrow_bookmark: false}});
     }
@@ -48,19 +26,10 @@ class TabCommonElements extends Component {
     render () {
         return (
             <Menu.Menu position='right'>
-                <Menu.Item>
-                    <Form onSubmit={this.handleSubmit}>
-                        <Search styleName='notice_css.input-bar'
-                            onSearchChange={this.handleChange}
-                            type='text'
-                            showNoResults={false}
-                            value={this.state.value}/>
-                    </Form>
-                </Menu.Item>
-                <Menu.Item>
-                    <Button basic styleName='notice_css.tab-button'
+                <Menu.Item styleName='notice_css.menu-right'>
+                    <Button basic styleName='notice_css.tab-button notice_css.menu-button-no-border'
                         onClick={() => this.narrowBookmarks('/noticeboard/')}>Bookmarks</Button>
-                    <Button basic styleName='notice_css.tab-button'
+                    <Button basic styleName='notice_css.tab-button notice_css.menu-button-border'
                         onClick={() => this.goHome('/noticeboard/')}>Home</Button>
                 </Menu.Item>
             </Menu.Menu>

@@ -31,7 +31,7 @@ class AllNoticesLink extends Component {
         return (
             <Menu.Menu position='left'>
                 <Menu.Item>
-                <Button basic styleName='notice_css.tab-button'
+                    <Button basic styleName='notice_css.menu-button-border notice_css.tab-button'
                         onClick={() => this.all_notices('/noticeboard/')}
                         icon='arrow left' content='Back'/>
                 </Menu.Item>
@@ -40,11 +40,17 @@ class AllNoticesLink extends Component {
     };
 
     all_notices(path) {
+
+      let narrow_bookmark = this.props.narrow_bookmark;
+      if (narrow_bookmark) {
+          narrow_bookmark = !narrow_bookmark;
+      }
+
       this.props.history.push({
           pathname: path,
           state: {page: this.props.page,
                   search_keyword: this.props.search_keyword,
-                  narrow_bookmark: this.props.narrow_bookmark,
+                  narrow_bookmark: narrow_bookmark,
                   banner_id: this.props.banner_id,
                   expired: this.props.expired,
                   date_range: this.props.date_range
