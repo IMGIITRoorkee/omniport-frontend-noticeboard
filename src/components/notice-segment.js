@@ -143,7 +143,7 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_
                     <div >
                         {select_all_active ? (
                             <div>
-                                <Button basic icon styleName='notice_css.select-all-button-activated notice_css.select-all-button notice_css.tab-button'
+                                <Button icon styleName='notice_css.select-all-button-activated notice_css.select-all-button notice_css.tab-button'
                                     onClick={selectAll}>
                                     <Icon name='square' color='blue'></Icon>
                                 </Button>
@@ -164,7 +164,7 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_
                             </div>
                         ) : (
                             <div styleName="notice_css.table-row">
-                                <Button basic icon styleName='notice_css.select-all-button-not-activated  notice_css.select-all-button'
+                                <Button icon styleName='notice_css.select-all-button-not-activated  notice_css.select-all-button'
                                         onClick={selectAll}>
                                     <Icon name='square outline'> </Icon>
                                 </Button>

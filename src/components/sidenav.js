@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, Menu, Divider } from 'semantic-ui-react';
+import { Dropdown, Menu, Divider, Icon } from 'semantic-ui-react';
 import notice_css from "../css/notice.css";
 import 'rc-calendar/assets/index.css';
 import { connect } from "react-redux";
@@ -21,7 +21,6 @@ const mapStateToProps = state => {
 class SideNav extends Component {
 
     goHome(path) {
-        console.log(this.props);
       this.props.history.push({
           pathname: path,
           state: {page: initial_page,
@@ -53,6 +52,7 @@ class SideNav extends Component {
             return items.map((item, index) => (
                 <Dropdown.Item key={index}
                                onClick={() => this.filterNotices(item.id, '/noticeboard/')}>
+
                     {item.name}
                 </Dropdown.Item>
             ));
@@ -63,7 +63,7 @@ class SideNav extends Component {
     renderOuterDropdownItems(items) {
         if (items.length > 0) {
             return items.map((item, index) => (
-                <Dropdown item text={item.name} key={index}>
+                <Dropdown item text={item.name} key={index} scrolling={true}>
                     <Dropdown.Menu>
                         {this.renderInnerDropdownItems(item.banner)}
                         </Dropdown.Menu>
@@ -79,7 +79,10 @@ class SideNav extends Component {
             <Menu secondary vertical styleName='notice_css.sidenav-menu'>
                 <Menu.Item
                     name='All Notices'
-                    onClick={() => this.goHome('/noticeboard/')}/>
+                    onClick={() => this.goHome('/noticeboard/')}>
+                    <Icon name='home' />
+                    All Notices
+                </Menu.Item>
 
                 {this.renderOuterDropdownItems(this.props.filters)}
 

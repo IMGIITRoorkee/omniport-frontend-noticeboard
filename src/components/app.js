@@ -93,7 +93,6 @@ class App extends React.PureComponent {
                   <AppMain>
                       <div styleName='main.app-main'>
                           <Scrollbars autoHide>
-                              <div styleName="notice_css.main-div">
                                   <div styleName='notice_css.side-nav'>
                                       <SideNav history={this.props.history}/>
                                   </div>
@@ -105,7 +104,6 @@ class App extends React.PureComponent {
                                                                         history={this.props.history}/>}/>
                                       <Route path="/noticeboard/notice" component={NoticeView} />
                                   </div>
-                              </div>
                           </Scrollbars>
                       </div>
                   </AppMain>

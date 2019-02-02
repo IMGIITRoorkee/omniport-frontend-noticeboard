@@ -62,7 +62,7 @@ const Notice = ({id, date, banner, title, is_selected, select_all_active, Toggle
                     <Icon name='square outline'/>
                 ) : (
                     <Icon name={is_selected ? 'square': 'square outline'}
-                          color={is_selected ? 'blue': 'black'}
+                          color={is_selected ? 'blue': 'grey'}
                     />
                 )}
             </Table.Cell>

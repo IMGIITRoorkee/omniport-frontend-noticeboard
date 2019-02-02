@@ -30,8 +30,8 @@ class AllNoticesLink extends Component {
     render () {
         return (
             <Menu.Menu position='left'>
-                <Menu.Item>
-                    <Button basic styleName='notice_css.menu-button-border notice_css.tab-button'
+                <Menu.Item styleName='notice_css.back-button'>
+                    <Button styleName='notice_css.menu-button-border notice_css.tab-button'
                         onClick={() => this.all_notices('/noticeboard/')}
                         icon='arrow left' content='Back'/>
                 </Menu.Item>
