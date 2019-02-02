@@ -78,9 +78,8 @@ class App extends React.PureComponent {
       return (
           <React.Fragment>
               <div styleName='main.app'>
-                  <AppHeader appName='Noticeboard'
-                             appLink={`http://${window.location.host}${match.path}`}
-                             userDropdown/>
+                  <AppHeader appName='noticeboard'
+                             userDropdown mode='app'/>
                   <AppMain>
                       <div styleName='main.app-main'>
                           <Scrollbars autoHide>
@@ -109,8 +108,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 
   return {
-    GetNotices: (page, search_keyword, narrow_bookmark, expired, banner_id, date_range) => {
-        dispatch(GetNotices(page, search_keyword, narrow_bookmark, expired, banner_id, date_range))
+    GetNotices: (page, search_keyword, narrow_bookmark,
+                 expired, banner_id, date_range) => {
+        dispatch(GetNotices(page, search_keyword, narrow_bookmark,
+            expired, banner_id, date_range))
     },
     GetNotice: (notice_id, expired) => {
         dispatch(GetNotice(notice_id, expired))
