@@ -57,7 +57,9 @@ class SideNav extends Component {
                 </Dropdown.Item>
             ));
         }
-        else return [];
+        else {
+            return [];
+        }
     }
 
     renderOuterDropdownItems(items) {
@@ -66,7 +68,7 @@ class SideNav extends Component {
                 <Dropdown item text={item.name} key={index} scrolling={true}>
                     <Dropdown.Menu>
                         {this.renderInnerDropdownItems(item.banner)}
-                        </Dropdown.Menu>
+                    </Dropdown.Menu>
                 </Dropdown>
             ));
         }
@@ -90,13 +92,19 @@ class SideNav extends Component {
 
                 <Menu.Item
                     name='Expired'
-                    onClick={() => this.expiredNotices('/noticeboard/')}/>
+                    onClick={() => this.expiredNotices('/noticeboard/')}>
+                    <Icon name='sticky note' />
+                    Expired
+                </Menu.Item>
 
                 <Divider />
 
                 <Menu.Item
                     name='Bookmarks'
-                    onClick={() => this.narrowBookmarks('/noticeboard/')}/>
+                    onClick={() => this.narrowBookmarks('/noticeboard/')}>
+                    <Icon name='home' />
+                    Bookmarks
+                </Menu.Item>
 
             </Menu>
         )

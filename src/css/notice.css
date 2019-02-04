@@ -1,7 +1,7 @@
 .side-nav {
     position: absolute;
-    height: 100%;
-    width: 10em;
+    min-height: 100%;
+    width: 15em;
 }
 
 .main-div {
@@ -9,17 +9,18 @@
 }
 
 .notice-container {
-    margin-left: auto;
-    margin-right: auto;
-    width: calc(100% - 10em);
+    min-width: calc(100% - 15em);
     position: absolute;
-    left: 10em;
+    left: 15em;
     background: #F2F5F7 !important;
+    padding-bottom: 20px;
+    min-height: 100%;
 }
 
 .sidenav-menu {
     width: 100% !important;
     height: 100%;
+    margin-top: 10px !important;
     margin-left: 0px !important;
     background: white !important;
 }
@@ -40,7 +41,7 @@
 .notice-list-no-notice {
     border: 1px solid rgba(34,36,38,.15);
     border-radius: .28571429rem;
-    background: #f2f2f2;
+    background: white;
     color: grey;
     position: relative;
     height: 27.3em;
@@ -83,8 +84,16 @@
     min-height: 25em;
 }
 
+.notice-view-no-notice {
+    border: 1px solid rgba(34,36,38,.15);
+    border-radius: .28571429rem;
+    position: relative;
+    color: grey;
+    height: 30em;
+}
+
 .notice-view-loading {
-    background: transparent;
+    background: transparent !important;
     margin-top: 23em;
 }
 
@@ -143,6 +152,10 @@
     border: 1px solid #DDDDDD !important;
 }
 
+.buttons-select-all {
+    padding-right: 20px;
+}
+
 .input-bar input {
     border-radius: 0px !important;
     height: 38px;
@@ -162,6 +175,7 @@
 
 .back-button {
     padding-left: 0px !important;
+    margin-left: 0px !important;
 }
 
 .calendar-element {
@@ -209,6 +223,11 @@
     color: #878787;
 }
 
+@media only screen and (max-width: 1324px) {
+    .cell-width-1 {
+        width: 0.14% !important;
+    }
+}
 
 .cell-width-2 {
     width: 0.33% !important;

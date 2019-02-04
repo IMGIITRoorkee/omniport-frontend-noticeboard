@@ -29,6 +29,7 @@ const initialState = {
     date_range: null,
     select_all_active: false,
     selected_notices: [],
+    notice_exists: null,
 };
 
 function GetNoticesReducer(state = initialState, action) {
@@ -152,7 +153,8 @@ function GetNoticeReducer(state=initialState, action) {
           return {
                ...state,
               is_fetching_notice: false,
-              notice: action.payload.notice
+              notice: action.payload.notice,
+              notice_exists: action.payload.notice_exists,
           };
       default:
           return state;

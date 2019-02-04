@@ -137,7 +137,6 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_
 
         <div styleName='notice_css.notice-list'>
             {/* Select all button */}
-
             <Container styleName='notice_css.select-all-container'>
                 {display_select_all ? (
                     <div >
@@ -149,15 +148,15 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_
                                 </Button>
                                 <Segment styleName='notice_css.select-all-list notice_css.select-all-activated-list'>
                                     <Button basic styleName='notice_css.tab-button' icon onClick={read}>
-                                        <Icon name='envelope open outline' color='blue'></Icon>
+                                        <Icon name='envelope open outline' color='blue' styleName='notice_css.buttons-select-all'></Icon>
                                         Mark as Read
                                     </Button>
                                     <Button basic styleName='notice_css.tab-button' icon onClick={bookmark}>
-                                        <Icon name='bookmark' color='blue'></Icon>
+                                        <Icon name='bookmark' color='blue' styleName='notice_css.buttons-select-all'></Icon>
                                         Bookmark
                                     </Button>
                                     <Button basic styleName='notice_css.tab-button' icon onClick={remove_bookmark}>
-                                        <Icon name='bookmark outline' color='blue'></Icon>
+                                        <Icon name='bookmark outline' color='blue' styleName='notice_css.buttons-select-all'></Icon>
                                         Remove Bookmark
                                     </Button>
                                 </Segment>

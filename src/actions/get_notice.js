@@ -13,11 +13,13 @@ function requestNotice(notice_id) {
     }
 }
 
-function receiveNotice(notice_data) {
+function receiveNotice(notice_data, notice_exists) {
+
   return {
     type: GET_NOTICE,
     payload: {
-        notice: notice_data
+        notice: notice_data,
+        notice_exists: notice_exists,
     }
   }
 }
@@ -29,21 +31,26 @@ export default function GetNotice(notice_id, expired) {
     dispatch(requestNotice(notice_id));
     return fetch(urlNotice(notice_id, expired))
       .then(response => response.json())
-      .then(json => dispatch(receiveNotice(json)))
       .then(json => {
-         if (!expired) {
-          if (!json.payload.notice.read) {
-           let headers = {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': getCookie('csrftoken')
-           }
-           let body = JSON.stringify({
-               keyword: 'read',
-               notices: [json.payload.notice.id]
-           })
-           fetch(urlStarRead(),
-           {method: 'post', headers: headers, body: body})};
+          if (json.detail != 'Not found.') {
+            dispatch(receiveNotice(json, true));
+
+            if (!expired) {
+                if (!json.read) {
+                    let headers = {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                    let body = JSON.stringify({
+                        keyword: 'read',
+                        notices: [json.id]
+                    })
+                    fetch(urlStarRead(),
+                {method: 'post', headers: headers, body: body})};
+            }
+          } else {
+             dispatch(receiveNotice(null, false));
           }
-      })
+       })
   }
 }
