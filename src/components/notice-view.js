@@ -4,7 +4,6 @@ import notice_css from "../css/notice.css";
 import { Editor } from '@tinymce/tinymce-react';
 import { connect } from "react-redux";
 import moment from 'moment';
-import renderHTML from 'react-render-html';
 
 
 
@@ -49,7 +48,7 @@ class NoticeView extends Component {
 
                                 <Container textAlign='justified' styleName="notice_css.notice-view-container">
                                     <Header as='h2' styleName='notice_css.notice-box-header'>{notice.title}</Header>
-                                    {renderHTML(notice.content)}
+                                      <div dangerouslySetInnerHTML={{__html: notice.content}} />
                                     </Container>
                             </Segment.Group>
                         ) : (

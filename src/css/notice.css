@@ -9,20 +9,15 @@
 }
 
 .notice-container {
-    min-width: calc(100% - 15em);
+    width: 100%;
     position: absolute;
-    left: 15em;
-    background: #F2F5F7 !important;
-    padding-bottom: 20px;
+    background: rgba(14, 110, 184, 0.04);
     min-height: 100%;
 }
 
 .sidenav-menu {
-    width: 100% !important;
-    height: 100%;
-    margin-top: 10px !important;
+    padding-top: 10px !important;
     margin-left: 0px !important;
-    background: white !important;
 }
 
 .top-bar {
@@ -31,7 +26,7 @@
 }
 
 .notice-list {
-    margin-top: 5.5em;
+    margin-top: 0.5em;
 }
 
 .notice-list-view {
@@ -39,7 +34,7 @@
 }
 
 .notice-list-no-notice {
-    border: 1px solid rgba(34,36,38,.15);
+    border: 1px solid #E5E5E5;
     border-radius: .28571429rem;
     background: white;
     color: grey;
@@ -66,7 +61,8 @@
 }
 
 .notice-box {
-    margin-top: 8em;
+    margin-top: 0.5em;
+    margin-bottom: 20px;
     background: white !important;
 }
 
@@ -85,7 +81,7 @@
 }
 
 .notice-view-no-notice {
-    border: 1px solid rgba(34,36,38,.15);
+    border: 1px solid #E5E5E5;
     border-radius: .28571429rem;
     position: relative;
     color: grey;
@@ -149,7 +145,7 @@
     padding: .78571429em .89571429em .78571429em !important;
     border-radius: 0px !important;
     background: white !important;
-    border: 1px solid #DDDDDD !important;
+    border: 1px solid #E5E5E5 !important;
 }
 
 .buttons-select-all {
@@ -159,6 +155,7 @@
 .input-bar input {
     border-radius: 0px !important;
     height: 38px;
+    width: 16em !important
 }
 
 .search-bar input {
@@ -170,7 +167,6 @@
     padding-right: 0px !important;
     margin-left: 0px !important;
     margin-right: 0px !important;
-    width: 160px !important;
 }
 
 .back-button {
@@ -184,7 +180,6 @@
 
 .pagination-box {
     text-align: center;
-    margin-top: 12px !important;
     min-height: 2px !important;
 }
 
@@ -198,7 +193,7 @@
 }
 
 .menu-button-border {
-    border: 1px solid #DDDDDD !important;
+    border: 1px solid #E6E6E6 !important;
     border-radius: 0px !important;
     background: white !important;
     margin-left: 0px !important;
@@ -219,8 +214,8 @@
 .cell-width-1 {
     width: 0.13% !important;
     text-align: center;
-    border-right: 1px solid #DDDDDD;
-    color: #878787;
+    border-right: 1px solid #E6E6E6;
+    color: #999999;
 }
 
 @media only screen and (max-width: 1324px) {
@@ -233,6 +228,11 @@
     width: 0.33% !important;
     text-align: center;
     color: #878787;
+}
+
+.cell-date {
+    border-right: 1px solid #E6E6E6;
+    border-left: 1px solid #E6E6E6;
 }
 
 .cell-width-3 {

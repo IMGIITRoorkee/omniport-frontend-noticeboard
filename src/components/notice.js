@@ -75,17 +75,17 @@ const Notice = ({id, date, banner, title, is_selected, select_all_active, Toggle
                     <Icon name={bookmark ? 'bookmark': 'bookmark outline'} color='yellow'/>
                 )}
             </Table.Cell>
-            <Table.Cell onClick={OpenNotice} styleName='notice_css.cell-width-2 notice_css.cell-hover'>
-                {moment(date).format("MMM Do")}
-            </Table.Cell>
-            <Table.Cell onClick={OpenNotice} styleName='notice_css.cell-width-2 notice_css.cell-hover'>
-                {moment(date).format("LT")}
-            </Table.Cell>
             <Table.Cell collapsing onClick={OpenNotice} styleName='notice_css.cell-width-3 notice_css.cell-hover'>
                 {banner.name}
             </Table.Cell>
             <Table.Cell collapsing onClick={OpenNotice} styleName='notice_css.cell-hover'>
                 {title}
+            </Table.Cell>
+            <Table.Cell onClick={OpenNotice} styleName='notice_css.cell-width-2 notice_css.cell-date notice_css.cell-hover'>
+                {moment(date).format("MMM Do")}
+            </Table.Cell>
+            <Table.Cell onClick={OpenNotice} styleName='notice_css.cell-width-2 notice_css.cell-hover'>
+                {moment(date).format("LT")}
             </Table.Cell>
         </Table.Row>
     )

@@ -40,6 +40,7 @@ class DropdownView extends Component {
             let end = dates[2];
 
             let date_range =  {start: start, end: end};
+            console.log(date_range);
             return date_range;
         } else {
             return null;

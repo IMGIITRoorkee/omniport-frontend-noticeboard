@@ -92,10 +92,8 @@ class App extends React.PureComponent {
                              userDropdown mode='app'/>
                   <AppMain>
                       <div styleName='main.app-main'>
+            <SideNav history={this.props.history}/>
                           <Scrollbars autoHide>
-                                  <div styleName='notice_css.side-nav'>
-                                      <SideNav history={this.props.history}/>
-                                  </div>
                                   <div styleName='notice_css.notice-container'>
                                       <TabList history={this.props.history}/>
                                       <Route exact path="/noticeboard"

@@ -78,11 +78,10 @@ class SideNav extends Component {
     render () {
 
         return (
-            <Menu secondary vertical styleName='notice_css.sidenav-menu'>
+            <Menu secondary vertical inverted attached styleName='notice_css.sidenav-menu' color={'blue'}>
                 <Menu.Item
                     name='All Notices'
                     onClick={() => this.goHome('/noticeboard/')}>
-                    <Icon name='home' />
                     All Notices
                 </Menu.Item>
 
@@ -93,7 +92,6 @@ class SideNav extends Component {
                 <Menu.Item
                     name='Expired'
                     onClick={() => this.expiredNotices('/noticeboard/')}>
-                    <Icon name='sticky note' />
                     Expired
                 </Menu.Item>
 
@@ -102,7 +100,6 @@ class SideNav extends Component {
                 <Menu.Item
                     name='Bookmarks'
                     onClick={() => this.narrowBookmarks('/noticeboard/')}>
-                    <Icon name='home' />
                     Bookmarks
                 </Menu.Item>
 
