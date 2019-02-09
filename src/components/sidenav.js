@@ -38,20 +38,22 @@ class SideNav extends Component {
        this.props.history.push({pathname: path, state: {page: initial_page, narrow_bookmark: true}});
     }
 
-    filterNotices(banner_id, path) {
+    filterNotices(banner_id, all, path) {
         this.props.history.push({
             pathname: path,
             state: {page: initial_page,
                     search_keyword: this.props.search_keyword,
                     date_range: this.props.date_range,
+                    main_category_slug: all,
                     banner_id: banner_id}})
     }
 
     renderInnerDropdownItems(items) {
+        const all=false;
         if (items.length > 0) {
             return items.map((item, index) => (
                 <Dropdown.Item key={index}
-                               onClick={() => this.filterNotices(item.id, '/noticeboard/')}>
+                               onClick={() => this.filterNotices(item.id, all, '/noticeboard/')}>
 
                     {item.name}
                 </Dropdown.Item>
@@ -66,13 +68,29 @@ class SideNav extends Component {
         }
     }
 
+    renderInnerDropdownAll(item) {
+        if (item.banner.length > 0) {
+            const all = true;
+            return (
+                <Dropdown.Item key={0}
+                    onClick={() => this.filterNotices(item.slug, all, '/noticeboard/')}>
+                    All {item.name}
+                </Dropdown.Item>
+            )
+        } else {
+            return []
+        }
+    }
+
     renderOuterDropdownItems(items) {
-        console.log(items);
+
         if (items.length > 0) {
             return items.map((item, index) => (
                 <Dropdown styleName="notice_css.sidenav-items" item text={item.name}
                      key={index} scrolling={true}>
                     <Dropdown.Menu>
+                        {this.renderInnerDropdownAll(item)}
+                        <Dropdown.Divider />
                         {this.renderInnerDropdownItems(item.banner)}
                     </Dropdown.Menu>
                 </Dropdown>

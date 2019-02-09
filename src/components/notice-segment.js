@@ -21,6 +21,7 @@ const mapStateToProps = state => {
             narrow_bookmark: state.GetNotices.narrow_bookmark,
             expired: state.GetNotices.expired,
             banner_id: state.GetNotices.banner_id,
+            main_category_slug: state.GetNotices.main_category_slug,
             date_range: state.GetNotices.date_range,
             select_all_active: state.GetNotices.select_all_active,
             selected_notices: state.GetNotices.selected_notices,
@@ -39,9 +40,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
       GetNotices: (page, search_keyword, narrow_bookmark,
-                 expired, banner_id, date_range) => {
+                 expired, banner_id, main_category_slug, date_range) => {
           dispatch(GetNotices(page, search_keyword, narrow_bookmark,
-              expired, banner_id, date_range))
+              expired, banner_id, main_category_slug, date_range))
       },
       SelectAll: (select_all_active) => {
         dispatch(SelectAll(select_all_active));
@@ -57,7 +58,7 @@ const mapDispatchToProps = dispatch => {
 
 
 const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_id,
-                            NoticeBookmark, NoticeRead, date_range, filters,
+                            NoticeBookmark, NoticeRead, date_range, filters, main_category_slug,
                             SelectAll, select_all_active, is_fetching_notices,
                             GetNotices, search_keyword, page, expired, selected_notices}) => {
     let notice_list, date_display, active_page, no_notices, display_select_all, toggle, banner_name;
@@ -108,7 +109,8 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_
 
     const handlePaginationChange = (e, { activePage }) => {
         active_page = activePage;
-        GetNotices(active_page, search_keyword, narrow_bookmark, expired, banner_id, date_range);
+        GetNotices(active_page, search_keyword, narrow_bookmark, expired,
+            banner_id, main_category_slug, date_range);
     };
 
     const selectAll = (e) => {

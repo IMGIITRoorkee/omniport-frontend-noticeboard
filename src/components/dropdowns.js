@@ -13,6 +13,7 @@ const mapStateToProps = state => {
         filters: state.GetFilters.filters,
         date_range: state.GetNotices.date_range,
         search_keyword: state.GetNotices.search_keyword,
+        main_category_slug: state.GetNotices.main_category_slug,
         banner_id: state.GetNotices.banner_id,
     }
 };
@@ -66,6 +67,7 @@ class DropdownView extends Component {
                         page: initial_page,
                         search_keyword: this.props.search_keyword,
                         banner_id: this.props.banner_id,
+                        main_category_slug: this.props.main_category_slug,
                         date_range: date_range
                     }
                 });
@@ -84,6 +86,7 @@ class DropdownView extends Component {
                     page: initial_page,
                     search_keyword: this.props.search_keyword,
                     banner_id: this.props.banner_id,
+                    main_category_slug: this.props.main_category_slug,
                     date_range: date_range
                 }
             });

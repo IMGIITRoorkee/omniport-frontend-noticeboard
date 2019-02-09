@@ -42,7 +42,7 @@ function receiveNotices(page, notice_data_list, search_keyword,
     }
 }
 
-export default function GetNotices(page, search_keyword, narrow_bookmark, expired, banner_id, date_range) {
+export default function GetNotices(page, search_keyword, narrow_bookmark, expired, banner_id, main_category_slug, date_range) {
   return (dispatch) => {
     dispatch(requestNotices(page, search_keyword));
     let url;
@@ -50,9 +50,10 @@ export default function GetNotices(page, search_keyword, narrow_bookmark, expire
     if (expired) {
         url = urlExpiredNotices(page, search_keyword);
     } else if (date_range) {
-        url = urlDateFilter(page, date_range.start, date_range.end, banner_id, search_keyword)
+        url = urlDateFilter(page, date_range.start, date_range.end, banner_id, main_category_slug, search_keyword)
     } else if (banner_id){
-        url = urlFilter(page, banner_id, search_keyword);
+        console.log(main_category_slug);
+        url = urlFilter(page, banner_id, search_keyword, main_category_slug);
     } else if (narrow_bookmark) {
         url = urlBookmarkedNotices(page);
     } else {
