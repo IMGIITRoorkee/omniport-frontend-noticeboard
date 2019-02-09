@@ -35,7 +35,7 @@ class DropdownView extends Component {
         console.log(this.props.date_range);
 
         if (this.props.date_range) {
-            date_range = this.props.date_range;
+            date_range = this.props.date_range.start + ' - ' + this.props.date_range.end;
             date_filter_active = true;
         } else {
             date_range = '';
@@ -74,7 +74,7 @@ class DropdownView extends Component {
         if (this.state.hasOwnProperty(name)) {
             this.setState({[name]: value});
 
-            let date_range;
+            let date_range, date_range_active;
             date_range = this.dateFormatMatch(value);
 
             let flag = false;
@@ -82,8 +82,14 @@ class DropdownView extends Component {
                 flag = true;
             }
 
+            if (value === '') {
+                date_range_active = false;
+            } else {
+                date_range_active = true;
+            }
+
             if (flag) {
-                this.setState({date_filter_active: true, datesRange: value});
+                this.setState({date_filter_active: date_range_active, datesRange: value});
                 this.props.history.push({
                     pathname: '/noticeboard/',
                     state: {
@@ -99,9 +105,16 @@ class DropdownView extends Component {
     };
 
     handleDateFilterSubmit = () => {
-        let date_range;
+        let date_range, date_range_active;
         date_range = this.dateFormatMatch(this.state.datesRange);
-        this.setState({date_filter_active: true, datesRange: this.state.datesRange});
+        if (date_range) {
+            date_range_active = true;
+        } else {
+            date_range_active = false;
+        }
+
+
+        this.setState({date_filter_active: date_range_active, datesRange: this.state.datesRange});
 
         this.props.history.push({
             pathname: '/noticeboard/',
@@ -116,8 +129,6 @@ class DropdownView extends Component {
     };
 
     handleDateDelete = () => {
-
-        console.log(this.state);
         this.setState({date_filter_active: false, datesRange: ''});
         this.props.history.push({
             pathname: '/noticeboard/',
@@ -228,7 +239,7 @@ class DropdownView extends Component {
                             onChange={this.handleDateFilterChange}/>
                      </Form>
                      ) : (
-                       <Form autoComplete="off">
+                       <Form onSubmit={this.handleDateFilterSubmit} autoComplete="off">
                          <DatesRangeInput
                             styleName='notice_css.input-bar'
                             name="datesRange"
@@ -237,7 +248,8 @@ class DropdownView extends Component {
                             icon={<Icon name='delete' link onClick={this.handleDateDelete}/>}
                             closeOnMouseLeave={true}
                             value={this.state.datesRange}
-                            dateFormat='YYYY-MM-DD'/>
+                            dateFormat='YYYY-MM-DD'
+                            onChange={this.handleDateFilterChange}/>
                         </Form>
                       )}
                 </Menu.Item>
