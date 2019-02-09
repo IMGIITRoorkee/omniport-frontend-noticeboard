@@ -58,14 +58,20 @@ class SideNav extends Component {
             ));
         }
         else {
-            return [];
+            return (
+                <Dropdown.Item key={1} disabled>
+                    No results
+                </Dropdown.Item>
+            )
         }
     }
 
     renderOuterDropdownItems(items) {
+        console.log(items);
         if (items.length > 0) {
             return items.map((item, index) => (
-                <Dropdown styleName="notice_css.sidenav-items" item text={item.name} key={index} scrolling={true}>
+                <Dropdown styleName="notice_css.sidenav-items" item text={item.name}
+                     key={index} scrolling={true}>
                     <Dropdown.Menu>
                         {this.renderInnerDropdownItems(item.banner)}
                     </Dropdown.Menu>
