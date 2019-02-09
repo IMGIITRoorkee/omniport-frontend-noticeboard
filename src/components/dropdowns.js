@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Dropdown, Form, Menu, Search } from 'semantic-ui-react';
+import { Dropdown, Form, Menu, Search, Input, Icon } from 'semantic-ui-react';
 import notice_css from "../css/notice.css";
 import 'rc-calendar/assets/index.css';
 import { connect } from "react-redux";
-import {initial_page} from "../constants/constants";
+import {initial_page, search_keyword} from "../constants/constants";
 import {DatesRangeInput} from 'semantic-ui-calendar-react';
 
 
@@ -23,12 +23,24 @@ class DropdownView extends Component {
     constructor(props) {
         super(props);
 
+        let search_done, value;
+        if (this.props.search_keyword) {
+            search_done = true;
+            value = this.props.search_keyword;
+        } else {
+            search_done = false;
+            value = '';
+        }
+
+
         this.state = {
             datesRange: '',
-            value: ''
+            value: value,
+            search_done: search_done,
         };
 
         this.handleSearchChange = this.handleSearchChange.bind(this);
+        this.handleSearchDelete = this.handleSearchDelete.bind(this);
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
     }
 
@@ -41,7 +53,6 @@ class DropdownView extends Component {
             let end = dates[2];
 
             let date_range =  {start: start, end: end};
-            console.log(date_range);
             return date_range;
         } else {
             return null;
@@ -147,7 +158,20 @@ class DropdownView extends Component {
         this.setState({value: event.target.value});
     }
 
+    handleSearchDelete(event) {
+        this.setState({search_done: false, value: ''});
+        this.props.history.push({pathname: '/noticeboard/',
+            state: {page: initial_page,
+                    search_keyword: '',
+                    narrow_bookmark: false,
+                    banner_id: this.props.banner_id,
+                    date_range: this.props.date_range,
+                    expired: this.props.expired}});
+    }
+
+
     handleSearchSubmit() {
+        this.setState({search_done: true});
         this.props.history.push({pathname: '/noticeboard/',
             state: {page: initial_page,
                     search_keyword: this.state.value,
@@ -156,6 +180,7 @@ class DropdownView extends Component {
                     date_range: this.props.date_range,
                     expired: this.props.expired}});
     }
+
 
     render () {
 
@@ -177,13 +202,22 @@ class DropdownView extends Component {
                 </Menu.Item>
 
                 <Menu.Item>
-                    <Form onSubmit={this.handleSearchSubmit}>
-                        <Search styleName='notice_css.input-bar notice_css.search-bar'
-                            onSearchChange={this.handleSearchChange}
+                    {!this.state.search_done ? (
+                      <Form onSubmit={this.handleSearchSubmit}>
+                        <Input styleName='notice_css.input-bar notice_css.search-bar'
+                            onChange={this.handleSearchChange}
                             type='text'
-                            showNoResults={false}
+                            icon={<Icon name='search' link onClick={this.handleSearchSubmit}/>}
+                            value={this.state.value}/>
+                      </Form>
+                     ) : (
+                     <Form>
+                        <Input styleName='notice_css.input-bar notice_css.search-bar'
+                            type='text'
+                            icon={<Icon name='delete' link onClick={this.handleSearchDelete}/>}
                             value={this.state.value}/>
                     </Form>
+                     )}
                 </Menu.Item>
             </Menu.Menu>
         )

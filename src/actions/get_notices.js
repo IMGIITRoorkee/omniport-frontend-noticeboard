@@ -52,7 +52,6 @@ export default function GetNotices(page, search_keyword, narrow_bookmark, expire
     } else if (date_range) {
         url = urlDateFilter(page, date_range.start, date_range.end, banner_id, main_category_slug, search_keyword)
     } else if (banner_id){
-        console.log(main_category_slug);
         url = urlFilter(page, banner_id, search_keyword, main_category_slug);
     } else if (narrow_bookmark) {
         url = urlBookmarkedNotices(page);
