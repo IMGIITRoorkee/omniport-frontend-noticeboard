@@ -23,7 +23,7 @@ class DropdownView extends Component {
     constructor(props) {
         super(props);
 
-        let search_done, value;
+        let search_done, value, date_filter_active, date_range;
         if (this.props.search_keyword) {
             search_done = true;
             value = this.props.search_keyword;
@@ -32,21 +32,32 @@ class DropdownView extends Component {
             value = '';
         }
 
+        console.log(this.props.date_range);
+
+        if (this.props.date_range) {
+            date_range = this.props.date_range;
+            date_filter_active = true;
+        } else {
+            date_range = '';
+            date_filter_active = false;
+        }
 
         this.state = {
-            datesRange: '',
+            datesRange: date_range,
             value: value,
             search_done: search_done,
+            date_filter_active: date_filter_active,
         };
 
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSearchDelete = this.handleSearchDelete.bind(this);
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
+        this.handleDateFilterSubmit = this.handleDateFilterSubmit.bind(this);
+        this.handleDateDelete = this.handleDateDelete.bind(this);
     }
 
 
     dateFormatMatch = (dates) => {
-
         if (/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01]) - \d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test(dates)) {
             dates = dates.split(' ');
             let start = dates[0];
@@ -72,6 +83,7 @@ class DropdownView extends Component {
             }
 
             if (flag) {
+                this.setState({date_filter_active: true, datesRange: value});
                 this.props.history.push({
                     pathname: '/noticeboard/',
                     state: {
@@ -89,20 +101,36 @@ class DropdownView extends Component {
     handleDateFilterSubmit = () => {
         let date_range;
         date_range = this.dateFormatMatch(this.state.datesRange);
+        this.setState({date_filter_active: true, datesRange: this.state.datesRange});
 
-        if (true) {
-            this.props.history.push({
-                pathname: '/noticeboard/',
-                state: {
-                    page: initial_page,
-                    search_keyword: this.props.search_keyword,
-                    banner_id: this.props.banner_id,
-                    main_category_slug: this.props.main_category_slug,
-                    date_range: date_range
-                }
-            });
-        }
+        this.props.history.push({
+            pathname: '/noticeboard/',
+            state: {
+                page: initial_page,
+                search_keyword: this.props.search_keyword,
+                banner_id: this.props.banner_id,
+                main_category_slug: this.props.main_category_slug,
+                date_range: date_range
+            }
+        })
     };
+
+    handleDateDelete = () => {
+
+        console.log(this.state);
+        this.setState({date_filter_active: false, datesRange: ''});
+        this.props.history.push({
+            pathname: '/noticeboard/',
+            state: {
+                page: initial_page,
+                search_keyword: this.props.search_keyword,
+                banner_id: this.props.banner_id,
+                main_category_slug: this.props.main_category_slug,
+                date_range: ''
+            }
+        })
+    };
+
 
     goHome(path) {
       this.props.history.push({
@@ -187,18 +215,31 @@ class DropdownView extends Component {
         return (
             <Menu.Menu position='left'>
                 <Menu.Item styleName='notice_css.date-bar'>
+                    {!this.state.date_filter_active ? (
                     <Form onSubmit={this.handleDateFilterSubmit} autoComplete="off">
                         <DatesRangeInput
                             styleName='notice_css.input-bar'
                             name="datesRange"
                             placeholder="Date: From - To"
-                            iconPosition="left"
                             closable={true}
                             closeOnMouseLeave={true}
                             value={this.state.datesRange}
                             dateFormat='YYYY-MM-DD'
                             onChange={this.handleDateFilterChange}/>
-                    </Form>
+                     </Form>
+                     ) : (
+                       <Form autoComplete="off">
+                         <DatesRangeInput
+                            styleName='notice_css.input-bar'
+                            name="datesRange"
+                            placeholder="Date: From - To"
+                            closable={true}
+                            icon={<Icon name='delete' link onClick={this.handleDateDelete}/>}
+                            closeOnMouseLeave={true}
+                            value={this.state.datesRange}
+                            dateFormat='YYYY-MM-DD'/>
+                        </Form>
+                      )}
                 </Menu.Item>
 
                 <Menu.Item>
