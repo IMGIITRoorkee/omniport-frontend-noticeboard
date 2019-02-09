@@ -24,6 +24,15 @@
     margin-left: 0px !important;
 }
 
+.sidenav-items {
+    color: rgba(255,255,255,.8) !important;
+}
+
+.sidenav-divider {
+    background: white;
+    opacity: 0.2;
+}
+
 .top-bar {
     margin-left: 0px !important;
     margin-top: 2em !important;
@@ -145,6 +154,7 @@
     color: #48A7F1 !important;
     border: 1px solid #B7DFFF !important;
     border-left: none !important;
+    width: calc(100% - 44px) !important;
 }
 
 .select-all-button-activated {
@@ -156,13 +166,13 @@
 .select-all-button-not-activated {
     margin-right: 10px !important;
     background: white !important;
+    border: 1px solid #E5E5E5 !important;
 }
 
 .select-all-button {
     padding: .78571429em .89571429em .78571429em !important;
     border-radius: 0px !important;
     background: white !important;
-    border: 1px solid #E5E5E5 !important;
 }
 
 .buttons-select-all {

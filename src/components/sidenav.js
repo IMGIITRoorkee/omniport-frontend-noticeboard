@@ -65,7 +65,7 @@ class SideNav extends Component {
     renderOuterDropdownItems(items) {
         if (items.length > 0) {
             return items.map((item, index) => (
-                <Dropdown item text={item.name} key={index} scrolling={true}>
+                <Dropdown styleName="notice_css.sidenav-items" item text={item.name} key={index} scrolling={true}>
                     <Dropdown.Menu>
                         {this.renderInnerDropdownItems(item.banner)}
                     </Dropdown.Menu>
@@ -87,7 +87,7 @@ class SideNav extends Component {
 
                 {this.renderOuterDropdownItems(this.props.filters)}
 
-                <Divider />
+                <Divider styleName="notice_css.sidenav-divider"/>
 
                 <Menu.Item
                     name='Expired'
@@ -95,7 +95,7 @@ class SideNav extends Component {
                     Expired
                 </Menu.Item>
 
-                <Divider />
+                <Divider styleName="notice_css.sidenav-divider"/>
 
                 <Menu.Item
                     name='Bookmarks'
