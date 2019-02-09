@@ -32,8 +32,6 @@ class DropdownView extends Component {
             value = '';
         }
 
-        console.log(this.props.date_range);
-
         if (this.props.date_range) {
             date_range = this.props.date_range.start + ' - ' + this.props.date_range.end;
             date_filter_active = true;
@@ -210,7 +208,15 @@ class DropdownView extends Component {
 
 
     handleSearchSubmit() {
-        this.setState({search_done: true});
+
+        let search_done;
+        if (this.state.value) {
+            search_done= true;
+        } else {
+            search_done= false;
+        }
+
+        this.setState({search_done: search_done});
         this.props.history.push({pathname: '/noticeboard/',
             state: {page: initial_page,
                     search_keyword: this.state.value,
@@ -264,9 +270,10 @@ class DropdownView extends Component {
                             value={this.state.value}/>
                       </Form>
                      ) : (
-                     <Form>
+                     <Form onSubmit={this.handleSearchSubmit}>
                         <Input styleName='notice_css.input-bar notice_css.search-bar'
                             type='text'
+                            onChange={this.handleSearchChange}
                             icon={<Icon name='delete' link onClick={this.handleSearchDelete}/>}
                             value={this.state.value}/>
                     </Form>
