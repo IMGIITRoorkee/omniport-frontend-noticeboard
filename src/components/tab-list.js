@@ -19,7 +19,7 @@ class TabList extends Component {
         let narrow_bookmark = this.props.narrow_bookmark;
 
         return (
-            <Container>
+            <Container styleName='notice_css.notice-container-width'>
                 <Menu secondary styleName='notice_css.top-bar'>
                     {!narrow_bookmark ? (
                         <div>

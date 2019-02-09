@@ -137,7 +137,7 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_
 
         <div styleName='notice_css.notice-list'>
             {/* Select all button */}
-            <Container styleName='notice_css.select-all-container'>
+            <Container styleName='notice_css.select-all-container notice_css.notice-container-width'>
                 {display_select_all ? (
                     <div >
                         {select_all_active ? (
@@ -181,19 +181,19 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_
 
             {/* Notice Table */}
             {is_fetching_notices ? (
-                <Container styleName='notice_css.notice-list-view notice_css.notice-list-loading'>
+                <Container styleName='notice_css.notice-list-view notice_css.notice-list-loading notice_css.notice-container-width'>
                     <Loader active styleName='notice_css.loader-element'/>
                 </Container>
             ) : (
                 <div>
                 {!no_notices ? (
-                <Container styleName='notice_css.notice-list-view'>
+                <Container styleName='notice_css.notice-list-view notice_css.notice-container-width'>
                         <Table fixed basic singleLine compact>
                             <Table.Body>{notice_list}</Table.Body>
                         </Table>
                 </Container>
                 ) : (
-                    <Container styleName='notice_css.notice-list-view'>
+                    <Container styleName='notice_css.notice-list-view notice_css.notice-container-width'>
                         <div styleName='notice_css.notice-list-no-notice'>
                             <h1 styleName='no-results-found'> No results found </h1>
                         </div>
@@ -202,7 +202,7 @@ const NoticeListView = ({history, notices, total_pages, narrow_bookmark, banner_
                 </div>
             )}
 
-            <Container styleName='notice_css.pagination-box'>
+            <Container styleName='notice_css.pagination-box notice_css.notice-container-width'>
                  <Pagination styleName='notice_css.pagination'
                              totalPages={total_pages}
                              firstItem={null}

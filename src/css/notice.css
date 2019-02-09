@@ -15,6 +15,10 @@
     min-height: 100%;
 }
 
+.notice-container-width {
+    width: 1000px !important;
+}
+
 .sidenav-menu {
     padding-top: 10px !important;
     margin-left: 0px !important;
@@ -22,7 +26,7 @@
 
 .top-bar {
     margin-left: 0px !important;
-    margin-top: 2.5em !important;
+    margin-top: 2em !important;
 }
 
 .notice-list {
@@ -212,8 +216,7 @@
 }
 
 .cell-width-1 {
-    width: 0.13% !important;
-    text-align: center;
+    width: 0.16% !important;
     border-right: 1px solid #E6E6E6;
     color: #999999;
 }

@@ -34,7 +34,7 @@ class NoticeView extends Component {
         return (
           <div>
                 {!is_fetching_notice ? (
-                    <Container styleName="notice_css.notice-box">
+                    <Container styleName="notice_css.notice-box notice_css.notice-container-width">
                         {notice_exists ? (
                             <Segment.Group>
                                 <Segment as='h5'>Subject: {notice.title} </Segment>
@@ -63,7 +63,7 @@ class NoticeView extends Component {
 
                     </Container>
                 ) : (
-                    <Container styleName="notice_css.notice-box notice_css.notice-view-loading">
+                    <Container styleName="notice_css.notice-box notice_css.notice-view-loading notice_css.notice-container-width">
                        <Loader active styleName='notice_css.loader-element'/>
                     </Container>
                 )
