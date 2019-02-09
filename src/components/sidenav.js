@@ -20,6 +20,7 @@ const mapStateToProps = state => {
 
 class SideNav extends Component {
 
+
     goHome(path) {
       this.props.history.push({
           pathname: path,
@@ -50,7 +51,7 @@ class SideNav extends Component {
 
     renderInnerDropdownItems(items) {
         const all=false;
-        if (items.length > 0) {
+        if (items.length) {
             return items.map((item, index) => (
                 <Dropdown.Item key={index}
                                onClick={() => this.filterNotices(item.id, all, '/noticeboard/')}>
@@ -69,7 +70,7 @@ class SideNav extends Component {
     }
 
     renderInnerDropdownAll(item) {
-        if (item.banner.length > 0) {
+        if (item.banner.length) {
             const all = true;
             return (
                 <Dropdown.Item key={0}
@@ -77,8 +78,6 @@ class SideNav extends Component {
                     All {item.name}
                 </Dropdown.Item>
             )
-        } else {
-            return []
         }
     }
 
@@ -90,7 +89,11 @@ class SideNav extends Component {
                      key={index} scrolling={true}>
                     <Dropdown.Menu>
                         {this.renderInnerDropdownAll(item)}
-                        <Dropdown.Divider />
+                        {item.banner.length ? (
+                            <Dropdown.Divider />
+                        ) : (
+                            <div></div>
+                        )}
                         {this.renderInnerDropdownItems(item.banner)}
                     </Dropdown.Menu>
                 </Dropdown>

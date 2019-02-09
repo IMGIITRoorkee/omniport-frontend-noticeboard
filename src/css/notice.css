@@ -1,13 +1,3 @@
-.side-nav {
-    position: absolute;
-    min-height: 100%;
-    width: 15em;
-}
-
-.main-div {
-
-}
-
 .notice-container {
     width: 100%;
     position: absolute;
@@ -22,6 +12,7 @@
 .sidenav-menu {
     padding-top: 10px !important;
     margin-left: 0px !important;
+    width: 16em;
 }
 
 .sidenav-items {
