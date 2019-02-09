@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Container, Divider, Segment, Header, Loader } from 'semantic-ui-react';
+import { Container, Divider, Segment, Header, Loader, Popup, Icon } from 'semantic-ui-react';
 import notice_css from "../css/notice.css";
 import { Editor } from '@tinymce/tinymce-react';
 import { connect } from "react-redux";
 import moment from 'moment';
 
-
+const timeoutLength = 1000;
 
 const mapStateToProps = state => {
 
@@ -26,6 +26,30 @@ const mapStateToProps = state => {
 
 class NoticeView extends Component {
 
+    state = { isOpen: false };
+
+    copyUrl = () => {
+        const el = document.createElement('input');
+        el.value = document.location.href;
+        el.id = "url-input";
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        el.remove();
+    };
+
+    handleOpen = () => {
+        this.setState({ isOpen: true });
+        this.timeout = setTimeout(() => {
+            this.setState({ isOpen: false })
+        }, timeoutLength);
+    };
+
+    handleClose = () => {
+        this.setState({ isOpen: false });
+        clearTimeout(this.timeout);
+    };
+
     render () {
         const notice = this.props.notice;
         const is_fetching_notice = this.props.is_fetching_notice;
@@ -40,7 +64,15 @@ class NoticeView extends Component {
                                 <Segment as='h5'>Subject: {notice.title} </Segment>
 
                                 <Segment>
-                                    <p styleName="notice_css.notice-posted-by">Posted by: {notice.banner.name}</p>
+                                    <div styleName='notice-list-div'>
+                                        <p styleName="notice_css.notice-posted-by">Posted by: {notice.banner.name}</p>
+                                            <Popup trigger={
+                                                 <p styleName="notice_css.get_shareable_link" onClick={this.copyUrl}>
+                                                      Get shareable link
+                                                 </p>
+                                            } content={`Copied!`} on='click' hideOnScroll
+                                            onClose={this.handleClose} open={this.state.isOpen} onOpen={this.handleOpen}/>
+                                    </div>
                                     <p>Posted on: {moment(notice.datetimeModified).format("MMMM Do YYYY, h:mm:ss a")}</p>
                                 </Segment>
 

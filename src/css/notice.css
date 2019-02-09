@@ -70,6 +70,19 @@
     background: white !important;
 }
 
+.notice-list-div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.get_shareable_link {
+    color: #1FA77E;
+}
+
+.get_shareable_link:hover {
+    cursor: pointer;
+}
+
 .notice-posted-by {
     margin-bottom: 5px;
 }
