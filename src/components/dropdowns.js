@@ -18,6 +18,7 @@ const mapStateToProps = state => {
     }
 };
 
+
 class DropdownView extends Component {
 
     constructor(props) {
@@ -46,6 +47,8 @@ class DropdownView extends Component {
             search_done: search_done,
             date_filter_active: date_filter_active,
         };
+
+        console.log(this.state);
 
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSearchDelete = this.handleSearchDelete.bind(this);
@@ -202,13 +205,13 @@ class DropdownView extends Component {
                     search_keyword: '',
                     narrow_bookmark: false,
                     banner_id: this.props.banner_id,
+                    main_category_slug: this.props.main_category_slug,
                     date_range: this.props.date_range,
                     expired: this.props.expired}});
     }
 
 
     handleSearchSubmit() {
-
         let search_done;
         if (this.state.value) {
             search_done= true;
@@ -222,6 +225,7 @@ class DropdownView extends Component {
                     search_keyword: this.state.value,
                     narrow_bookmark: false,
                     banner_id: this.props.banner_id,
+                    main_category_slug: this.props.main_category_slug,
                     date_range: this.props.date_range,
                     expired: this.props.expired}});
     }

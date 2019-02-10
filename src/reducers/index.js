@@ -30,6 +30,7 @@ const initialState = {
     select_all_active: false,
     selected_notices: [],
     notice_exists: null,
+    main_category_slug: false,
 };
 
 function GetNoticesReducer(state = initialState, action) {
@@ -52,6 +53,7 @@ function GetNoticesReducer(state = initialState, action) {
               total_pages: action.payload.total_pages,
               narrow_bookmark: action.payload.narrow_bookmark,
               banner_id: action.payload.banner_id,
+              main_category_slug: action.payload.main_category_slug,
               date_range: action.payload.date_range,
           });
 

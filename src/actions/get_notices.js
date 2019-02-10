@@ -19,7 +19,7 @@ function requestNotices(page, search_keyword) {
 }
 
 function receiveNotices(page, notice_data_list, search_keyword,
-                        narrow_bookmark, expired, banner_id, date_range) {
+                        narrow_bookmark, expired, banner_id, date_range, main_category_slug) {
 
     let total_pages = Math.ceil(notice_data_list.count/10);
     if (total_pages == 0) {
@@ -33,6 +33,7 @@ function receiveNotices(page, notice_data_list, search_keyword,
             narrow_bookmark: narrow_bookmark,
             expired: expired,
             banner_id: banner_id,
+            main_category_slug: main_category_slug,
             date_range: date_range,
             notices: notice_data_list.results,
             search_keyword: search_keyword,
@@ -46,6 +47,7 @@ export default function GetNotices(page, search_keyword, narrow_bookmark, expire
   return (dispatch) => {
     dispatch(requestNotices(page, search_keyword));
     let url;
+    console.log(main_category_slug);
 
     if (expired) {
         url = urlExpiredNotices(page, search_keyword);
@@ -61,6 +63,6 @@ export default function GetNotices(page, search_keyword, narrow_bookmark, expire
 
     return fetch(url)
       .then(response => response.json())
-      .then(json => dispatch(receiveNotices(page, json, search_keyword, narrow_bookmark, expired, banner_id, date_range)))
+      .then(json => dispatch(receiveNotices(page, json, search_keyword, narrow_bookmark, expired, banner_id, date_range, main_category_slug)))
   }
 }

@@ -14,19 +14,12 @@ const mapStateToProps = state => {
         narrow_bookmark: state.GetNotices.narrow_bookmark,
         expired: state.GetNotices.expired,
         banner_id: state.GetNotices.banner_id,
+        main_category_slug: state.GetNotices.main_category_slug,
         date_range: state.GetNotices.date_range
     }
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    GetNotices: (page, search_keyword, narrow_bookmark, expired, banner_id) => {
-      dispatch(GetNotices(page, search_keyword, narrow_bookmark, expired, banner_id))
-    }
-  }
-};
-
-class AllNoticesLink extends Component {
+class BackLink extends Component {
     render () {
         return (
             <Menu.Menu position='left'>
@@ -52,10 +45,11 @@ class AllNoticesLink extends Component {
                   search_keyword: this.props.search_keyword,
                   narrow_bookmark: narrow_bookmark,
                   banner_id: this.props.banner_id,
+                  main_category_slug: this.props.main_category_slug,
                   expired: this.props.expired,
                   date_range: this.props.date_range
           }});
     }
 }
 
-export default withRouter(connect (mapStateToProps, mapDispatchToProps) (AllNoticesLink));
+export default withRouter(connect (mapStateToProps) (BackLink));

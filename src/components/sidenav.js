@@ -25,6 +25,7 @@ class SideNav extends Component {
       this.props.history.push({
           pathname: path,
           state: {page: initial_page,
+                  search_keyword: '',
                   narrow_bookmark: false}});
     }
 

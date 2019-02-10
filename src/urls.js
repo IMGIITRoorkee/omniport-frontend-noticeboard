@@ -48,6 +48,7 @@ export function urlFilter (page, banner_id, search_keyword, main_category_slug) 
 export function urlDateFilter(page, start, end, banner_id, main_category_slug, search_keyword) {
     let url;
     url = `${urlMainApp()}date_filter_view/?start=${start}&end=${end}&page=${page}`;
+    console.log(main_category_slug);
 
     if (main_category_slug) {
         url += `&main_category=${banner_id}`;
