@@ -47,7 +47,6 @@ export default function GetNotices(page, search_keyword, narrow_bookmark, expire
   return (dispatch) => {
     dispatch(requestNotices(page, search_keyword));
     let url;
-    console.log(main_category_slug);
 
     if (expired) {
         url = urlExpiredNotices(page, search_keyword);

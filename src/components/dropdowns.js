@@ -48,8 +48,6 @@ class DropdownView extends Component {
             date_filter_active: date_filter_active,
         };
 
-        console.log(this.state);
-
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSearchDelete = this.handleSearchDelete.bind(this);
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this);

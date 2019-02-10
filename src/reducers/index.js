@@ -65,7 +65,6 @@ function GetNoticesReducer(state = initialState, action) {
 
       case BOOKMARK_NOTICE:
           let notice_id_list = action.payload.notice_id_list;
-          console.log(action.payload.toggle);
 
           for (let index=0; index < notice_id_list.length; index++) {
               for (let i = 0; i < state.notices.length; i++) {
@@ -78,7 +77,6 @@ function GetNoticesReducer(state = initialState, action) {
 
       case READ_NOTICE:
           notice_id_list = action.payload.notice_id_list;
-          console.log(action.payload.toggle);
 
           for (let index=0; index < notice_id_list.length; index++) {
               for (let i = 0; i < state.notices.length; i++) {
