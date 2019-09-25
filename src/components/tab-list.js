@@ -15,7 +15,7 @@ class TabList extends Component {
       <Container styleName="tablist.notice-container-width">
         <Menu secondary styleName="tablist.top-bar">
           {!narrowBookmark ? (
-            <div>
+            <div styleName="tablist.width-100">
               <Route path="/noticeboard/notice" component={BackLink} />
               <Route exact path="/noticeboard/" component={DropdownView} />
             </div>

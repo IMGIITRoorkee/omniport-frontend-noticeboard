@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { INTIAL_PAGE } from '../constants/constants'
 import { DatesRangeInput } from 'semantic-ui-calendar-react'
 import { dateFormatMatch } from '../utils'
+import UploadNotice from './upload-notice'
 
 import dropdown from '../css/notice.css'
 
@@ -123,7 +124,7 @@ class DropdownView extends Component {
   goHome = path => {
     this.props.history.push({
       pathname: path,
-      state: { page: INTIAL_PAGE, narrow_bookmark: false }
+      state: { page: INTIAL_PAGE, narrowBookmark: false }
     })
   }
 
@@ -193,7 +194,7 @@ class DropdownView extends Component {
       state: {
         page: INTIAL_PAGE,
         searchKeyword: '',
-        narrow_bookmark: false,
+        narrowBookmark: false,
         bannerId: bannerId,
         mainCategorySlug: mainCategorySlug,
         dateRange: dateRange,
@@ -226,7 +227,7 @@ class DropdownView extends Component {
       state: {
         page: INTIAL_PAGE,
         searchKeyword: value,
-        narrow_bookmark: false,
+        narrowBookmark: false,
         bannerId: bannerId,
         mainCategorySlug: mainCategorySlug,
         dateRange: dateRange,
@@ -298,6 +299,9 @@ class DropdownView extends Component {
               />
             </Form>
           )}
+        </Menu.Item>
+        <Menu.Item position="right" styleName="dropdown.upload-item-padding">
+          <UploadNotice />
         </Menu.Item>
       </Menu.Menu>
     )

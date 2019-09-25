@@ -1,0 +1,6 @@
+.editor-parent {
+  padding: 2rem;
+}
+.modal-mount-parent {
+  z-index: 1000000;
+}
