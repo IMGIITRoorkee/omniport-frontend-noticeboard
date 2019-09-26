@@ -1,137 +1,158 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { isMobile, isBrowser } from 'react-device-detect'
 import { Scrollbars } from 'react-custom-scrollbars'
 
-import Sidebar from 'core/common/src/components/primary-sidebar'
-import { AppHeader, AppFooter, AppMain, Tiles } from 'formula_one'
-import {initial_page, search_keyword} from "../constants/constants";
+import { AppHeader, AppFooter, AppMain } from 'formula_one'
+import { INTIAL_PAGE } from '../constants/constants'
 
-import NoticeListView from "./notice-segment";
-import NoticeView from "./notice-view"
-import TabList from "./tab-list";
-import SideNav from "./sidenav"
-import { Route, withRouter } from "react-router-dom";
-import GetNotices from "../actions/get_notices";
-import GetNotice from "../actions/get_notice";
-import GetFilters from "../actions/filters";
+import NoticeListView from './notice-segment'
+import NoticeView from './notice-view'
+import TabList from './tab-list'
+import SideNav from './sidenav'
+
+import { Route, withRouter } from 'react-router-dom'
+import { getNotice, getNotices, getFilters } from '../actions/index'
 
 import main from 'formula_one/src/css/app.css'
-import notice_css from "../css/notice.css";
+import app from '../css/notice.css'
 
-
-
-const get_id_from_notice_url = (url, expired) => {
-    let notice_id;
-    if (!expired){
-        notice_id = +url.split('/')[3];
-    } else {
-        notice_id = +url.split('/')[4];
-    }
-    return notice_id;
-};
+const getIdFromNoticeUrl = (url, expired) => {
+  let noticeId
+  if (!expired) {
+    noticeId = +url.split('/')[3]
+  } else {
+    noticeId = +url.split('/')[4]
+  }
+  return noticeId
+}
 
 class App extends React.PureComponent {
+  componentDidMount() {
+    const { getFilters, getNotice, getNotices, location, history } = this.props
+    getFilters()
 
-    componentDidMount () {
-
-        this.props.GetFilters();
-
-        // Direct url hit
-        if (this.props.location.pathname.startsWith('/noticeboard/notice/')) {
-            if (this.props.location.pathname.startsWith('/noticeboard/notice/old/')) {
-                let id = get_id_from_notice_url(this.props.location.pathname, true);
-                this.props.GetNotice(id, true);
-            } else {
-                let id = get_id_from_notice_url(this.props.location.pathname, false);
-                this.props.GetNotice(id, false);
-            }
-        } else {
-            this.props.GetNotices(initial_page);
-        }
-
-        // on page change
-        this.props.history.listen((location) => {
-            if (location.pathname.startsWith('/noticeboard/notice/')) {
-                let id = get_id_from_notice_url(location.pathname, location.state.expired);
-                this.props.GetNotice(id, location.state.expired);
-            } else {
-                this.props.GetNotices(
-                    location.state.page,
-                    location.state.search_keyword,
-                    location.state.narrow_bookmark,
-                    location.state.expired,
-                    location.state.banner_id,
-                    location.state.main_category_slug,
-                    location.state.date_range);
-            }
-        });
+    // Direct url hit
+    if (location.pathname.startsWith('/noticeboard/notice/')) {
+      if (location.pathname.startsWith('/noticeboard/notice/old/')) {
+        let id = getIdFromNoticeUrl(location.pathname, true)
+        getNotice(id, true)
+      } else {
+        let id = getIdFromNoticeUrl(location.pathname, false)
+        getNotice(id, false)
+      }
+    } else {
+      getNotices(INTIAL_PAGE)
     }
 
-    render () {
-        const { match } = this.props;
-        const creators = [{
-            name: 'Rhea Parekh',
-            role: 'Backend and Frontend Developer',
-            link: 'https://github.com/rheaparekh/'
-        }, {
-            name: 'Gouranshi Choudhary',
-            role: 'Designer'
-        }, {
-            name: 'Harshit Khetan',
-            role: 'IOS Developer',
-        }, {
-            name: 'Aniket Goyal',
-            role: 'Android Developer'
-        }
-        ];
+    // on page change
+    history.listen(location => {
+      if (location.pathname.startsWith('/noticeboard/notice/')) {
+        let id = getIdFromNoticeUrl(location.pathname, location.state.expired)
+        getNotice(id, location.state.expired)
+      } else {
+        getNotices(
+          location.state.page,
+          location.state.searchKeyword,
+          location.state.narrowBookmark,
+          location.state.expired,
+          location.state.bannerId,
+          location.state.mainCategorySlug,
+          location.state.dateRange
+        )
+      }
+    })
+  }
 
-      return (
-          <React.Fragment>
-              <div styleName='main.app'>
-                  <AppHeader appName='noticeboard'
-                             userDropdown mode='app'/>
-                  <AppMain>
-                      <div styleName='main.app-main'>
-                          <SideNav history={this.props.history}/>
-                          <Scrollbars autoHide>
-                                  <div styleName='notice_css.notice-container'>
-                                      <TabList history={this.props.history}/>
-                                      <Route exact path="/noticeboard"
-                                         render={
-                                             (props) => <NoticeListView {...props}
-                                                                        history={this.props.history}/>}/>
-                                      <Route path="/noticeboard/notice" component={NoticeView} />
-                                  </div>
-                          </Scrollbars>
-                      </div>
-                  </AppMain>
-                  <AppFooter creators={creators} />
-              </div>
-          </React.Fragment>
-      )
-    }
+  render() {
+    const { history } = this.props
+    const creators = [
+      {
+        name: 'Rhea Parekh',
+        role: 'Backend and Frontend Developer',
+        link: 'https://github.com/rheaparekh/'
+      },
+      {
+        name: 'Gouranshi Choudhary',
+        role: 'Designer'
+      },
+      {
+        name: 'Harshit Khetan',
+        role: 'IOS Developer'
+      },
+      {
+        name: 'Aniket Goyal',
+        role: 'Android Developer'
+      }
+    ]
+
+    return (
+      <React.Fragment>
+        <div styleName="main.app">
+          <AppHeader appName="noticeboard" userDropdown mode="app" />
+          <AppMain>
+            <div styleName="main.app-main">
+              <SideNav history={history} />
+              <Scrollbars autoHide>
+                <div styleName="app.notice-container">
+                  <TabList history={history} />
+                  <Route
+                    exact
+                    path="/noticeboard"
+                    render={props => (
+                      <NoticeListView {...props} history={history} />
+                    )}
+                  />
+                  <Route path="/noticeboard/notice" component={NoticeView} />
+                </div>
+              </Scrollbars>
+            </div>
+          </AppMain>
+          <AppFooter creators={creators} />
+        </div>
+      </React.Fragment>
+    )
+  }
 }
 
 const mapStateToProps = state => {
-    return { notices: state, search: state.GetNotices.search_keyword };
-};
+  return { notices: state, search: state.allNotices.searchKeyword }
+}
 
 const mapDispatchToProps = dispatch => {
-
   return {
-    GetNotices: (page, search_keyword, narrow_bookmark,
-                 expired, banner_id, main_category_slug, date_range) => {
-        dispatch(GetNotices(page, search_keyword, narrow_bookmark,
-            expired, banner_id, main_category_slug, date_range))
+    getNotices: (
+      page,
+      searchKeyword,
+      narrowBookmark,
+      expired,
+      bannerId,
+      mainCategorySlug,
+      dateRange
+    ) => {
+      dispatch(
+        getNotices(
+          page,
+          searchKeyword,
+          narrowBookmark,
+          expired,
+          bannerId,
+          mainCategorySlug,
+          dateRange
+        )
+      )
     },
-    GetNotice: (notice_id, expired) => {
-        dispatch(GetNotice(notice_id, expired))
+    getNotice: (noticeId, expired) => {
+      dispatch(getNotice(noticeId, expired))
     },
-    GetFilters: () => {
-        dispatch(GetFilters())
+    getFilters: () => {
+      dispatch(getFilters())
     }
   }
-};
+}
 
-export default withRouter(connect (mapStateToProps, mapDispatchToProps) (App));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(App)
+)

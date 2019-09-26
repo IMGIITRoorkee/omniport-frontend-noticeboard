@@ -1,55 +1,66 @@
-import React, { Component } from 'react';
-import { Button, Menu } from 'semantic-ui-react';
-import notice_css from "../css/notice.css";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import GetNotices from "../actions/get_notices";
-import {initial_page} from "../constants/constants";
+import React, { Component } from 'react'
+import { Button, Menu } from 'semantic-ui-react'
+import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 
-
-const mapStateToProps = state => {
-    return {
-        page: state.GetNotices.page,
-        search_keyword: state.GetNotices.search_keyword,
-        narrow_bookmark: state.GetNotices.narrow_bookmark,
-        expired: state.GetNotices.expired,
-        banner_id: state.GetNotices.banner_id,
-        main_category_slug: state.GetNotices.main_category_slug,
-        date_range: state.GetNotices.date_range
-    }
-};
+import backlink from '../css/notice.css'
 
 class BackLink extends Component {
-    render () {
-        return (
-            <Menu.Menu position='left'>
-                <Menu.Item styleName='notice_css.back-button'>
-                    <Button styleName='notice_css.menu-button-border notice_css.tab-button'
-                        onClick={() => this.all_notices('/noticeboard/')}
-                        icon='arrow left' content='Back'/>
-                </Menu.Item>
-            </Menu.Menu>
-        )
-    };
-
-    all_notices(path) {
-
-      let narrow_bookmark = this.props.narrow_bookmark;
-      if (narrow_bookmark) {
-          narrow_bookmark = !narrow_bookmark;
-      }
-
-      this.props.history.push({
-          pathname: path,
-          state: {page: this.props.page,
-                  search_keyword: this.props.search_keyword,
-                  narrow_bookmark: narrow_bookmark,
-                  banner_id: this.props.banner_id,
-                  main_category_slug: this.props.main_category_slug,
-                  expired: this.props.expired,
-                  date_range: this.props.date_range
-          }});
+  allNotices = path => {
+    const {
+      page,
+      searchKeyword,
+      narrowBookmark,
+      bannerId,
+      mainCategorySlug,
+      expired,
+      dateRange,
+      history
+    } = this.props
+    let narrowTemp = narrowBookmark
+    if (narrowTemp) {
+      narrowTemp = !narrowTemp
     }
+
+    history.push({
+      pathname: path,
+      state: {
+        page: page,
+        searchKeyword: searchKeyword,
+        narrowBookmark: narrowTemp,
+        bannerId: bannerId,
+        mainCategorySlug: mainCategorySlug,
+        expired: expired,
+        dateRange: dateRange
+      }
+    })
+  }
+  render() {
+    return (
+      <Menu.Menu position="left">
+        <Menu.Item styleName="backlink.back-button">
+          <Button
+            styleName="backlink.menu-button-border backlink.tab-button"
+            onClick={() => this.allNotices('/noticeboard/')}
+            icon="arrow left"
+            content="Back"
+          />
+        </Menu.Item>
+      </Menu.Menu>
+    )
+  }
 }
 
-export default withRouter(connect (mapStateToProps) (BackLink));
+const mapStateToProps = state => {
+  return {
+    page: state.allNotices.page,
+    searchKeyword: state.allNotices.searchKeyword,
+    narrowBookmark: state.allNotices.narrowBookmark,
+    expired: state.allNotices.expired,
+    bannerId: state.allNotices.bannerId,
+    mainCategorySlug: state.allNotices.mainCategorySlug,
+    dateRange: state.allNotices.dateRange
+  }
+}
+
+export default withRouter(connect(mapStateToProps)(BackLink))

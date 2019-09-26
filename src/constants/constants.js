@@ -1,2 +1,2 @@
-export const initial_page = 1;
-export const search_keyword = undefined;
+export const INTIAL_PAGE = 1,
+  SEARCH_KEYWORD = undefined
