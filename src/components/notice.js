@@ -7,9 +7,14 @@ import { INTIAL_PAGE } from '../constants/constants'
 
 import notice from '../css/notice.css'
 class Notice extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      check: false
+    }
+  }
   openNotice = e => {
     const { id, history, expired } = this.props
-
     let path
     if (expired) {
       path = '/noticeboard/notice/old/' + id
@@ -21,30 +26,35 @@ class Notice extends Component {
       state: { page: INTIAL_PAGE, expired: expired }
     })
   }
+  componentDidUpdate(prevProps) {
+    const { selectAllActive } = this.props
+    if (selectAllActive !== prevProps.selectAllActive) {
+      this.setState({
+        check: selectAllActive
+      })
+    }
+  }
 
   bookmarkNotice = e => {
     const { id, bookmark, noticeBookmark, expired } = this.props
-    bookmark = !bookmark
     if (!expired) {
-      noticeBookmark([id], bookmark)
+      noticeBookmark([id], !bookmark)
     }
   }
 
   selectNotice = e => {
-    const { id, isSelected, toggleSelect } = this.props
-    isSelected = !isSelected
-    toggleSelect(id, isSelected)
+    const { id, toggleSelect } = this.props
+    const { check } = this.state
+    this.setState(
+      {
+        check: !check
+      },
+      toggleSelect(id)
+    )
   }
   render() {
-    const {
-      date,
-      banner,
-      title,
-      isSelected,
-      read,
-      bookmark,
-      expired
-    } = this.props
+    const { date, banner, title, read, bookmark, expired } = this.props
+    const { check } = this.state
     return (
       <Table.Row
         styleName={
@@ -65,8 +75,8 @@ class Notice extends Component {
             <Icon name="square outline" />
           ) : (
             <Icon
-              name={isSelected ? 'square' : 'square outline'}
-              color={isSelected ? 'blue' : 'grey'}
+              name={check ? 'square' : 'square outline'}
+              color={check ? 'blue' : 'grey'}
             />
           )}
         </Table.Cell>
@@ -96,7 +106,7 @@ class Notice extends Component {
         </Table.Cell>
         <Table.Cell
           collapsing
-          onClick={OpenNotice}
+          onClick={this.openNotice}
           styleName="notice.cell-hover"
         >
           {title}
@@ -121,7 +131,8 @@ class Notice extends Component {
 const mapStateToProps = state => {
   return {
     expired: state.allNotices.expired,
-    selectAllActive: state.allNotices.selectAllActive
+    selectAllActive: state.allNotices.selectAllActive,
+    selectedNotices: state.allNotices.selectedNotices
   }
 }
 
@@ -130,8 +141,8 @@ const mapDispatchToProps = dispatch => {
     noticeBookmark: (noticeIdList, bookmark) => {
       dispatch(noticeBookmark(noticeIdList, bookmark))
     },
-    toggleSelect: (noticeId, isSelected) => {
-      dispatch(toggleSelect(noticeId, isSelected))
+    toggleSelect: noticeId => {
+      dispatch(toggleSelect(noticeId))
     }
   }
 }

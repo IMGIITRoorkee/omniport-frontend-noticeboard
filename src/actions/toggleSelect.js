@@ -1,17 +1,16 @@
 import { TOGGLE_SELECT } from '../constants/action-types'
 
-function toggleSelectFunc(noticeId, isSelected) {
+function toggleSelectFunc(noticeId) {
   return {
     type: TOGGLE_SELECT,
     payload: {
-      noticeId: noticeId,
-      isSelected: isSelected
+      noticeId: noticeId
     }
   }
 }
 
-export const toggleSelect = (noticeId, isSelected) => {
+export const toggleSelect = noticeId => {
   return dispatch => {
-    dispatch(toggleSelectFunc(noticeId, isSelected))
+    dispatch(toggleSelectFunc(noticeId))
   }
 }

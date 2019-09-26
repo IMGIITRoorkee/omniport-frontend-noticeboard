@@ -21,70 +21,22 @@ import notice from '../css/notice.css'
 class NoticeListView extends Component {
   constructor(props) {
     super(props)
-
-    const {
-      history,
-      notices,
-      bannerId,
-      dateRange,
-      filters,
-      isFetchingNotices
-    } = this.props
-
-    let noticeList, bannerName, dateDisplay, displayselectAll, noNotices
-
-    if (bannerId) {
-      for (let index = 0; index < filters.length; index++) {
-        for (let j = 0; j < filters[index].banner.length; j++) {
-          if (bannerId === filters[index].banner[j].id) {
-            bannerName = filters[index].banner[j].name
-          }
-        }
-      }
-    } else {
-      bannerName = null
-    }
-
-    if (dateRange) {
-      dateDisplay = dateRange.start + ' to ' + dateRange.end
-    }
-
-    if (!isFetchingNotices) {
-      noticeList = notices.map(noticeInfo => {
-        return (
-          <Notice
-            key={noticeInfo.id}
-            id={noticeInfo.id}
-            isSelected={noticeInfo.isSelected}
-            date={noticeInfo.datetimeModified}
-            banner={noticeInfo.banner}
-            title={noticeInfo.title}
-            read={noticeInfo.read}
-            bookmark={noticeInfo.starred}
-            history={history}
-          />
-        )
-      })
-
-      if (noticeList.length === 0) {
-        noNotices = true
-        displayselectAll = false
-      } else {
-        noNotices = false
-        displayselectAll = true
-      }
-    } else {
-      noticeList = []
-      displayselectAll = false
-    }
     this.state = {
-      bannerName: bannerName,
-      dateDisplay: dateDisplay,
-      displayselectAll: displayselectAll,
-      noticeList: noticeList,
-      noNotices: noNotices
+      displayselectAll: '',
+      noNotices: ''
     }
   }
+
+  componentDidUpdate(prevProps) {
+    const { notices } = this.props
+    if (prevProps.notices !== notices) {
+      this.setState({
+        noNotices: notices.length > 0 ? false : true,
+        displayselectAll: notices.length > 0 ? true : false
+      })
+    }
+  }
+
   handlePaginationChange = (e, { activePageTemp }) => {
     const {
       narrowBookmark,
@@ -114,33 +66,54 @@ class NoticeListView extends Component {
 
   bookmark = e => {
     const { noticeBookmark, selectAll, selectedNotices } = this.props
-    toggle = true
+    let toggle = true
     noticeBookmark(selectedNotices, toggle)
     selectAll(false)
   }
 
   removeBookmark = e => {
     const { noticeBookmark, selectAll, selectedNotices } = this.props
-    toggle = false
+    let toggle = false
     noticeBookmark(selectedNotices, toggle)
     selectAll(false)
   }
 
   read = e => {
     const { noticeRead, selectAll, selectedNotices } = this.props
-    toggle = true
+    let toggle = true
     noticeRead(selectedNotices, toggle)
     selectAll(false)
   }
   render() {
-    const { totalPages, selectAllActive, isFetchingNotices, page } = this.props
     const {
-      dateDisplay,
-      bannerName,
-      displayselectAll,
-      noticeList,
-      noNotices
-    } = this.state
+      totalPages,
+      selectAllActive,
+      isFetchingNotices,
+      page,
+      bannerId,
+      filters,
+      dateRange,
+      notices,
+      history
+    } = this.props
+    const { displayselectAll, noNotices } = this.state
+
+    let bannerName, dateDisplay
+    if (bannerId && filters.length > 0) {
+      for (let index = 0; index < filters.length; index++) {
+        for (let j = 0; j < filters[index].banner.length; j++) {
+          if (bannerId === filters[index].banner[j].id) {
+            bannerName = filters[index].banner[j].name
+          }
+        }
+      }
+    } else {
+      bannerName = null
+    }
+
+    if (dateRange) {
+      dateDisplay = dateRange.start + ' to ' + dateRange.end
+    }
     return (
       <div styleName="notice.notice-list">
         {/* Select all button */}
@@ -229,7 +202,21 @@ class NoticeListView extends Component {
             {!noNotices ? (
               <Container styleName="notice.notice-list-view notice.notice-container-width">
                 <Table fixed basic singleLine compact>
-                  <Table.Body>{noticeList}</Table.Body>
+                  <Table.Body>
+                    {notices &&
+                      notices.map(noticeInfo => (
+                        <Notice
+                          key={noticeInfo.id}
+                          id={noticeInfo.id}
+                          date={noticeInfo.datetimeModified}
+                          banner={noticeInfo.banner}
+                          title={noticeInfo.title}
+                          read={noticeInfo.read}
+                          bookmark={noticeInfo.starred}
+                          history={history}
+                        />
+                      ))}
+                  </Table.Body>
                 </Table>
               </Container>
             ) : (

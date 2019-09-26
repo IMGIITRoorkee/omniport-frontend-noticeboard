@@ -26,13 +26,9 @@ const initialState = {
 const allNotices = (state = initialState, action) => {
   switch (action.type) {
     case GET_NOTICES:
-      let notices = action.payload.notices
-      for (let i = 0; i < notices.length; i++) {
-        notices[i]['is_selected'] = false
-      }
       return {
         ...state,
-        notices: notices,
+        notices: action.payload.notices,
         searchKeyword: action.payload.searchKeyword,
         isFetchingNotices: false,
         selectAllActive: false,
@@ -82,7 +78,6 @@ const allNotices = (state = initialState, action) => {
       selectAllActive = action.payload.selectAllActive
 
       for (let i = 0; i < state.notices.length; i++) {
-        state.notices[i]['is_selected'] = selectAllActive
         if (selectAllActive) {
           selectedNotices.push(state.notices[i].id)
         }
@@ -96,25 +91,17 @@ const allNotices = (state = initialState, action) => {
 
     case TOGGLE_SELECT:
       selectedNotices = state.selectedNotices
-      let notice_id = action.payload.notice_id
-      let is_selected = action.payload.is_selected
+      let noticeId = action.payload.noticeId
       let selectAllActive = false
 
-      for (let i = 0; i < state.notices.length; i++) {
-        if (state.notices[i].id === notice_id) {
-          state.notices[i].is_selected = is_selected
-        }
-      }
-
-      if (selectedNotices.includes(notice_id)) {
-        let index = selectedNotices.indexOf(notice_id)
+      if (selectedNotices.includes(noticeId)) {
+        let index = selectedNotices.indexOf(noticeId)
         if (index !== -1) {
           selectedNotices.splice(index, 1)
         }
       } else {
-        selectedNotices.push(notice_id)
+        selectedNotices.push(noticeId)
       }
-
       if (selectedNotices.length > 0) {
         selectAllActive = true
       }
