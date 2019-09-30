@@ -7,7 +7,7 @@ import config from '../../config.json'
 
 import editor from '../css/upload-notice-editor.css'
 
-class UploadNoticeEditor extends Component {
+export default class UploadNoticeEditor extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -15,7 +15,6 @@ class UploadNoticeEditor extends Component {
       isConfirmModal: false,
       isConfirm: false
     }
-    this.nodeRef = React.createRef()
   }
   componentDidMount() {
     var self = this
@@ -66,6 +65,7 @@ class UploadNoticeEditor extends Component {
   }
   render() {
     const { isConfirmModal, data } = this.state
+    const { mountedNode } = this.props
     return (
       <div styleName="editor.editor-parent">
         <Editor
@@ -90,12 +90,7 @@ class UploadNoticeEditor extends Component {
             size="large"
             open={isConfirmModal}
             onClose={this.closeConfirmationModal}
-            style={{ zIndex: 897465 }}
-            mountNode={
-              this.nodeRef
-                ? this.nodeRef.current
-                : document.querySelector('#app')
-            }
+            mountNode={mountedNode ? mountedNode.current : null}
           >
             <Modal.Header>
               Do you really want to select "{data.fileName}"
@@ -117,13 +112,7 @@ class UploadNoticeEditor extends Component {
             </Modal.Actions>
           </Modal>
         ) : null}
-        <div styleName="editor.modal-mount-parent" ref={this.nodeRef}></div>
       </div>
     )
   }
 }
-
-export default connect(
-  null,
-  null
-)(UploadNoticeEditor)

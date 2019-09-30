@@ -3,14 +3,15 @@ import { connect } from 'react-redux'
 import { Modal, Button, Icon } from 'semantic-ui-react'
 import UploadNoticeEditor from './upload-notice-editor'
 
+import upload from '../css/upload-notice.css'
 class UploadNotice extends Component {
   constructor(props) {
     super(props)
     this.state = {
       showModal: false
     }
+    this.modalRef = React.createRef()
   }
-  componentDidMount() {}
   handleModal = value => {
     this.setState({
       showModal: value
@@ -23,7 +24,7 @@ class UploadNotice extends Component {
         <Button onClick={() => this.handleModal(true)} primary>
           Upload
         </Button>
-
+        <div styleName="upload.modal-mount-parent" ref={this.modalRef}></div>
         {showModal ? (
           <Modal
             open={showModal}
@@ -41,7 +42,7 @@ class UploadNotice extends Component {
               </Modal.Description> */}
             </Modal.Content>
             <Modal.Header>Select Categories</Modal.Header>
-            <UploadNoticeEditor />
+            <UploadNoticeEditor mountedNode={this.modalRef} />
             <Modal.Actions>
               <Button primary>
                 Proceed <Icon name="chevron right" />
