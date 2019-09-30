@@ -27,10 +27,10 @@ class Notice extends Component {
     })
   }
   componentDidUpdate(prevProps) {
-    const { selectAllActive } = this.props
+    const { selectAllActive, id, selectedNotices } = this.props
     if (selectAllActive !== prevProps.selectAllActive) {
       this.setState({
-        check: selectAllActive
+        check: selectAllActive && selectedNotices.includes(id)
       })
     }
   }
@@ -53,8 +53,18 @@ class Notice extends Component {
     )
   }
   render() {
-    const { date, banner, title, read, bookmark, expired } = this.props
+    const {
+      date,
+      banner,
+      title,
+      read,
+      bookmark,
+      expired,
+      id,
+      selectedNotices
+    } = this.props
     const { check } = this.state
+    console.log(this.props.selectedNotices, this.state.check)
     return (
       <Table.Row
         styleName={
