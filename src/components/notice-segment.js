@@ -23,16 +23,20 @@ class NoticeListView extends Component {
     super(props)
     this.state = {
       displayselectAll: '',
-      noNotices: ''
+      noNotices: '',
+      showImp: false,
     }
   }
 
   componentDidUpdate(prevProps) {
-    const { notices } = this.props
+    const { notices, importantNotices } = this.props
+    let { showImp } = this.state
+
+    let currentNotices = showImp ? importantNotices:notices;
     if (prevProps.notices !== notices) {
       this.setState({
-        noNotices: notices.length > 0 ? false : true,
-        displayselectAll: notices.length > 0 ? true : false
+        noNotices: currentNotices.length > 0 ? false : true,
+        displayselectAll: currentNotices.length > 0 ? true : false
       })
     }
   }
@@ -47,6 +51,7 @@ class NoticeListView extends Component {
       searchKeyword,
       expired
     } = this.props
+    var { showImp } = this.state;
     let activePage = activePageTemp
     getNotices(
       activePage,
@@ -55,8 +60,33 @@ class NoticeListView extends Component {
       expired,
       bannerId,
       mainCategorySlug,
-      dateRange
+      dateRange,
+      showImp
     )
+  }
+
+  showImportant = e => {
+    this.setState({showImp: true})
+    const {
+        narrowBookmark,
+        bannerId,
+        dateRange,
+        mainCategorySlug,
+        getNotices,
+        searchKeyword,
+        expired
+      } = this.props
+      let activePage = 1
+      getNotices(
+        activePage,
+        searchKeyword,
+        narrowBookmark,
+        expired,
+        bannerId,
+        mainCategorySlug,
+        dateRange,
+        true
+      )
   }
 
   selectAll = e => {
@@ -94,9 +124,15 @@ class NoticeListView extends Component {
       filters,
       dateRange,
       notices,
+      importantNotices,
       history
     } = this.props
-    const { displayselectAll, noNotices } = this.state
+    const { displayselectAll, noNotices, showImp } = this.state
+    let currentNotices = notices;
+    if(showImp){
+        // this.handlePaginationChange({}, {activePageTemp: 1})
+        currentNotices = importantNotices;
+    }
 
     let bannerName, dateDisplay
     if (bannerId && filters.length > 0) {
@@ -201,10 +237,11 @@ class NoticeListView extends Component {
           <div>
             {!noNotices ? (
               <Container styleName="notice.notice-list-view notice.notice-container-width">
+                <Container onClick={this.showImportant}>Important</Container>
                 <Table fixed basic singleLine compact>
                   <Table.Body>
-                    {notices &&
-                      notices.map(noticeInfo => (
+                    {currentNotices &&
+                      currentNotices.map(noticeInfo => (
                         <Notice
                           key={noticeInfo.id}
                           id={noticeInfo.id}
@@ -247,6 +284,7 @@ class NoticeListView extends Component {
 const mapStateToProps = state => {
   return {
     notices: state.allNotices.notices,
+    importantNotices: state.allNotices.importantNotices,
     totalPages: state.allNotices.totalPages,
     isFetchingNotices: state.allNotices.isFetchingNotices,
     page: state.allNotices.page,
@@ -271,7 +309,8 @@ const mapDispatchToProps = dispatch => {
       expired,
       bannerId,
       mainCategorySlug,
-      dateRange
+      dateRange,
+      showImp
     ) => {
       dispatch(
         getNotices(
@@ -281,7 +320,8 @@ const mapDispatchToProps = dispatch => {
           expired,
           bannerId,
           mainCategorySlug,
-          dateRange
+          dateRange,
+          showImp
         )
       )
     },

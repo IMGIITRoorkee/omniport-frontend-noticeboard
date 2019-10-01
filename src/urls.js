@@ -9,6 +9,12 @@ export function url_search_get_param(url, search_keyword) {
     return url;
 }
 
+export function urlAddImportant(url) {
+    let key = url.includes('?') ? '&':'?';
+    url += `${key}important=true`;
+    return url;
+}
+
 export function urlExpiredNotices (page, search_keyword) {
     let url = `${urlMainApp()}old/?page=${page}`;
     return url_search_get_param(url, search_keyword);
@@ -16,6 +22,11 @@ export function urlExpiredNotices (page, search_keyword) {
 
 export function urlNotices (page, search_keyword) {
     let url = `${urlMainApp()}new/?page=${page}`;
+    return url_search_get_param(url, search_keyword);
+}
+
+export function urlImportantNotices (page, search_keyword) {
+    let url = `${urlMainApp()}new/?important=true&page=${page}`;
     return url_search_get_param(url, search_keyword);
 }
 

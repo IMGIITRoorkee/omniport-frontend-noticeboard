@@ -1,5 +1,6 @@
 import {
   GET_NOTICES,
+  GET_IMPORTANT_NOTICES,
   REQUEST_NOTICES,
   BOOKMARK_NOTICE,
   SELECT_ALL,
@@ -8,10 +9,12 @@ import {
 } from '../constants/action-types'
 
 const initialState = {
+  impPage: 1,
   page: 1,
   isFetchingNotices: true,
   totalPages: 0,
   notices: [],
+  importantNotices: [],
   searchKeyword: null,
   isLoaded: false,
   expired: false,
@@ -26,9 +29,8 @@ const initialState = {
 const allNotices = (state = initialState, action) => {
   switch (action.type) {
     case GET_NOTICES:
-      return {
+      let newState = {
         ...state,
-        notices: action.payload.notices,
         searchKeyword: action.payload.searchKeyword,
         isFetchingNotices: false,
         selectAllActive: false,
@@ -40,6 +42,18 @@ const allNotices = (state = initialState, action) => {
         mainCategorySlug: action.payload.mainCategorySlug,
         dateRange: action.payload.dateRange
       }
+      if(action.payload.showImp){
+        newState["importantNotices"] = action.payload.notices;
+        newState["notices"] = [];
+      }
+      else{
+        newState["notices"] = action.payload.notices;
+        newState["importantNotices"] = [];
+
+      }
+      
+      return newState;
+      
 
     case REQUEST_NOTICES:
       return {
@@ -48,7 +62,7 @@ const allNotices = (state = initialState, action) => {
         page: action.payload.page,
         searchKeyword: action.payload.searchKeyword
       }
-
+    
     case BOOKMARK_NOTICE:
       let noticeIdList = action.payload.noticeIdList
 
@@ -56,6 +70,14 @@ const allNotices = (state = initialState, action) => {
         for (let i = 0; i < state.notices.length; i++) {
           if (state.notices[i].id === noticeIdList[index]) {
             state.notices[i].starred = action.payload.toggle
+          }
+        }
+      }
+
+      for (let index = 0; index < noticeIdList.length; index++) {
+        for (let i = 0; i < state.importantNotices.length; i++) {
+          if (state.importantNotices[i].id === noticeIdList[index]) {
+            state.importantNotices[i].starred = action.payload.toggle
           }
         }
       }
@@ -71,6 +93,15 @@ const allNotices = (state = initialState, action) => {
           }
         }
       }
+
+      for (let index = 0; index < notice_id_list.length; index++) {
+        for (let i = 0; i < state.importantNotices.length; i++) {
+          if (state.importantNotices[i].id === notice_id_list[index]) {
+            state.importantNotices[i].read = action.payload.toggle
+          }
+        }
+      }
+
       return { ...state }
 
     case SELECT_ALL:

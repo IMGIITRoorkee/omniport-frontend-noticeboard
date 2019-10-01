@@ -1,5 +1,6 @@
 import { GET_NOTICES, REQUEST_NOTICES } from '../constants/action-types'
 import {
+  urlAddImportant,
   urlBookmarkedNotices,
   urlExpiredNotices,
   urlFilter,
@@ -26,7 +27,8 @@ function receiveNotices(
   expired,
   bannerId,
   dateRange,
-  mainCategorySlug
+  mainCategorySlug,
+  showImp
 ) {
   let totalPages = Math.ceil(noticeDataList.count / 10)
   if (totalPages == 0) {
@@ -45,7 +47,8 @@ function receiveNotices(
       notices: noticeDataList.results,
       searchKeyword: searchKeyword,
       totalPages: totalPages,
-      page: page
+      page: page,
+      showImp: showImp
     }
   }
 }
@@ -57,7 +60,8 @@ export const getNotices = (
   expired,
   bannerId,
   mainCategorySlug,
-  dateRange
+  dateRange,
+  showImp
 ) => {
   return dispatch => {
     dispatch(requestNotices(page, searchKeyword))
@@ -82,6 +86,10 @@ export const getNotices = (
       url = urlNotices(page, searchKeyword)
     }
 
+    if(showImp)
+       url = urlAddImportant(url);
+    console.log(url, "ritvik")
+
     return fetch(url)
       .then(response => response.json())
       .then(json =>
@@ -94,7 +102,8 @@ export const getNotices = (
             expired,
             bannerId,
             dateRange,
-            mainCategorySlug
+            mainCategorySlug,
+            showImp
           )
         )
       )
