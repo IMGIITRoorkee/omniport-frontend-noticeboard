@@ -31,17 +31,19 @@ class NoticeListView extends Component {
   componentDidUpdate(prevProps) {
     const { notices, importantNotices } = this.props
     let { showImp } = this.state
-
+    console.log(notices, importantNotices)
     let currentNotices = showImp ? importantNotices:notices;
     if (prevProps.notices !== notices) {
       this.setState({
         noNotices: currentNotices.length > 0 ? false : true,
         displayselectAll: currentNotices.length > 0 ? true : false
+        // noNotices: false,
+        // displayselectAll: true
       })
     }
   }
 
-  handlePaginationChange = (e, { activePageTemp }) => {
+  handlePaginationChange = (e, { activePage }) => {
     const {
       narrowBookmark,
       bannerId,
@@ -52,7 +54,7 @@ class NoticeListView extends Component {
       expired
     } = this.props
     var { showImp } = this.state;
-    let activePage = activePageTemp
+    console.log(activePage)
     getNotices(
       activePage,
       searchKeyword,
@@ -130,7 +132,6 @@ class NoticeListView extends Component {
     const { displayselectAll, noNotices, showImp } = this.state
     let currentNotices = notices;
     if(showImp){
-        // this.handlePaginationChange({}, {activePageTemp: 1})
         currentNotices = importantNotices;
     }
 

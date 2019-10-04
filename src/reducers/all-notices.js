@@ -42,16 +42,11 @@ const allNotices = (state = initialState, action) => {
         mainCategorySlug: action.payload.mainCategorySlug,
         dateRange: action.payload.dateRange
       }
-      if(action.payload.showImp){
+      if(action.payload.showImp)
         newState["importantNotices"] = action.payload.notices;
-        newState["notices"] = [];
-      }
-      else{
+      else
         newState["notices"] = action.payload.notices;
-        newState["importantNotices"] = [];
 
-      }
-      
       return newState;
       
 
