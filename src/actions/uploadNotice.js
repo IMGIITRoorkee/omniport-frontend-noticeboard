@@ -7,7 +7,7 @@ import {
   UPLOAD_NOTICE_SUCCESS
 } from '../constants/action-types'
 
-export default function uploadNotice(data, callback) {
+export const uploadNotice = (data, callback) => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }

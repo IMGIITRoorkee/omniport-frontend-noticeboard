@@ -1,3 +1,25 @@
 .modal-mount-parent {
   z-index: 100000000;
 }
+.sub-categories-parent {
+  margin: 2rem 0;
+}
+.sub-categories-radio-parent {
+  margin: 1rem 0;
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+/* .sub-categories-radio-button {
+  color: #878787 !important;
+} */
+.input-width-50 {
+  width: 50%;
+}
+.date-input-parent {
+  margin: 1rem 0;
+}
+.notice-upload-checkbox {
+  margin: 1rem 0;
+}

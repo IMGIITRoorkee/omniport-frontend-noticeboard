@@ -65,7 +65,7 @@ export default class UploadNoticeEditor extends Component {
   }
   render() {
     const { isConfirmModal, data } = this.state
-    const { mountedNode } = this.props
+    const { mountedNode, handleEditorChange } = this.props
     return (
       <div styleName="editor.editor-parent">
         <Editor
@@ -83,6 +83,7 @@ export default class UploadNoticeEditor extends Component {
             file_browser_callback_types: 'file image media link',
             branding: false
           }}
+          onChange={handleEditorChange}
           menubar={false}
         />
         {isConfirmModal ? (
