@@ -5,7 +5,10 @@ import {
   BOOKMARK_NOTICE,
   SELECT_ALL,
   TOGGLE_SELECT,
-  READ_NOTICE
+  READ_NOTICE,
+  UPLOAD_NOTICE_FAILURE,
+  UPLOAD_NOTICE_SUCCESS,
+  UPLOAD_NOTICE_REQUEST
 } from '../constants/action-types'
 
 const initialState = {
@@ -23,7 +26,9 @@ const initialState = {
   dateRange: null,
   selectAllActive: false,
   selectedNotices: [],
-  mainCategorySlug: false
+  mainCategorySlug: false,
+  isUploading: false,
+  error: ''
 }
 
 const allNotices = (state = initialState, action) => {
@@ -136,6 +141,22 @@ const allNotices = (state = initialState, action) => {
         ...state,
         selectedNotices: selectedNotices,
         selectAllActive: selectAllActive
+      }
+    case UPLOAD_NOTICE_FAILURE:
+      return {
+        ...state,
+        isUploading: false,
+        error: action.payload
+      }
+    case UPLOAD_NOTICE_SUCCESS:
+      return {
+        ...state,
+        isUploading: false
+      }
+    case UPLOAD_NOTICE_REQUEST:
+      return {
+        ...state,
+        isUploading: true
       }
 
     default:

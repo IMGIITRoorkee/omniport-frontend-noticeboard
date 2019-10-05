@@ -7,7 +7,8 @@ import {
   Header,
   Radio,
   Input,
-  Checkbox
+  Checkbox,
+  Responsive
 } from 'semantic-ui-react'
 import { DateInput } from 'semantic-ui-calendar-react'
 import { uploadNotice } from '../actions/index'
@@ -77,11 +78,13 @@ class UploadNotice extends Component {
     uploadNotice(data, this.successCallback)
   }
   successCallback = () => {
-    console.log('here')
+    this.setState({
+      showModal: false
+    })
   }
   render() {
     const { showModal, title, checkedState, endDate, isImportant } = this.state
-    const { filters } = this.props
+    const { filters, isUploading } = this.props
 
     const dateCurrent = new Date()
     dateCurrent.setDate(dateCurrent.getDate() + 1)
@@ -100,31 +103,51 @@ class UploadNotice extends Component {
             <Modal.Header>Create Notice</Modal.Header>
 
             <Modal.Content>
-              <div styleName="upload.input-width-50">
-                <label>Title</label>
-                <Input
-                  fluid
-                  placeholder="Title of notice"
-                  value={title}
-                  name="title"
-                  onChange={this.onChange}
-                />
-              </div>
-              <div styleName="upload.date-input-parent upload.input-width-50">
-                <label>Expires On</label>
-                <DateInput
-                  closable
-                  fluid
-                  popupPosition="bottom center"
-                  name="endDate"
-                  minDate={new Date()}
-                  placeholder="Expires on"
-                  value={endDate}
-                  iconPosition="left"
-                  required
-                  dateFormat="YYYY-MM-DD"
-                  onChange={this.handleDateChange}
-                />
+              <div styleName="upload.display-flex">
+                <div styleName="upload.input-width">
+                  <label>Title</label>
+                  <Input
+                    fluid
+                    placeholder="Title of notice"
+                    value={title}
+                    name="title"
+                    onChange={this.onChange}
+                    styleName="upload.margin-above"
+                  />
+                </div>
+                <div styleName="upload.input-width">
+                  <label>Expires On</label>
+                  <Responsive {...Responsive.onlyMobile}>
+                    <DateInput
+                      closable
+                      name="endDate"
+                      minDate={dateCurrent}
+                      placeholder="Expires on"
+                      value={endDate}
+                      iconPosition="left"
+                      inline
+                      required
+                      dateFormat="YYYY-MM-DD"
+                      onChange={this.handleDateChange}
+                    />
+                  </Responsive>
+                  <Responsive minWidth={Responsive.onlyMobile.maxWidth + 1}>
+                    <DateInput
+                      closable
+                      fluid
+                      popupPosition="bottom center"
+                      name="endDate"
+                      minDate={new Date()}
+                      placeholder="Expires on"
+                      value={endDate}
+                      iconPosition="left"
+                      required
+                      dateFormat="YYYY-MM-DD"
+                      onChange={this.handleDateChange}
+                      styleName="upload.margin-above"
+                    />
+                  </Responsive>
+                </div>
               </div>
               <div>
                 {/* <Header content="Select Catgories" as="h2" /> */}
@@ -160,7 +183,7 @@ class UploadNotice extends Component {
               />
             </Modal.Content>
             <Modal.Actions>
-              <Button onClick={this.handleSubmit} primary>
+              <Button loading={isUploading} onClick={this.handleSubmit} primary>
                 Create <Icon name="chevron right" />
               </Button>
             </Modal.Actions>
@@ -173,7 +196,8 @@ class UploadNotice extends Component {
 
 const mapStateToProps = state => {
   return {
-    filters: state.filters.filters
+    filters: state.filters.filters,
+    isUploading: state.allNotices.isUploading
   }
 }
 

@@ -11,15 +11,28 @@
   flex-direction: row;
   flex-wrap: wrap;
 }
-/* .sub-categories-radio-button {
-  color: #878787 !important;
-} */
-.input-width-50 {
-  width: 50%;
-}
-.date-input-parent {
-  margin: 1rem 0;
+.input-width {
+  width: 47%;
 }
 .notice-upload-checkbox {
-  margin: 1rem 0;
+  margin: 1.5rem 0;
+  font-weight: 900;
+}
+.margin-above {
+  margin-top: 0.5rem;
+}
+.display-flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+@media only screen and (max-width: 600px) {
+  .input-width {
+    width: 95%;
+  }
+  .display-flex {
+    flex-direction: column;
+  }
 }
