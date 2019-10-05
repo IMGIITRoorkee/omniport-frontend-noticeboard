@@ -4,7 +4,7 @@ import 'rc-calendar/assets/index.css'
 import { connect } from 'react-redux'
 import { INTIAL_PAGE } from '../constants/constants'
 
-import sidenav from '../css/notice.css'
+import sidenav from '../css/sidenav.css'
 
 class SideNav extends Component {
   goHome = path => {
@@ -111,6 +111,7 @@ class SideNav extends Component {
           name="All Notices"
           onClick={() => this.goHome('/noticeboard/')}
         >
+          <Icon styleName="sidenav.sidenav-icon-styling" name="home" />
           All Notices
         </Menu.Item>
 
@@ -119,19 +120,21 @@ class SideNav extends Component {
         <Divider styleName="sidenav.sidenav-divider" />
 
         <Menu.Item
-          name="Expired"
-          onClick={() => this.expiredNotices('/noticeboard/')}
+          name="Bookmarks"
+          onClick={() => this.narrowBookmarks('/noticeboard/')}
         >
-          Expired
+          <Icon styleName="sidenav.sidenav-icon-styling" name="bookmark" />
+          Bookmarks
         </Menu.Item>
 
         <Divider styleName="sidenav.sidenav-divider" />
 
         <Menu.Item
-          name="Bookmarks"
-          onClick={() => this.narrowBookmarks('/noticeboard/')}
+          name="Expired"
+          onClick={() => this.expiredNotices('/noticeboard/')}
         >
-          Bookmarks
+          <Icon styleName="sidenav.sidenav-icon-styling" name="time" />
+          Expired
         </Menu.Item>
       </Menu>
     )

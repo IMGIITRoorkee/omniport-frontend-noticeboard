@@ -9,21 +9,6 @@
   width: 1000px !important;
 }
 
-.sidenav-menu {
-  padding-top: 10px !important;
-  margin-left: 0px !important;
-  width: 16em !important;
-}
-
-.sidenav-items {
-  color: rgba(255, 255, 255, 0.8) !important;
-}
-
-.sidenav-divider {
-  background: white;
-  opacity: 0.2;
-}
-
 .top-bar {
   margin-left: 0px !important;
   margin-top: 2em !important;

@@ -1,0 +1,19 @@
+.sidenav-menu {
+  padding-top: 10px !important;
+  margin-left: 0px !important;
+  width: 16em !important;
+}
+
+.sidenav-items {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.sidenav-divider {
+  background: white;
+  opacity: 0.2;
+}
+
+.sidenav-icon-styling {
+  float: none !important;
+  margin-right: 0.7rem !important;
+}
