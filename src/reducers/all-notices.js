@@ -1,6 +1,5 @@
 import {
   GET_NOTICES,
-  GET_IMPORTANT_NOTICES,
   REQUEST_NOTICES,
   BOOKMARK_NOTICE,
   SELECT_ALL,
@@ -12,12 +11,12 @@ import {
 } from '../constants/action-types'
 
 const initialState = {
-  impPage: 1,
   page: 1,
   isFetchingNotices: true,
   totalPages: 0,
   notices: [],
   importantNotices: [],
+  showImp: false,
   searchKeyword: null,
   isLoaded: false,
   expired: false,

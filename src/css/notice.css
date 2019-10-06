@@ -264,3 +264,52 @@
 .upload-item-padding {
   padding-right: 0px !important;
 }
+
+.flex{
+  display: flex;
+}
+
+.flex-row{
+  flex-direction: row;
+}
+
+.flex-column{
+  flex-direction: column;
+}
+
+.important-main-box{
+  height: 4.5em;
+  background-color: white;
+  margin: 1.5em 0;
+}
+
+.important-sub-left{
+  width: 80%;
+  height: 100%;
+  padding: .7em 1em;
+  justify-content: space-between;
+}
+
+.important-sub-right{
+  width: 20%;
+  height: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+
+}
+
+.important-sub-left>p{
+  margin: 0;
+  color: grey;
+  font-size: .3em;
+}
+
+.important-sub-left>h3{
+  margin: 0;
+}
+
+.important-button{
+  width: 7.6em;
+  margin-right: 1em !important;
+}

@@ -29,16 +29,14 @@ class NoticeListView extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { notices, importantNotices } = this.props
-    let { showImp } = this.state
+    const { notices, importantNotices } = this.props;
+    let { showImp } = this.state;
     console.log(notices, importantNotices)
     let currentNotices = showImp ? importantNotices:notices;
     if (prevProps.notices !== notices) {
       this.setState({
         noNotices: currentNotices.length > 0 ? false : true,
         displayselectAll: currentNotices.length > 0 ? true : false
-        // noNotices: false,
-        // displayselectAll: true
       })
     }
   }
@@ -53,7 +51,7 @@ class NoticeListView extends Component {
       searchKeyword,
       expired
     } = this.props
-    var { showImp } = this.state;
+    let { showImp } = this.state;
     console.log(activePage)
     getNotices(
       activePage,
@@ -127,7 +125,7 @@ class NoticeListView extends Component {
       dateRange,
       notices,
       importantNotices,
-      history
+      history,
     } = this.props
     const { displayselectAll, noNotices, showImp } = this.state
     let currentNotices = notices;
@@ -238,7 +236,25 @@ class NoticeListView extends Component {
           <div>
             {!noNotices ? (
               <Container styleName="notice.notice-list-view notice.notice-container-width">
-                <Container onClick={this.showImportant}>Important</Container>
+                {!showImp ? (
+                <div styleName="notice.important-main-box notice.flex notice.flex-row">
+                    <div styleName="notice.important-sub-left notice.flex notice.flex-column">
+                      <h4> Important Notices </h4>
+                      <p>From director, deans and 3 more.</p>
+                    </div>
+                    <div styleName="notice.important-sub-right">
+                      <Button
+                        basic
+                        color="blue"
+                        content="Show All"
+                        styleName="notice.important-button"
+                        onClick={this.showImportant}
+                      />
+                    </div>
+                  </div>)
+                  :
+                  (<div></div>)
+                }
                 <Table fixed basic singleLine compact>
                   <Table.Body>
                     {currentNotices &&
