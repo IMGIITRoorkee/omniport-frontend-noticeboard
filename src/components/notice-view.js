@@ -48,7 +48,6 @@ class NoticeView extends Component {
             {noticeExists ? (
               <Segment.Group>
                 <Segment as="h5">Subject: {notice.title} </Segment>
-
                 <Segment>
                   <div styleName="notice-list-div">
                     <p styleName="noticeView.notice-posted-by">

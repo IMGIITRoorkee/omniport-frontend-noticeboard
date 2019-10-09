@@ -1,6 +1,5 @@
 import {
   GET_NOTICES,
-  GET_IMPORTANT_NOTICES,
   REQUEST_NOTICES,
   BOOKMARK_NOTICE,
   SELECT_ALL,
@@ -8,16 +7,18 @@ import {
   READ_NOTICE,
   UPLOAD_NOTICE_FAILURE,
   UPLOAD_NOTICE_SUCCESS,
-  UPLOAD_NOTICE_REQUEST
+  UPLOAD_NOTICE_REQUEST,
+  SHOW_IMP,
+  HIDE_IMP
 } from '../constants/action-types'
 
 const initialState = {
-  impPage: 1,
   page: 1,
   isFetchingNotices: true,
   totalPages: 0,
   notices: [],
   importantNotices: [],
+  showImp: false,
   searchKeyword: null,
   isLoaded: false,
   expired: false,
@@ -33,6 +34,19 @@ const initialState = {
 
 const allNotices = (state = initialState, action) => {
   switch (action.type) {
+    case SHOW_IMP:
+      return{
+        ...state,
+        showImp: true
+      }
+
+    case HIDE_IMP:
+        console.log("i was called")
+        return{
+          ...state,
+          showImp: false
+        }
+
     case GET_NOTICES:
       let newState = {
         ...state,

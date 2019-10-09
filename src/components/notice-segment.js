@@ -24,24 +24,24 @@ class NoticeListView extends Component {
     this.state = {
       displayselectAll: '',
       noNotices: '',
-      showImp: false,
     }
   }
 
   componentDidUpdate(prevProps) {
-    const { notices, importantNotices } = this.props
-    let { showImp } = this.state
-    console.log(notices, importantNotices)
+    const { notices, importantNotices, showImp } = this.props;
+    if(prevProps.showImp !== showImp){
+      if(showImp)
+        this.showImportant();
+    }
     let currentNotices = showImp ? importantNotices:notices;
     if (prevProps.notices !== notices) {
       this.setState({
         noNotices: currentNotices.length > 0 ? false : true,
         displayselectAll: currentNotices.length > 0 ? true : false
-        // noNotices: false,
-        // displayselectAll: true
       })
     }
   }
+
 
   handlePaginationChange = (e, { activePage }) => {
     const {
@@ -51,9 +51,9 @@ class NoticeListView extends Component {
       mainCategorySlug,
       getNotices,
       searchKeyword,
-      expired
+      expired,
+      showImp
     } = this.props
-    var { showImp } = this.state;
     console.log(activePage)
     getNotices(
       activePage,
@@ -68,7 +68,6 @@ class NoticeListView extends Component {
   }
 
   showImportant = e => {
-    this.setState({showImp: true})
     const {
         narrowBookmark,
         bannerId,
@@ -127,9 +126,10 @@ class NoticeListView extends Component {
       dateRange,
       notices,
       importantNotices,
-      history
+      history,
+      showImp
     } = this.props
-    const { displayselectAll, noNotices, showImp } = this.state
+    const { displayselectAll, noNotices } = this.state
     let currentNotices = notices;
     if(showImp){
         currentNotices = importantNotices;
@@ -238,7 +238,6 @@ class NoticeListView extends Component {
           <div>
             {!noNotices ? (
               <Container styleName="notice.notice-list-view notice.notice-container-width">
-                <Container onClick={this.showImportant}>Important</Container>
                 <Table fixed basic singleLine compact>
                   <Table.Body>
                     {currentNotices &&
@@ -286,6 +285,7 @@ const mapStateToProps = state => {
   return {
     notices: state.allNotices.notices,
     importantNotices: state.allNotices.importantNotices,
+    showImp: state.allNotices.showImp,
     totalPages: state.allNotices.totalPages,
     isFetchingNotices: state.allNotices.isFetchingNotices,
     page: state.allNotices.page,
@@ -297,7 +297,7 @@ const mapStateToProps = state => {
     dateRange: state.allNotices.dateRange,
     selectAllActive: state.allNotices.selectAllActive,
     selectedNotices: state.allNotices.selectedNotices,
-    filters: state.filters.filters
+    filters: state.filters.filters,
   }
 }
 
@@ -334,7 +334,7 @@ const mapDispatchToProps = dispatch => {
     },
     noticeRead: (noticeIdList, toggle) => {
       dispatch(noticeRead(noticeIdList, toggle))
-    }
+    },
   }
 }
 
