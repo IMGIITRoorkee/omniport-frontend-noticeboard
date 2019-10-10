@@ -64,7 +64,6 @@ class Notice extends Component {
       selectedNotices
     } = this.props
     const { check } = this.state
-    console.log(this.props.selectedNotices, this.state.check)
     return (
       <Table.Row
         styleName={

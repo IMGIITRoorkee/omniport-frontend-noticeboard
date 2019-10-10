@@ -35,17 +35,16 @@ const initialState = {
 const allNotices = (state = initialState, action) => {
   switch (action.type) {
     case SHOW_IMP:
-      return{
+      return {
         ...state,
         showImp: true
       }
 
     case HIDE_IMP:
-        console.log("i was called")
-        return{
-          ...state,
-          showImp: false
-        }
+      return {
+        ...state,
+        showImp: false
+      }
 
     case GET_NOTICES:
       let newState = {
@@ -61,13 +60,11 @@ const allNotices = (state = initialState, action) => {
         mainCategorySlug: action.payload.mainCategorySlug,
         dateRange: action.payload.dateRange
       }
-      if(action.payload.showImp)
-        newState["importantNotices"] = action.payload.notices;
-      else
-        newState["notices"] = action.payload.notices;
+      if (action.payload.showImp)
+        newState['importantNotices'] = action.payload.notices
+      else newState['notices'] = action.payload.notices
 
-      return newState;
-      
+      return newState
 
     case REQUEST_NOTICES:
       return {
@@ -76,7 +73,7 @@ const allNotices = (state = initialState, action) => {
         page: action.payload.page,
         searchKeyword: action.payload.searchKeyword
       }
-    
+
     case BOOKMARK_NOTICE:
       let noticeIdList = action.payload.noticeIdList
 

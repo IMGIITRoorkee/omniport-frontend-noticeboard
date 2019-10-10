@@ -86,9 +86,7 @@ export const getNotices = (
       url = urlNotices(page, searchKeyword)
     }
 
-    console.log(url, "ritvik")
-    if(showImp)
-       url = urlAddImportant(url);
+    if (showImp) url = urlAddImportant(url)
 
     return fetch(url)
       .then(response => response.json())

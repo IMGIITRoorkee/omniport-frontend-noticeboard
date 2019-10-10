@@ -23,17 +23,16 @@ class NoticeListView extends Component {
     super(props)
     this.state = {
       displayselectAll: '',
-      noNotices: '',
+      noNotices: ''
     }
   }
 
   componentDidUpdate(prevProps) {
-    const { notices, importantNotices, showImp } = this.props;
-    if(prevProps.showImp !== showImp){
-      if(showImp)
-        this.showImportant();
+    const { notices, importantNotices, showImp } = this.props
+    if (prevProps.showImp !== showImp) {
+      if (showImp) this.showImportant()
     }
-    let currentNotices = showImp ? importantNotices:notices;
+    let currentNotices = showImp ? importantNotices : notices
     if (prevProps.notices !== notices) {
       this.setState({
         noNotices: currentNotices.length > 0 ? false : true,
@@ -41,7 +40,6 @@ class NoticeListView extends Component {
       })
     }
   }
-
 
   handlePaginationChange = (e, { activePage }) => {
     const {
@@ -54,7 +52,6 @@ class NoticeListView extends Component {
       expired,
       showImp
     } = this.props
-    console.log(activePage)
     getNotices(
       activePage,
       searchKeyword,
@@ -69,25 +66,25 @@ class NoticeListView extends Component {
 
   showImportant = e => {
     const {
-        narrowBookmark,
-        bannerId,
-        dateRange,
-        mainCategorySlug,
-        getNotices,
-        searchKeyword,
-        expired
-      } = this.props
-      let activePage = 1
-      getNotices(
-        activePage,
-        searchKeyword,
-        narrowBookmark,
-        expired,
-        bannerId,
-        mainCategorySlug,
-        dateRange,
-        true
-      )
+      narrowBookmark,
+      bannerId,
+      dateRange,
+      mainCategorySlug,
+      getNotices,
+      searchKeyword,
+      expired
+    } = this.props
+    let activePage = 1
+    getNotices(
+      activePage,
+      searchKeyword,
+      narrowBookmark,
+      expired,
+      bannerId,
+      mainCategorySlug,
+      dateRange,
+      true
+    )
   }
 
   selectAll = e => {
@@ -130,9 +127,9 @@ class NoticeListView extends Component {
       showImp
     } = this.props
     const { displayselectAll, noNotices } = this.state
-    let currentNotices = notices;
-    if(showImp){
-        currentNotices = importantNotices;
+    let currentNotices = notices
+    if (showImp) {
+      currentNotices = importantNotices
     }
 
     let bannerName, dateDisplay
@@ -297,7 +294,7 @@ const mapStateToProps = state => {
     dateRange: state.allNotices.dateRange,
     selectAllActive: state.allNotices.selectAllActive,
     selectedNotices: state.allNotices.selectedNotices,
-    filters: state.filters.filters,
+    filters: state.filters.filters
   }
 }
 
@@ -334,7 +331,7 @@ const mapDispatchToProps = dispatch => {
     },
     noticeRead: (noticeIdList, toggle) => {
       dispatch(noticeRead(noticeIdList, toggle))
-    },
+    }
   }
 }
 

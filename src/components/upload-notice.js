@@ -8,7 +8,8 @@ import {
   Radio,
   Input,
   Checkbox,
-  Responsive
+  Responsive,
+  Message
 } from 'semantic-ui-react'
 import { DateInput } from 'semantic-ui-calendar-react'
 import { uploadNotice } from '../actions/index'
@@ -24,7 +25,11 @@ class UploadNotice extends Component {
       title: '',
       checkedState: '',
       endDate: '',
-      isImportant: false
+      isImportant: false,
+      titleError: false,
+      endDateError: false,
+      bannerError: false,
+      editorError: false
     }
     this.modalRef = React.createRef()
   }
@@ -35,22 +40,26 @@ class UploadNotice extends Component {
   }
   handleRadioChange = (e, banner) => {
     this.setState({
-      checkedState: banner
+      checkedState: banner,
+      bannerError: false
     })
   }
   onChange = e => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
+      [e.target.name + 'Error']: false
     })
   }
   handleEditorChange = e => {
+    let content = e.target.getContent()
     this.setState({
-      editorContent: e.target.getContent()
+      editorContent: content,
+      editorError: content === '' ? true : false
     })
   }
   handleDateChange = (event, { name, value }) => {
     if (this.state.hasOwnProperty(name)) {
-      this.setState({ [name]: value })
+      this.setState({ [name]: value, [name + 'Error']: false })
     }
   }
   handleCheckChange = () => {
@@ -68,6 +77,35 @@ class UploadNotice extends Component {
       isImportant
     } = this.state
     const { uploadNotice } = this.props
+
+    if (title.trim() === '') {
+      this.setState({
+        titleError: true
+      })
+      return
+    }
+
+    if (endDate === '') {
+      this.setState({
+        endDateError: true
+      })
+      return
+    }
+
+    if (checkedState === '') {
+      this.setState({
+        bannerError: true
+      })
+      return
+    }
+
+    if (editorContent.trim() === '') {
+      this.setState({
+        editorError: true
+      })
+      return
+    }
+
     let data = {
       title: title,
       content: editorContent,
@@ -75,6 +113,7 @@ class UploadNotice extends Component {
       expiry_date: endDate,
       is_important: isImportant
     }
+
     uploadNotice(data, this.successCallback)
   }
   successCallback = () => {
@@ -83,8 +122,20 @@ class UploadNotice extends Component {
     })
   }
   render() {
-    const { showModal, title, checkedState, endDate, isImportant } = this.state
+    const {
+      showModal,
+      title,
+      checkedState,
+      endDate,
+      isImportant,
+      titleError,
+      editorError,
+      endDateError,
+      bannerError
+    } = this.state
     const { filters, isUploading } = this.props
+
+    console.log(this.state)
 
     const dateCurrent = new Date()
     dateCurrent.setDate(dateCurrent.getDate() + 1)
@@ -105,7 +156,9 @@ class UploadNotice extends Component {
             <Modal.Content>
               <div styleName="upload.display-flex">
                 <div styleName="upload.input-width">
-                  <label>Title</label>
+                  <label>
+                    Title<span styleName="upload.field-required">*</span>
+                  </label>
                   <Input
                     fluid
                     placeholder="Title of notice"
@@ -114,9 +167,17 @@ class UploadNotice extends Component {
                     onChange={this.onChange}
                     styleName="upload.margin-above"
                   />
+                  {titleError ? (
+                    <Message
+                      error
+                      content={`Field is empty or invalid title`}
+                    />
+                  ) : null}
                 </div>
                 <div styleName="upload.input-width">
-                  <label>Expires On</label>
+                  <label>
+                    Expires On<span styleName="upload.field-required">*</span>
+                  </label>
                   <Responsive {...Responsive.onlyMobile}>
                     <DateInput
                       closable
@@ -147,10 +208,22 @@ class UploadNotice extends Component {
                       styleName="upload.margin-above"
                     />
                   </Responsive>
+                  {endDateError ? (
+                    <Message
+                      error
+                      content={`Field is empty or invalid expiry date`}
+                    />
+                  ) : null}
                 </div>
               </div>
-              <div>
-                {/* <Header content="Select Catgories" as="h2" /> */}
+              <div styleName="upload.category-div-margin">
+                {bannerError ? (
+                  <Message
+                    error
+                    content={`Choose a category`}
+                    styleName="upload.banner-error"
+                  />
+                ) : null}
                 {filters &&
                   filters.map((filter, index) => (
                     <div key={index} styleName="upload.sub-categories-parent">
@@ -170,6 +243,9 @@ class UploadNotice extends Component {
                     </div>
                   ))}
               </div>
+              {editorError ? (
+                <Message error content={`Editor Content is empty!`} />
+              ) : null}
               <UploadNoticeEditor
                 handleEditorChange={this.handleEditorChange}
                 mountedNode={this.modalRef}
