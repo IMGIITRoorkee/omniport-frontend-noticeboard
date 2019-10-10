@@ -269,7 +269,7 @@ class DropdownView extends Component {
       value,
       unreadImpCount
     } = this.state
-    const { showImportant, hideImportant, showImp } = this.props
+    const { showImportant, hideImportant, showImp, permission } = this.props
 
     return (
       <div>
@@ -387,12 +387,14 @@ class DropdownView extends Component {
                 </Form>
               )}
             </Menu.Item>
-            <Menu.Item
-              position="right"
-              styleName="dropdown.upload-item-padding"
-            >
-              <UploadNotice />
-            </Menu.Item>
+            {permission.length > 0 ? (
+              <Menu.Item
+                position="right"
+                styleName="dropdown.upload-item-padding"
+              >
+                <UploadNotice />
+              </Menu.Item>
+            ) : null}
           </Menu.Menu>
         ) : null}
       </div>
@@ -408,7 +410,8 @@ const mapStateToProps = state => {
     searchKeyword: state.allNotices.searchKeyword,
     mainCategorySlug: state.allNotices.mainCategorySlug,
     bannerId: state.allNotices.bannerId,
-    showImp: state.allNotices.showImp
+    showImp: state.allNotices.showImp,
+    permission: state.permission.permission
   }
 }
 

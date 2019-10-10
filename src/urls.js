@@ -88,3 +88,7 @@ export function urlStarRead() {
 export function urlUploadNotice() {
   return `${urlMainApp()}new/`
 }
+
+export function urlPermissions() {
+  return `${urlMainApp()}permissions/`
+}

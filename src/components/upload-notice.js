@@ -12,7 +12,7 @@ import {
   Message
 } from 'semantic-ui-react'
 import { DateInput } from 'semantic-ui-calendar-react'
-import { uploadNotice } from '../actions/index'
+import { uploadNotice, getNotices } from '../actions/index'
 import UploadNoticeEditor from './upload-notice-editor'
 
 import upload from '../css/upload-notice.css'
@@ -29,7 +29,8 @@ class UploadNotice extends Component {
       titleError: false,
       endDateError: false,
       bannerError: false,
-      editorError: false
+      editorError: false,
+      showImpCheck: false
     }
     this.modalRef = React.createRef()
   }
@@ -38,10 +39,11 @@ class UploadNotice extends Component {
       showModal: value
     })
   }
-  handleRadioChange = (e, banner) => {
+  handleRadioChange = (e, permission) => {
     this.setState({
-      checkedState: banner,
-      bannerError: false
+      checkedState: permission,
+      bannerError: false,
+      showImpCheck: permission.isSuperUploader ? true : false
     })
   }
   onChange = e => {
@@ -120,6 +122,27 @@ class UploadNotice extends Component {
     this.setState({
       showModal: false
     })
+    const {
+      narrowBookmark,
+      bannerId,
+      dateRange,
+      mainCategorySlug,
+      getNotices,
+      searchKeyword,
+      expired,
+      showImp,
+      page
+    } = this.props
+    getNotices(
+      page,
+      searchKeyword,
+      narrowBookmark,
+      expired,
+      bannerId,
+      mainCategorySlug,
+      dateRange,
+      showImp
+    )
   }
   render() {
     const {
@@ -131,10 +154,10 @@ class UploadNotice extends Component {
       titleError,
       editorError,
       endDateError,
-      bannerError
+      bannerError,
+      showImpCheck
     } = this.state
-    const { filters, isUploading } = this.props
-
+    const { isUploading, permission } = this.props
     const dateCurrent = new Date()
     dateCurrent.setDate(dateCurrent.getDate() + 1)
     return (
@@ -222,21 +245,29 @@ class UploadNotice extends Component {
                     styleName="upload.banner-error"
                   />
                 ) : null}
-                {filters &&
-                  filters.map((filter, index) => (
+                {permission &&
+                  permission.map((permission, index) => (
                     <div key={index} styleName="upload.sub-categories-parent">
-                      <Header content={filter.name} as="h3" />
+                      <Header
+                        content={permission.banner.parentCategory.name}
+                        as="h3"
+                      />
                       <div styleName="upload.sub-categories-radio-parent">
-                        {filter.banner &&
-                          filter.banner.map((banner, index) => (
-                            <Radio
-                              key={index}
-                              name="filter-radio"
-                              label={banner.name}
-                              onChange={e => this.handleRadioChange(e, banner)}
-                              checked={checkedState.name === banner.name}
-                            />
-                          ))}
+                        {permission.banner ? (
+                          <Radio
+                            key={index}
+                            name="permission-radio"
+                            label={permission.banner.name}
+                            onChange={e =>
+                              this.handleRadioChange(e, permission)
+                            }
+                            checked={
+                              checkedState.banner &&
+                              checkedState.banner.name ===
+                                permission.banner.name
+                            }
+                          />
+                        ) : null}
                       </div>
                     </div>
                   ))}
@@ -248,13 +279,15 @@ class UploadNotice extends Component {
                 handleEditorChange={this.handleEditorChange}
                 mountedNode={this.modalRef}
               />
-              <Checkbox
-                styleName="upload.notice-upload-checkbox"
-                checked={isImportant}
-                onChange={this.handleCheckChange}
-                name="isImportant"
-                label="Make the notice as IMPORTANT"
-              />
+              {showImpCheck ? (
+                <Checkbox
+                  styleName="upload.notice-upload-checkbox"
+                  checked={isImportant}
+                  onChange={this.handleCheckChange}
+                  name="isImportant"
+                  label="Make the notice as IMPORTANT"
+                />
+              ) : null}
             </Modal.Content>
             <Modal.Actions>
               <Button loading={isUploading} onClick={this.handleSubmit} primary>
@@ -270,13 +303,43 @@ class UploadNotice extends Component {
 
 const mapStateToProps = state => {
   return {
-    filters: state.filters.filters,
-    isUploading: state.allNotices.isUploading
+    showImp: state.allNotices.showImp,
+    totalPages: state.allNotices.totalPages,
+    isFetchingNotices: state.allNotices.isFetchingNotices,
+    page: state.allNotices.page,
+    expired: state.allNotices.expired,
+    searchKeyword: state.allNotices.searchKeyword,
+    narrowBookmark: state.allNotices.narrowBookmark,
+    isUploading: state.allNotices.isUploading,
+    permission: state.permission.permission
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
+    getNotices: (
+      page,
+      searchKeyword,
+      narrowBookmark,
+      expired,
+      bannerId,
+      mainCategorySlug,
+      dateRange,
+      showImp
+    ) => {
+      dispatch(
+        getNotices(
+          page,
+          searchKeyword,
+          narrowBookmark,
+          expired,
+          bannerId,
+          mainCategorySlug,
+          dateRange,
+          showImp
+        )
+      )
+    },
     uploadNotice: (data, callback) => {
       dispatch(uploadNotice(data, callback))
     }

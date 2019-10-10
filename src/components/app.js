@@ -11,7 +11,12 @@ import TabList from './tab-list'
 import SideNav from './sidenav'
 
 import { Route, withRouter } from 'react-router-dom'
-import { getNotice, getNotices, getFilters } from '../actions/index'
+import {
+  getNotice,
+  getNotices,
+  getFilters,
+  getPermissions
+} from '../actions/index'
 
 import main from 'formula_one/src/css/app.css'
 import app from '../css/notice.css'
@@ -28,8 +33,17 @@ const getIdFromNoticeUrl = (url, expired) => {
 
 class App extends React.PureComponent {
   componentDidMount() {
-    const { getFilters, getNotice, getNotices, location, history } = this.props
+    const {
+      getFilters,
+      getNotice,
+      getNotices,
+      getPermissions,
+      location,
+      history
+    } = this.props
     getFilters()
+
+    getPermissions()
 
     // Direct url hit
     if (location.pathname.startsWith('/noticeboard/notice/')) {
@@ -146,6 +160,9 @@ const mapDispatchToProps = dispatch => {
     },
     getFilters: () => {
       dispatch(getFilters())
+    },
+    getPermissions: () => {
+      dispatch(getPermissions())
     }
   }
 }

@@ -66,7 +66,6 @@ export const getNotices = (
   return dispatch => {
     dispatch(requestNotices(page, searchKeyword))
     let url
-
     if (expired) {
       url = urlExpiredNotices(page, searchKeyword)
     } else if (dateRange) {
