@@ -60,8 +60,7 @@ class Notice extends Component {
       read,
       bookmark,
       expired,
-      id,
-      selectedNotices
+      important
     } = this.props
     const { check } = this.state
     return (
@@ -112,6 +111,9 @@ class Notice extends Component {
           styleName="notice.cell-width-3 notice.cell-hover"
         >
           {banner.name}
+          <span styleName="notice.tag-float-right">
+            {important ? <Icon name="tag" color="blue" /> : null}
+          </span>
         </Table.Cell>
         <Table.Cell
           collapsing

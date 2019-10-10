@@ -135,8 +135,6 @@ class UploadNotice extends Component {
     } = this.state
     const { filters, isUploading } = this.props
 
-    console.log(this.state)
-
     const dateCurrent = new Date()
     dateCurrent.setDate(dateCurrent.getDate() + 1)
     return (

@@ -247,6 +247,7 @@ class NoticeListView extends Component {
                           title={noticeInfo.title}
                           read={noticeInfo.read}
                           bookmark={noticeInfo.starred}
+                          important={noticeInfo.isImportant}
                           history={history}
                         />
                       ))}

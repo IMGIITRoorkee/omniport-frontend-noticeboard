@@ -3,12 +3,15 @@ import { Dropdown, Menu, Divider, Icon } from 'semantic-ui-react'
 import 'rc-calendar/assets/index.css'
 import { connect } from 'react-redux'
 import { INTIAL_PAGE } from '../constants/constants'
+import { SHOW_IMP, HIDE_IMP } from '../constants/action-types'
 
 import sidenav from '../css/sidenav.css'
 
 class SideNav extends Component {
-  goHome = path => {
-    this.props.history.push({
+  goHome = (path, important = false) => {
+    const { showImportant, hideImportant, history } = this.props
+    important ? showImportant() : hideImportant()
+    history.push({
       pathname: path,
       state: { page: INTIAL_PAGE, searchKeyword: '', narrowBookmark: false }
     })
@@ -115,6 +118,14 @@ class SideNav extends Component {
           All Notices
         </Menu.Item>
 
+        <Menu.Item
+          name="Important Notices"
+          onClick={() => this.goHome('/noticeboard/', true)}
+        >
+          <Icon styleName="sidenav.sidenav-icon-styling" name="tag" />
+          Important Notices
+        </Menu.Item>
+
         {this.renderOuterDropdownItems(filters)}
 
         <Divider styleName="sidenav.sidenav-divider" />
@@ -150,4 +161,24 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(SideNav)
+const mapDispatchToProps = dispatch => {
+  return {
+    showImportant: () => {
+      dispatch({
+        type: SHOW_IMP,
+        payload: {}
+      })
+    },
+    hideImportant: () => {
+      dispatch({
+        type: HIDE_IMP,
+        payload: {}
+      })
+    }
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SideNav)
