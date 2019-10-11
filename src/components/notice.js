@@ -60,13 +60,13 @@ class Notice extends Component {
       read,
       bookmark,
       expired,
-      important,
-      uploader,
-      user,
       id,
-      editNotice
+      selectedNotices,
+      uploader
     } = this.props
+    console.log(uploader);
     const { check } = this.state
+    // console.log(this.props.selectedNotices, this.state.check)
     return (
       <Table.Row
         styleName={
@@ -115,9 +115,6 @@ class Notice extends Component {
           styleName="notice.cell-width-3 notice.cell-hover"
         >
           {banner.name}
-          <span styleName="notice.tag-float-right">
-            {important ? <Icon name="tag" color="blue" /> : null}
-          </span>
         </Table.Cell>
         <Table.Cell
           collapsing
@@ -128,25 +125,17 @@ class Notice extends Component {
         </Table.Cell>
         <Table.Cell
           onClick={this.openNotice}
-          styleName="notice.cell-width-2 notice.cell-date notice.cell-hover"
+          textAlign='center'
+          styleName="notice.cell-width-3 notice.cell-hover notice.cell-date"
         >
-          {moment(date).format('MMM Do')}
+          By {uploader}
         </Table.Cell>
         <Table.Cell
           onClick={this.openNotice}
-          styleName="notice.cell-width-2 notice.cell-hover"
+          styleName="notice.cell-width-3 notice.cell-date notice.cell-hover"
         >
-          {moment(date).format('LT')}
+          {moment(date).format('MMM Do, h:mm a')}
         </Table.Cell>
-        {uploader && uploader.fullName === user.fullName ? (
-          <Table.Cell
-            onClick={() => editNotice(id)}
-            collapsing
-            styleName="notice.cell-width-2 notice.cell-hover"
-          >
-            <Icon name="pencil" />
-          </Table.Cell>
-        ) : null}
       </Table.Row>
     )
   }
@@ -156,8 +145,7 @@ const mapStateToProps = state => {
   return {
     expired: state.allNotices.expired,
     selectAllActive: state.allNotices.selectAllActive,
-    selectedNotices: state.allNotices.selectedNotices,
-    user: state.user.user
+    selectedNotices: state.allNotices.selectedNotices
   }
 }
 

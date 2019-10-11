@@ -16,7 +16,6 @@ import {
   noticeRead,
   noticeBookmark
 } from '../actions/index'
-import EditModal from './notice-modal'
 
 import notice from '../css/notice.css'
 class NoticeListView extends Component {
@@ -25,18 +24,17 @@ class NoticeListView extends Component {
     this.state = {
       displayselectAll: '',
       noNotices: '',
-      editId: '',
-      showEditModal: false
     }
-    this.modalRef = React.createRef()
   }
 
   componentDidUpdate(prevProps) {
-    const { notices, importantNotices, showImp } = this.props
-    if (prevProps.showImp !== showImp) {
-      if (showImp) this.showImportant()
+    const { notices, importantNotices, showImp } = this.props;
+    if(prevProps.showImp !== showImp){
+      if(showImp)
+      this.showImportant();
     }
-    let currentNotices = showImp ? importantNotices : notices
+    let currentNotices = showImp ? importantNotices:notices;
+    console.log(currentNotices)
     if (prevProps.notices !== notices) {
       this.setState({
         noNotices: currentNotices.length > 0 ? false : true,
@@ -44,6 +42,7 @@ class NoticeListView extends Component {
       })
     }
   }
+
 
   handlePaginationChange = (e, { activePage }) => {
     const {
@@ -68,40 +67,27 @@ class NoticeListView extends Component {
     )
   }
 
-  handleEditNotice = id => {
-    this.setState({
-      showEditModal: true,
-      editId: id
-    })
-  }
-
-  handleEditModal = value => {
-    this.setState({
-      showEditModal: value
-    })
-  }
-
   showImportant = e => {
     const {
-      narrowBookmark,
-      bannerId,
-      dateRange,
-      mainCategorySlug,
-      getNotices,
-      searchKeyword,
-      expired
-    } = this.props
-    let activePage = 1
-    getNotices(
-      activePage,
-      searchKeyword,
-      narrowBookmark,
-      expired,
-      bannerId,
-      mainCategorySlug,
-      dateRange,
-      true
-    )
+        narrowBookmark,
+        bannerId,
+        dateRange,
+        mainCategorySlug,
+        getNotices,
+        searchKeyword,
+        expired
+      } = this.props
+      let activePage = 1
+      getNotices(
+        activePage,
+        searchKeyword,
+        narrowBookmark,
+        expired,
+        bannerId,
+        mainCategorySlug,
+        dateRange,
+        true
+      )
   }
 
   selectAll = e => {
@@ -143,10 +129,10 @@ class NoticeListView extends Component {
       history,
       showImp
     } = this.props
-    const { displayselectAll, noNotices, showEditModal, editId } = this.state
-    let currentNotices = notices
-    if (showImp) {
-      currentNotices = importantNotices
+    const { displayselectAll, noNotices } = this.state
+    let currentNotices = notices;
+    if(showImp){
+        currentNotices = importantNotices;
     }
 
     let bannerName, dateDisplay
@@ -264,10 +250,8 @@ class NoticeListView extends Component {
                           title={noticeInfo.title}
                           read={noticeInfo.read}
                           bookmark={noticeInfo.starred}
-                          important={noticeInfo.isImportant}
                           history={history}
-                          uploader={noticeInfo.uploader}
-                          editNotice={this.handleEditNotice}
+                          uploader={noticeInfo.uploader.fullName}
                         />
                       ))}
                   </Table.Body>
@@ -282,17 +266,6 @@ class NoticeListView extends Component {
             )}
           </div>
         )}
-
-        <div styleName="notice.modal-mount-parent" ref={this.modalRef}></div>
-
-        {showEditModal ? (
-          <EditModal
-            id={editId}
-            modalType="edit"
-            modalRef={this.modalRef}
-            handleModal={this.handleEditModal}
-          />
-        ) : null}
 
         <Container styleName="notice.pagination-box notice.notice-container-width">
           <Pagination
@@ -325,7 +298,7 @@ const mapStateToProps = state => {
     dateRange: state.allNotices.dateRange,
     selectAllActive: state.allNotices.selectAllActive,
     selectedNotices: state.allNotices.selectedNotices,
-    filters: state.filters.filters
+    filters: state.filters.filters,
   }
 }
 
@@ -362,7 +335,7 @@ const mapDispatchToProps = dispatch => {
     },
     noticeRead: (noticeIdList, toggle) => {
       dispatch(noticeRead(noticeIdList, toggle))
-    }
+    },
   }
 }
 
