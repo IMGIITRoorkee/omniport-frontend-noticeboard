@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import { Modal, Button, Message } from 'semantic-ui-react'
 import { Editor } from '@tinymce/tinymce-react'
 import { urlFileManager } from '../urls'

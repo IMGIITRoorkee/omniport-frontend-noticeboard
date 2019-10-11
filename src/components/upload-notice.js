@@ -111,7 +111,7 @@ class UploadNotice extends Component {
     let data = {
       title: title,
       content: editorContent,
-      banner: checkedState,
+      banner: checkedState.banner,
       expiry_date: endDate,
       is_important: isImportant
     }
@@ -120,7 +120,11 @@ class UploadNotice extends Component {
   }
   successCallback = () => {
     this.setState({
-      showModal: false
+      showModal: false,
+      title: '',
+      editorContent: '',
+      endDate: '',
+      checkedState: ''
     })
     const {
       narrowBookmark,
