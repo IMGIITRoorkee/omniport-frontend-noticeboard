@@ -16,6 +16,7 @@ import {
   noticeRead,
   noticeBookmark
 } from '../actions/index'
+import EditModal from './notice-modal'
 
 import notice from '../css/notice.css'
 class NoticeListView extends Component {
@@ -23,8 +24,11 @@ class NoticeListView extends Component {
     super(props)
     this.state = {
       displayselectAll: '',
-      noNotices: ''
+      noNotices: '',
+      editId: '',
+      showEditModal: false
     }
+    this.modalRef = React.createRef()
   }
 
   componentDidUpdate(prevProps) {
@@ -62,6 +66,19 @@ class NoticeListView extends Component {
       dateRange,
       showImp
     )
+  }
+
+  handleEditNotice = id => {
+    this.setState({
+      showEditModal: true,
+      editId: id
+    })
+  }
+
+  handleEditModal = value => {
+    this.setState({
+      showEditModal: value
+    })
   }
 
   showImportant = e => {
@@ -126,7 +143,7 @@ class NoticeListView extends Component {
       history,
       showImp
     } = this.props
-    const { displayselectAll, noNotices } = this.state
+    const { displayselectAll, noNotices, showEditModal, editId } = this.state
     let currentNotices = notices
     if (showImp) {
       currentNotices = importantNotices
@@ -249,6 +266,8 @@ class NoticeListView extends Component {
                           bookmark={noticeInfo.starred}
                           important={noticeInfo.isImportant}
                           history={history}
+                          uploader={noticeInfo.uploader}
+                          editNotice={this.handleEditNotice}
                         />
                       ))}
                   </Table.Body>
@@ -263,6 +282,17 @@ class NoticeListView extends Component {
             )}
           </div>
         )}
+
+        <div styleName="notice.modal-mount-parent" ref={this.modalRef}></div>
+
+        {showEditModal ? (
+          <EditModal
+            id={editId}
+            modalType="edit"
+            modalRef={this.modalRef}
+            handleModal={this.handleEditModal}
+          />
+        ) : null}
 
         <Container styleName="notice.pagination-box notice.notice-container-width">
           <Pagination

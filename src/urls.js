@@ -96,3 +96,7 @@ export function urlPermissions() {
 export function urlCopyMedia() {
   return `${urlMainApp()}copy_media/`
 }
+
+export function whoAmI() {
+  return `/kernel/who_am_i`
+}

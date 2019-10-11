@@ -3,12 +3,14 @@ import allNotices from './all-notices'
 import filters from './filters'
 import notice from './notice'
 import permission from './permission'
+import user from './user'
 
 const rootReducer = combineReducers({
   allNotices,
   notice,
   filters,
-  permission
+  permission,
+  user
 })
 
 export default rootReducer

@@ -9,7 +9,10 @@ import {
   UPLOAD_NOTICE_SUCCESS,
   UPLOAD_NOTICE_REQUEST,
   SHOW_IMP,
-  HIDE_IMP
+  HIDE_IMP,
+  EDIT_NOTICE_FAILURE,
+  EDIT_NOTICE_REQUEST,
+  EDIT_NOTICE_SUCCESS
 } from '../constants/action-types'
 
 const initialState = {
@@ -165,6 +168,23 @@ const allNotices = (state = initialState, action) => {
         isUploading: false
       }
     case UPLOAD_NOTICE_REQUEST:
+      return {
+        ...state,
+        isUploading: true
+      }
+
+    case EDIT_NOTICE_FAILURE:
+      return {
+        ...state,
+        isUploading: false,
+        error: action.payload
+      }
+    case EDIT_NOTICE_SUCCESS:
+      return {
+        ...state,
+        isUploading: false
+      }
+    case EDIT_NOTICE_REQUEST:
       return {
         ...state,
         isUploading: true

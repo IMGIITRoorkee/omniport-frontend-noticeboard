@@ -324,3 +324,7 @@
 .tag-float-right {
   float: right;
 }
+
+.modal-mount-parent {
+  z-index: 100000000;
+}

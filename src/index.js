@@ -9,7 +9,7 @@ import rootReducers from './reducers'
 export default class AppRouter extends Component {
   constructor(props) {
     super(props)
-    
+
     const initialState = {}
     const middleware = [thunk]
     const composeEnhancers =

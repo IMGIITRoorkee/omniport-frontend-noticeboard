@@ -15,7 +15,8 @@ import {
   getNotice,
   getNotices,
   getFilters,
-  getPermissions
+  getPermissions,
+  getUser
 } from '../actions/index'
 
 import main from 'formula_one/src/css/app.css'
@@ -39,10 +40,11 @@ class App extends React.PureComponent {
       getNotices,
       getPermissions,
       location,
-      history
+      history,
+      getUser
     } = this.props
     getFilters()
-
+    getUser()
     getPermissions()
 
     // Direct url hit
@@ -128,10 +130,6 @@ class App extends React.PureComponent {
   }
 }
 
-const mapStateToProps = state => {
-  return { notices: state, search: state.allNotices.searchKeyword }
-}
-
 const mapDispatchToProps = dispatch => {
   return {
     getNotices: (
@@ -163,13 +161,16 @@ const mapDispatchToProps = dispatch => {
     },
     getPermissions: () => {
       dispatch(getPermissions())
+    },
+    getUser: () => {
+      dispatch(getUser())
     }
   }
 }
 
 export default withRouter(
   connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
   )(App)
 )
