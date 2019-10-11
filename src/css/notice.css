@@ -313,3 +313,15 @@
   width: 7.6em;
   margin-right: 1em !important;
 }
+
+.unread-label {
+  margin-left: 0.4rem !important;
+}
+
+.tag-float-right {
+  float: right;
+}
+
+.modal-mount-parent {
+  z-index: 100000000;
+}

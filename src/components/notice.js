@@ -60,11 +60,13 @@ class Notice extends Component {
       read,
       bookmark,
       expired,
+      important,
+      uploader,
+      user,
       id,
-      selectedNotices,
-      uploader
+      editNotice
     } = this.props
-    console.log(uploader);
+    console.log(uploader)
     const { check } = this.state
     // console.log(this.props.selectedNotices, this.state.check)
     return (
@@ -125,10 +127,10 @@ class Notice extends Component {
         </Table.Cell>
         <Table.Cell
           onClick={this.openNotice}
-          textAlign='center'
+          textAlign="center"
           styleName="notice.cell-width-3 notice.cell-hover notice.cell-date"
         >
-          By {uploader}
+          By {uploader.fullName}
         </Table.Cell>
         <Table.Cell
           onClick={this.openNotice}
@@ -136,6 +138,15 @@ class Notice extends Component {
         >
           {moment(date).format('MMM Do, h:mm a')}
         </Table.Cell>
+        {uploader && uploader.fullName === user.fullName ? (
+          <Table.Cell
+            onClick={() => editNotice(id)}
+            collapsing
+            styleName="notice.cell-width-2 notice.cell-hover"
+          >
+            <Icon name="pencil" />
+          </Table.Cell>
+        ) : null}
       </Table.Row>
     )
   }
@@ -145,7 +156,8 @@ const mapStateToProps = state => {
   return {
     expired: state.allNotices.expired,
     selectAllActive: state.allNotices.selectAllActive,
-    selectedNotices: state.allNotices.selectedNotices
+    selectedNotices: state.allNotices.selectedNotices,
+    user: state.user.user
   }
 }
 

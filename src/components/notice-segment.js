@@ -16,6 +16,7 @@ import {
   noticeRead,
   noticeBookmark
 } from '../actions/index'
+import EditModal from './notice-modal'
 
 import notice from '../css/notice.css'
 class NoticeListView extends Component {
@@ -24,7 +25,10 @@ class NoticeListView extends Component {
     this.state = {
       displayselectAll: '',
       noNotices: '',
+      editId: '',
+      showEditModal: false
     }
+    this.modalRef = React.createRef()
   }
 
   componentDidUpdate(prevProps) {
@@ -65,6 +69,19 @@ class NoticeListView extends Component {
       dateRange,
       showImp
     )
+  }
+
+  handleEditNotice = id => {
+    this.setState({
+      showEditModal: true,
+      editId: id
+    })
+  }
+
+  handleEditModal = value => {
+    this.setState({
+      showEditModal: value
+    })
   }
 
   showImportant = e => {
@@ -129,10 +146,10 @@ class NoticeListView extends Component {
       history,
       showImp
     } = this.props
-    const { displayselectAll, noNotices } = this.state
-    let currentNotices = notices;
-    if(showImp){
-        currentNotices = importantNotices;
+    const { displayselectAll, noNotices, showEditModal, editId } = this.state
+    let currentNotices = notices
+    if (showImp) {
+      currentNotices = importantNotices
     }
 
     let bannerName, dateDisplay
@@ -251,7 +268,8 @@ class NoticeListView extends Component {
                           read={noticeInfo.read}
                           bookmark={noticeInfo.starred}
                           history={history}
-                          uploader={noticeInfo.uploader.fullName}
+                          uploader={noticeInfo.uploader}
+                          editNotice={this.handleEditNotice}
                         />
                       ))}
                   </Table.Body>
@@ -266,6 +284,17 @@ class NoticeListView extends Component {
             )}
           </div>
         )}
+
+        <div styleName="notice.modal-mount-parent" ref={this.modalRef}></div>
+
+        {showEditModal ? (
+          <EditModal
+            id={editId}
+            modalType="edit"
+            modalRef={this.modalRef}
+            handleModal={this.handleEditModal}
+          />
+        ) : null}
 
         <Container styleName="notice.pagination-box notice.notice-container-width">
           <Pagination
