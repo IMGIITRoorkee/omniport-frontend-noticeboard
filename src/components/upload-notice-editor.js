@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Modal, Button, Container } from 'semantic-ui-react'
+import { Modal, Button, Message } from 'semantic-ui-react'
 import { Editor } from '@tinymce/tinymce-react'
 import { urlFileManager } from '../urls'
+import { copyMedia } from '../actions/index'
 import config from '../../config.json'
 
 import editor from '../css/upload-notice-editor.css'
@@ -13,7 +14,9 @@ export default class UploadNoticeEditor extends Component {
     this.state = {
       data: '',
       isConfirmModal: false,
-      isConfirm: false
+      isConfirm: false,
+      error: false,
+      newPath: ''
     }
   }
   componentDidMount() {
@@ -38,13 +41,15 @@ export default class UploadNoticeEditor extends Component {
     window.open(urlFileManager(), 'title', params)
 
     window.addEventListener('click', function(e) {
-      if (
-        self.state.data.file &&
-        self.state.data.fileName &&
-        self.state.isConfirm
-      ) {
-        callback(self.state.data.file, { title: self.state.data.fileName })
-      }
+      this.setTimeout(function() {
+        if (
+          self.state.newPath &&
+          self.state.data.fileName &&
+          self.state.isConfirm
+        ) {
+          callback(self.state.newPath, { title: self.state.data.fileName })
+        }
+      }, 200)
     })
   }
   componentWillUnmount() {
@@ -57,14 +62,24 @@ export default class UploadNoticeEditor extends Component {
       data: ''
     })
   }
-  handleConfirmation = () => {
-    this.setState({
-      isConfirmModal: false,
-      isConfirm: true
-    })
+  handleConfirmation = path => {
+    copyMedia({ path: path }, this.callback)
+  }
+  callback = data => {
+    if (data.success) {
+      this.setState({
+        isConfirmModal: false,
+        isConfirm: true,
+        newPath: data.path
+      })
+    } else {
+      this.setState({
+        error: true
+      })
+    }
   }
   render() {
-    const { isConfirmModal, data } = this.state
+    const { isConfirmModal, data, error } = this.state
     const { mountedNode, handleEditorChange } = this.props
     return (
       <div styleName="editor.editor-parent">
@@ -93,6 +108,7 @@ export default class UploadNoticeEditor extends Component {
             onClose={this.closeConfirmationModal}
             mountNode={mountedNode ? mountedNode.current : null}
           >
+            {error ? <Message error header="Something went wrong!" /> : null}
             <Modal.Header>
               Do you really want to select "{data.fileName}"
             </Modal.Header>
@@ -108,7 +124,7 @@ export default class UploadNoticeEditor extends Component {
                 icon="checkmark"
                 labelPosition="right"
                 content="Yes"
-                onClick={this.handleConfirmation}
+                onClick={() => this.handleConfirmation(data.path)}
               />
             </Modal.Actions>
           </Modal>

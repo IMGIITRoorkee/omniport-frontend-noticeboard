@@ -92,3 +92,7 @@ export function urlUploadNotice() {
 export function urlPermissions() {
   return `${urlMainApp()}permissions/`
 }
+
+export function urlCopyMedia() {
+  return `${urlMainApp()}copy_media/`
+}
