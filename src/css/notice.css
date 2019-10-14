@@ -265,51 +265,50 @@
   padding-right: 0px !important;
 }
 
-.flex{
+.flex {
   display: flex;
 }
 
-.flex-row{
+.flex-row {
   flex-direction: row;
 }
 
-.flex-column{
+.flex-column {
   flex-direction: column;
 }
 
-.important-main-box{
+.important-main-box {
   height: 4.5em;
   background-color: white;
   margin: 1.5em 0;
 }
 
-.important-sub-left{
+.important-sub-left {
   width: 80%;
   height: 100%;
-  padding: .7em 1em;
+  padding: 0.7em 1em;
   justify-content: space-between;
 }
 
-.important-sub-right{
+.important-sub-right {
   width: 20%;
   height: 100%;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-
 }
 
-.important-sub-left>p{
+.important-sub-left > p {
   margin: 0;
   color: grey;
-  font-size: .3em;
+  font-size: 0.8em;
 }
 
-.important-sub-left>h3{
+.important-sub-left > h3 {
   margin: 0;
 }
 
-.important-button{
+.important-button {
   width: 7.6em;
   margin-right: 1em !important;
 }
@@ -318,10 +317,14 @@
   margin-left: 0.4rem !important;
 }
 
-.tag-float-right {
-  float: right;
+.tag-margin-right {
+  margin-right: 0.2rem !important;
 }
 
 .modal-mount-parent {
   z-index: 100000000;
+}
+
+.flex-wrap {
+  flex-wrap: wrap !important;
 }

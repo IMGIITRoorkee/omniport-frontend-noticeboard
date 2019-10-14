@@ -130,6 +130,10 @@ class App extends React.PureComponent {
   }
 }
 
+const mapStateToProps = state => {
+  return { notices: state, search: state.allNotices.searchKeyword }
+}
+
 const mapDispatchToProps = dispatch => {
   return {
     getNotices: (
@@ -170,7 +174,7 @@ const mapDispatchToProps = dispatch => {
 
 export default withRouter(
   connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
   )(App)
 )

@@ -60,15 +60,13 @@ class Notice extends Component {
       read,
       bookmark,
       expired,
-      important,
       uploader,
       user,
       id,
-      editNotice
+      editNotice,
+      important
     } = this.props
-    console.log(uploader)
     const { check } = this.state
-    // console.log(this.props.selectedNotices, this.state.check)
     return (
       <Table.Row
         styleName={
@@ -123,6 +121,13 @@ class Notice extends Component {
           onClick={this.openNotice}
           styleName="notice.cell-hover"
         >
+          <span styleName="notice.tag-margin-right">
+            {important ? (
+              <Icon name="tag" color="blue" />
+            ) : (
+              <Icon name={null} />
+            )}
+          </span>
           {title}
         </Table.Cell>
         <Table.Cell
@@ -138,15 +143,15 @@ class Notice extends Component {
         >
           {moment(date).format('MMM Do, h:mm a')}
         </Table.Cell>
-        {uploader && uploader.fullName === user.fullName ? (
-          <Table.Cell
-            onClick={() => editNotice(id)}
-            collapsing
-            styleName="notice.cell-width-2 notice.cell-hover"
-          >
+        <Table.Cell
+          onClick={() => editNotice(id)}
+          collapsing
+          styleName="notice.cell-width-1 notice.cell-hover"
+        >
+          {uploader && uploader.fullName === user.fullName ? (
             <Icon name="pencil" />
-          </Table.Cell>
-        ) : null}
+          ) : null}
+        </Table.Cell>
       </Table.Row>
     )
   }
