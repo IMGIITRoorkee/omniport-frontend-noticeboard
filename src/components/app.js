@@ -51,10 +51,10 @@ class App extends React.PureComponent {
     if (location.pathname.startsWith('/noticeboard/notice/')) {
       if (location.pathname.startsWith('/noticeboard/notice/old/')) {
         let id = getIdFromNoticeUrl(location.pathname, true)
-        getNotice(id, true)
+        getNotice(id, {}, true)
       } else {
         let id = getIdFromNoticeUrl(location.pathname, false)
-        getNotice(id, false)
+        getNotice(id, {}, false)
       }
     } else {
       getNotices(INTIAL_PAGE)
@@ -157,8 +157,8 @@ const mapDispatchToProps = dispatch => {
         )
       )
     },
-    getNotice: (noticeId, expired) => {
-      dispatch(getNotice(noticeId, expired))
+    getNotice: (noticeId, callback, expired) => {
+      dispatch(getNotice(noticeId, callback, expired))
     },
     getFilters: () => {
       dispatch(getFilters())

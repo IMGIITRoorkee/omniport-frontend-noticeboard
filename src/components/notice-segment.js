@@ -37,7 +37,6 @@ class NoticeListView extends Component {
       if (showImp) this.showImportant()
     }
     let currentNotices = showImp ? importantNotices : notices
-    console.log(currentNotices)
     if (prevProps.notices !== notices) {
       this.setState({
         noNotices: currentNotices.length > 0 ? false : true,

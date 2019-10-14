@@ -12,7 +12,6 @@ export const editNotice = (data, callback) => {
     'X-CSRFToken': getCookie('csrftoken')
   }
   return dispatch => {
-    console.log(data, 'tushar')
     dispatch({
       type: EDIT_NOTICE_REQUEST
     })

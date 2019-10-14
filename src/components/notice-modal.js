@@ -9,10 +9,17 @@ import {
   Input,
   Checkbox,
   Responsive,
-  Message
+  Message,
+  Loader,
+  Dimmer
 } from 'semantic-ui-react'
 import { DateInput } from 'semantic-ui-calendar-react'
-import { uploadNotice, getNotices, editNotice } from '../actions/index'
+import {
+  uploadNotice,
+  getNotices,
+  getNotice,
+  editNotice
+} from '../actions/index'
 import NoticeEditor from './upload-notice-editor'
 
 import upload from '../css/upload-notice.css'
@@ -36,34 +43,32 @@ class NoticeModal extends Component {
   }
 
   componentDidMount() {
-    const { modalType, notices, id, permission } = this.props
-    if (notices.length > 0 && modalType === 'edit') {
-      let index
-      for (let i = 0; i < notices.length; i++) {
-        if (notices[i].id === id) {
-          index = i
-          break
-        }
-      }
+    const { modalType, id, getNotice } = this.props
 
-      let notice = notices[index]
-      let tempCheck = false
-
-      for (let i = 0; i < permission.length; i++) {
-        if (JSON.stringify(permission[i].banner === notice.banner)) {
-          tempCheck = true
-        }
-      }
-
-      this.setState({
-        title: notice.title,
-        editorContent: notice.content,
-        checkedState: notice.banner,
-        isImportant: notice.isImportant,
-        endDate: notice.expiryDate,
-        showImpCheck: tempCheck
-      })
+    if (modalType === 'edit') {
+      getNotice(id, this.successNoticeCallback)
     }
+  }
+
+  successNoticeCallback = () => {
+    const { notice, permission } = this.props
+
+    let tempCheck = false
+
+    for (let i = 0; i < permission.length; i++) {
+      if (JSON.stringify(permission[i].banner === notice.notice.banner)) {
+        tempCheck = true
+      }
+    }
+
+    this.setState({
+      title: notice.notice.title,
+      editorContent: notice.notice.content,
+      checkedState: notice.notice.banner,
+      isImportant: notice.notice.isImportant,
+      endDate: notice.notice.expiryDate,
+      showImpCheck: tempCheck
+    })
   }
 
   handleModal = value => {
@@ -195,142 +200,158 @@ class NoticeModal extends Component {
       editorError,
       endDateError,
       bannerError,
-      showImpCheck
+      showImpCheck,
+      editorContent
     } = this.state
-    const { isUploading, permission, modalType, modalRef } = this.props
+    const { isUploading, permission, modalType, modalRef, notice } = this.props
+    const { isFetchingNotice } = notice
+
     const dateCurrent = new Date()
     dateCurrent.setDate(dateCurrent.getDate() + 1)
+
     return (
       <React.Fragment>
         {showModal ? (
           <Modal
             open={showModal}
             onClose={() => this.handleModal(false)}
+            styleName="upload.modal-height"
             closeIcon
           >
             <Modal.Header>
               {modalType === 'edit' ? 'Edit Notice' : 'Create Notice'}
             </Modal.Header>
-
-            <Modal.Content>
-              <div styleName="upload.display-flex">
-                <div styleName="upload.input-width">
-                  <label>
-                    Title<span styleName="upload.field-required">*</span>
-                  </label>
-                  <Input
-                    fluid
-                    placeholder="Title of notice"
-                    value={title}
-                    name="title"
-                    onChange={this.onChange}
-                    styleName="upload.margin-above"
-                  />
-                  {titleError ? (
-                    <Message
-                      error
-                      content={`Field is empty or invalid title`}
-                    />
-                  ) : null}
-                </div>
-                <div styleName="upload.input-width">
-                  <label>
-                    Expires On<span styleName="upload.field-required">*</span>
-                  </label>
-                  <Responsive {...Responsive.onlyMobile}>
-                    <DateInput
-                      closable
-                      name="endDate"
-                      minDate={dateCurrent}
-                      placeholder="Expires on"
-                      value={endDate}
-                      iconPosition="left"
-                      inline
-                      required
-                      dateFormat="YYYY-MM-DD"
-                      onChange={this.handleDateChange}
-                    />
-                  </Responsive>
-                  <Responsive minWidth={Responsive.onlyMobile.maxWidth + 1}>
-                    <DateInput
-                      closable
+            {!isFetchingNotice ? (
+              <Modal.Content>
+                <div styleName="upload.display-flex">
+                  <div styleName="upload.input-width">
+                    <label>
+                      Title<span styleName="upload.field-required">*</span>
+                    </label>
+                    <Input
                       fluid
-                      popupPosition="bottom center"
-                      name="endDate"
-                      minDate={new Date()}
-                      placeholder="Expires on"
-                      value={endDate}
-                      iconPosition="left"
-                      required
-                      dateFormat="YYYY-MM-DD"
-                      onChange={this.handleDateChange}
+                      placeholder="Title of notice"
+                      value={title}
+                      name="title"
+                      onChange={this.onChange}
                       styleName="upload.margin-above"
                     />
-                  </Responsive>
-                  {endDateError ? (
+                    {titleError ? (
+                      <Message
+                        error
+                        content={`Field is empty or invalid title`}
+                      />
+                    ) : null}
+                  </div>
+                  <div styleName="upload.input-width">
+                    <label>
+                      Expires On<span styleName="upload.field-required">*</span>
+                    </label>
+                    <Responsive {...Responsive.onlyMobile}>
+                      <DateInput
+                        closable
+                        name="endDate"
+                        minDate={dateCurrent}
+                        placeholder="Expires on"
+                        value={endDate}
+                        iconPosition="left"
+                        inline
+                        required
+                        dateFormat="YYYY-MM-DD"
+                        onChange={this.handleDateChange}
+                      />
+                    </Responsive>
+                    <Responsive minWidth={Responsive.onlyMobile.maxWidth + 1}>
+                      <DateInput
+                        closable
+                        fluid
+                        popupPosition="bottom center"
+                        name="endDate"
+                        minDate={new Date()}
+                        placeholder="Expires on"
+                        value={endDate}
+                        iconPosition="left"
+                        required
+                        dateFormat="YYYY-MM-DD"
+                        onChange={this.handleDateChange}
+                        styleName="upload.margin-above"
+                      />
+                    </Responsive>
+                    {endDateError ? (
+                      <Message
+                        error
+                        content={`Field is empty or invalid expiry date`}
+                      />
+                    ) : null}
+                  </div>
+                </div>
+                <div styleName="upload.category-div-margin">
+                  {bannerError ? (
                     <Message
                       error
-                      content={`Field is empty or invalid expiry date`}
+                      content={`Choose a category`}
+                      styleName="upload.banner-error"
                     />
                   ) : null}
+                  {permission &&
+                    permission.map((permission, index) => (
+                      <div key={index} styleName="upload.sub-categories-parent">
+                        <Header
+                          content={permission.banner.parentCategory.name}
+                          as="h3"
+                        />
+                        <div styleName="upload.sub-categories-radio-parent">
+                          {permission.banner ? (
+                            <Radio
+                              key={index}
+                              name="permission-radio"
+                              label={permission.banner.name}
+                              onChange={e =>
+                                this.handleRadioChange(e, permission)
+                              }
+                              checked={
+                                modalType === 'edit'
+                                  ? checkedState.name === permission.banner.name
+                                  : checkedState.banner &&
+                                    checkedState.banner.name ===
+                                      permission.banner.name
+                              }
+                            />
+                          ) : null}
+                        </div>
+                      </div>
+                    ))}
                 </div>
-              </div>
-              <div styleName="upload.category-div-margin">
-                {bannerError ? (
-                  <Message
-                    error
-                    content={`Choose a category`}
-                    styleName="upload.banner-error"
+                {editorError ? (
+                  <Message error content={`Editor Content is empty!`} />
+                ) : null}
+                <NoticeEditor
+                  handleEditorChange={this.handleEditorChange}
+                  mountedNode={modalRef}
+                  content={editorContent}
+                />
+                {showImpCheck ? (
+                  <Checkbox
+                    styleName="upload.notice-upload-checkbox"
+                    checked={isImportant}
+                    onChange={this.handleCheckChange}
+                    name="isImportant"
+                    label="Make the notice as IMPORTANT"
                   />
                 ) : null}
-                {permission &&
-                  permission.map((permission, index) => (
-                    <div key={index} styleName="upload.sub-categories-parent">
-                      <Header
-                        content={permission.banner.parentCategory.name}
-                        as="h3"
-                      />
-                      <div styleName="upload.sub-categories-radio-parent">
-                        {permission.banner ? (
-                          <Radio
-                            key={index}
-                            name="permission-radio"
-                            label={permission.banner.name}
-                            onChange={e =>
-                              this.handleRadioChange(e, permission)
-                            }
-                            checked={
-                              modalType === 'edit'
-                                ? checkedState.name === permission.banner.name
-                                : checkedState.banner &&
-                                  checkedState.banner.name ===
-                                    permission.banner.name
-                            }
-                          />
-                        ) : null}
-                      </div>
-                    </div>
-                  ))}
-              </div>
-              {editorError ? (
-                <Message error content={`Editor Content is empty!`} />
-              ) : null}
-              <NoticeEditor
-                handleEditorChange={this.handleEditorChange}
-                mountedNode={modalRef}
-              />
-              {showImpCheck ? (
-                <Checkbox
-                  styleName="upload.notice-upload-checkbox"
-                  checked={isImportant}
-                  onChange={this.handleCheckChange}
-                  name="isImportant"
-                  label="Make the notice as IMPORTANT"
-                />
-              ) : null}
-            </Modal.Content>
+              </Modal.Content>
+            ) : (
+              <Dimmer active inverted>
+                <Loader size="medium">Loading</Loader>
+              </Dimmer>
+            )}
             <Modal.Actions>
-              <Button loading={isUploading} onClick={this.handleSubmit} primary>
+              <Button
+                loading={isUploading}
+                onClick={this.handleSubmit}
+                primary
+                disabled={isFetchingNotice}
+              >
                 {modalType !== 'edit' ? 'Create' : 'Edit'}
                 <Icon name="chevron right" />
               </Button>
@@ -353,7 +374,7 @@ const mapStateToProps = state => {
     narrowBookmark: state.allNotices.narrowBookmark,
     isUploading: state.allNotices.isUploading,
     permission: state.permission.permission,
-    notices: state.allNotices.notices
+    notice: state.notice
   }
 }
 
@@ -387,6 +408,9 @@ const mapDispatchToProps = dispatch => {
     },
     editNotice: (data, callback) => {
       dispatch(editNotice(data, callback))
+    },
+    getNotice: (noticeId, callback) => {
+      dispatch(getNotice(noticeId, callback))
     }
   }
 }

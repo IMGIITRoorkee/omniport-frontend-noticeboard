@@ -79,7 +79,7 @@ export default class UploadNoticeEditor extends Component {
   }
   render() {
     const { isConfirmModal, data, error } = this.state
-    const { mountedNode, handleEditorChange } = this.props
+    const { mountedNode, handleEditorChange, content } = this.props
     return (
       <div styleName="editor.editor-parent">
         <Editor
@@ -99,6 +99,7 @@ export default class UploadNoticeEditor extends Component {
           }}
           onChange={handleEditorChange}
           menubar={false}
+          initialValue={content}
         />
         {isConfirmModal ? (
           <Modal

@@ -40,6 +40,10 @@
   margin-bottom: 0 !important;
 }
 
+.modal-height {
+  height: 90vh !important;
+}
+
 @media only screen and (max-width: 600px) {
   .input-width {
     width: 95%;
