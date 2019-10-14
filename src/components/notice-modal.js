@@ -52,21 +52,21 @@ class NoticeModal extends Component {
 
   successNoticeCallback = () => {
     const { notice, permission } = this.props
-
+    let tmpNotice = notice.notice
     let tempCheck = false
 
     for (let i = 0; i < permission.length; i++) {
-      if (JSON.stringify(permission[i].banner === notice.notice.banner)) {
+      if (permission[i].banner.id === tmpNotice.banner.id) {
         tempCheck = true
       }
     }
 
     this.setState({
-      title: notice.notice.title,
-      editorContent: notice.notice.content,
-      checkedState: notice.notice.banner,
-      isImportant: notice.notice.isImportant,
-      endDate: notice.notice.expiryDate,
+      title: tmpNotice.title,
+      editorContent: tmpNotice.content,
+      checkedState: tmpNotice.banner,
+      isImportant: tmpNotice.isImportant,
+      endDate: tmpNotice.expiryDate,
       showImpCheck: tempCheck
     })
   }
@@ -81,9 +81,9 @@ class NoticeModal extends Component {
   }
   handleRadioChange = (e, permission) => {
     this.setState({
-      checkedState: permission,
+      checkedState: permission.banner,
       bannerError: false,
-      showImpCheck: permission.isSuperUploader ? true : false
+      showImpCheck: permission.banner.isSuperUploader ? true : false
     })
   }
   onChange = e => {
@@ -118,7 +118,7 @@ class NoticeModal extends Component {
       endDate,
       isImportant
     } = this.state
-    const { uploadNotice, editNotice, modalType } = this.props
+    const { uploadNotice, editNotice, modalType, id } = this.props
 
     if (title.trim() === '') {
       this.setState({
@@ -150,13 +150,13 @@ class NoticeModal extends Component {
     let data = {
       title: title,
       content: editorContent,
-      banner: modalType === 'edit' ? checkedState : checkedState.banner,
+      banner: checkedState,
       expiry_date: endDate,
       is_important: isImportant
     }
 
     modalType === 'edit'
-      ? editNotice(data, this.successCallback)
+      ? editNotice(id, data, this.successCallback)
       : uploadNotice(data, this.successCallback)
   }
   successCallback = () => {
@@ -215,13 +215,14 @@ class NoticeModal extends Component {
           <Modal
             open={showModal}
             onClose={() => this.handleModal(false)}
-            styleName="upload.modal-height"
+            styleName={modalType === 'edit' ? 'upload.modal-height' : null}
             closeIcon
           >
             <Modal.Header>
               {modalType === 'edit' ? 'Edit Notice' : 'Create Notice'}
             </Modal.Header>
-            {!isFetchingNotice ? (
+            {(modalType === 'edit' && !isFetchingNotice) ||
+            modalType === 'create' ? (
               <Modal.Content>
                 <div styleName="upload.display-flex">
                   <div styleName="upload.input-width">
@@ -310,13 +311,9 @@ class NoticeModal extends Component {
                                 this.handleRadioChange(e, permission)
                               }
                               checked={
-                                modalType === 'edit'
-                                  ? checkedState.name === permission.banner.name
-                                  : checkedState.banner &&
-                                    checkedState.banner.name ===
-                                      permission.banner.name
+                                checkedState.name === permission.banner.name
                               }
-                            />
+                            ></Radio>
                           ) : null}
                         </div>
                       </div>
@@ -350,7 +347,7 @@ class NoticeModal extends Component {
                 loading={isUploading}
                 onClick={this.handleSubmit}
                 primary
-                disabled={isFetchingNotice}
+                disabled={(modalType === 'edit' && isFetchingNotice) || false}
               >
                 {modalType !== 'edit' ? 'Create' : 'Edit'}
                 <Icon name="chevron right" />
@@ -406,8 +403,8 @@ const mapDispatchToProps = dispatch => {
     uploadNotice: (data, callback) => {
       dispatch(uploadNotice(data, callback))
     },
-    editNotice: (data, callback) => {
-      dispatch(editNotice(data, callback))
+    editNotice: (id, data, callback) => {
+      dispatch(editNotice(id, data, callback))
     },
     getNotice: (noticeId, callback) => {
       dispatch(getNotice(noticeId, callback))

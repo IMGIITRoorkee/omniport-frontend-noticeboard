@@ -89,6 +89,10 @@ export function urlUploadNotice() {
   return `${urlMainApp()}new/`
 }
 
+export function urlEditNotice(id) {
+  return `${urlMainApp()}new/${id}/`
+}
+
 export function urlPermissions() {
   return `${urlMainApp()}permissions/`
 }
