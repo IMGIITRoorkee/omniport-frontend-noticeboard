@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { getCookie } from 'formula_one'
-import { urlEditNotice } from '../urls'
+import { urlNoticeId } from '../urls'
 import {
   EDIT_NOTICE_FAILURE,
   EDIT_NOTICE_REQUEST,
@@ -16,7 +16,7 @@ export const editNotice = (id, data, callback) => {
       type: EDIT_NOTICE_REQUEST
     })
     axios
-      .put(urlEditNotice(id), data, { headers: headers })
+      .put(urlNoticeId(id), data, { headers: headers })
       .then(res => {
         dispatch({
           type: EDIT_NOTICE_SUCCESS

@@ -15,11 +15,10 @@ import {
   getNotices,
   selectAll,
   noticeRead,
-  noticeBookmark,
+  noticeBookmark
 } from '../actions/index'
-import {deleteNotice} from '../actions/delete-notice';
-import EditModal from './notice-modal';
-
+import { deleteNotice } from '../actions/delete-notice'
+import EditModal from './notice-modal'
 
 import notice from '../css/notice.css'
 class NoticeListView extends Component {
@@ -31,7 +30,7 @@ class NoticeListView extends Component {
       editId: -1,
       showEditModal: false,
       confirmDelete: false,
-      deleteId: -1,
+      deleteId: -1
     }
     this.modalRef = React.createRef()
   }
@@ -136,17 +135,16 @@ class NoticeListView extends Component {
   }
 
   handleCancel = () => {
-    this.setState({ confirmDelete: false, deleteId: -1 });
+    this.setState({ confirmDelete: false, deleteId: -1 })
   }
 
   handleConfirm = () => {
     let { deleteId } = this.state
-    console.log(deleteNotice)
     this.props.deleteNotice(deleteId)
-    this.handleCancel();
+    this.handleCancel()
   }
 
-  deleteNotice = (id) => {
+  deleteNotice = id => {
     this.setState({ deleteId: id, confirmDelete: true })
   }
 
@@ -162,9 +160,15 @@ class NoticeListView extends Component {
       notices,
       importantNotices,
       history,
-      showImp,
+      showImp
     } = this.props
-    const { displayselectAll, noNotices, showEditModal, editId, confirmDelete } = this.state
+    const {
+      displayselectAll,
+      noNotices,
+      showEditModal,
+      editId,
+      confirmDelete
+    } = this.state
     let currentNotices = notices
     if (showImp) {
       currentNotices = importantNotices
@@ -391,8 +395,8 @@ const mapDispatchToProps = dispatch => {
     noticeRead: (noticeIdList, toggle) => {
       dispatch(noticeRead(noticeIdList, toggle))
     },
-    deleteNotice: (id) => {
-      dispatch(deleteNotice(id, null));
+    deleteNotice: id => {
+      dispatch(deleteNotice(id, null))
     }
   }
 }

@@ -44,19 +44,18 @@ class NoticeModal extends Component {
 
   componentDidMount() {
     const { modalType, id, getNotice } = this.props
-
     if (modalType === 'edit') {
       getNotice(id, this.successNoticeCallback)
     }
   }
 
   successNoticeCallback = () => {
-    const { notice, permission } = this.props
+    const { notice, normalPer } = this.props
     let tmpNotice = notice.notice
     let tempCheck = false
 
-    for (let i = 0; i < permission.length; i++) {
-      if (permission[i].banner.id === tmpNotice.banner.id) {
+    for (let i = 0; i < normalPer.length; i++) {
+      if (normalPer[i].banner.id === tmpNotice.banner.id) {
         tempCheck = true
       }
     }
@@ -297,24 +296,21 @@ class NoticeModal extends Component {
                   {permission &&
                     permission.map((permission, index) => (
                       <div key={index} styleName="upload.sub-categories-parent">
-                        <Header
-                          content={permission.banner.parentCategory.name}
-                          as="h3"
-                        />
+                        <Header content={permission.groupName} as="h3" />
                         <div styleName="upload.sub-categories-radio-parent">
-                          {permission.banner ? (
-                            <Radio
-                              key={index}
-                              name="permission-radio"
-                              label={permission.banner.name}
-                              onChange={e =>
-                                this.handleRadioChange(e, permission)
-                              }
-                              checked={
-                                checkedState.name === permission.banner.name
-                              }
-                            ></Radio>
-                          ) : null}
+                          {permission.child.length > 0 &&
+                            permission.child.map((child, index) => (
+                              <Radio
+                                key={index}
+                                styleName="upload.radio-buttons-margin"
+                                name="permission-radio"
+                                label={child.banner.name}
+                                onChange={e => this.handleRadioChange(e, child)}
+                                checked={
+                                  checkedState.name === child.banner.name
+                                }
+                              ></Radio>
+                            ))}
                         </div>
                       </div>
                     ))}
@@ -371,6 +367,7 @@ const mapStateToProps = state => {
     narrowBookmark: state.allNotices.narrowBookmark,
     isUploading: state.allNotices.isUploading,
     permission: state.permission.permission,
+    normalPer: state.permission.normalPer,
     notice: state.notice
   }
 }

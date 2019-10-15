@@ -43,6 +43,9 @@
 .modal-height {
   min-height: 90vh;
 }
+.radio-buttons-margin {
+  margin-left: 1rem;
+}
 
 @media only screen and (max-width: 600px) {
   .input-width {
