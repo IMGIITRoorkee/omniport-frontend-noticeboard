@@ -32,7 +32,6 @@ export const getNotice = (noticeId, callback, expired = false) => {
       .then(json => {
         if (json.detail != 'Not found.') {
           dispatch(receiveNotice(json, true))
-          callback()
           if (!expired) {
             if (!json.read) {
               let headers = {
@@ -50,6 +49,7 @@ export const getNotice = (noticeId, callback, expired = false) => {
               })
             }
           }
+          callback()
         } else {
           dispatch(receiveNotice(null, false))
         }

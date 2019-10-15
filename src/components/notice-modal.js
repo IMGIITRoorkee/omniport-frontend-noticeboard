@@ -37,7 +37,8 @@ class NoticeModal extends Component {
       endDateError: false,
       bannerError: false,
       editorError: false,
-      showImpCheck: false
+      showImpCheck: false,
+      isSendEmail: true
     }
     this.modalRef = React.createRef()
   }
@@ -66,7 +67,8 @@ class NoticeModal extends Component {
       checkedState: tmpNotice.banner,
       isImportant: tmpNotice.isImportant,
       endDate: tmpNotice.expiryDate,
-      showImpCheck: tempCheck
+      showImpCheck: tempCheck,
+      isSendEmail: notice.sendEmail
     })
   }
 
@@ -103,9 +105,9 @@ class NoticeModal extends Component {
       this.setState({ [name]: value, [name + 'Error']: false })
     }
   }
-  handleCheckChange = () => {
+  handleCheckChange = (event, { name, value }) => {
     this.setState({
-      isImportant: !this.state.isImportant
+      [name]: !this.state[name]
     })
   }
   handleSubmit = e => {
@@ -115,7 +117,8 @@ class NoticeModal extends Component {
       checkedState,
       editorContent,
       endDate,
-      isImportant
+      isImportant,
+      isSendEmail
     } = this.state
     const { uploadNotice, editNotice, modalType, id } = this.props
 
@@ -151,7 +154,8 @@ class NoticeModal extends Component {
       content: editorContent,
       banner: checkedState,
       expiry_date: endDate,
-      is_important: isImportant
+      is_important: isImportant,
+      send_email: isSendEmail
     }
 
     modalType === 'edit'
@@ -200,7 +204,8 @@ class NoticeModal extends Component {
       endDateError,
       bannerError,
       showImpCheck,
-      editorContent
+      editorContent,
+      isSendEmail
     } = this.state
     const { isUploading, permission, modalType, modalRef, notice } = this.props
     const { isFetchingNotice } = notice
@@ -323,15 +328,24 @@ class NoticeModal extends Component {
                   mountedNode={modalRef}
                   content={editorContent}
                 />
-                {showImpCheck ? (
+                <div styleName="upload.checkbox-parent">
+                  {showImpCheck ? (
+                    <Checkbox
+                      styleName="upload.notice-upload-checkbox"
+                      checked={isImportant}
+                      onChange={this.handleCheckChange}
+                      name="isImportant"
+                      label="Make the notice as IMPORTANT"
+                    />
+                  ) : null}
                   <Checkbox
-                    styleName="upload.notice-upload-checkbox"
-                    checked={isImportant}
+                    styleName="upload.notice-send-email-checkbox"
+                    checked={isSendEmail}
                     onChange={this.handleCheckChange}
-                    name="isImportant"
-                    label="Make the notice as IMPORTANT"
+                    name="isSendEmail"
+                    label="Send Email"
                   />
-                ) : null}
+                </div>
               </Modal.Content>
             ) : (
               <Dimmer active inverted>
