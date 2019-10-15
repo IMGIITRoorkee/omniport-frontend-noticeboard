@@ -1,30 +1,34 @@
-import { getCookie } from 'formula_one'
-import { urlUploadNotice } from '../urls'
+import { getCookie } from "formula_one";
+import { urlNoticeId } from "../urls";
+
 import {
   DELETE_NOTICE_FAILURE,
   DELETE_NOTICE_REQUEST,
   DELETE_NOTICE_SUCCESS
-} from '../constants/action-types'
+} from "../constants/action-types";
 
-export const deleteFile = (data, callback) => {
+export const deleteNotice = (id, callback) => {
   let headers = {
-    'X-CSRFToken': getCookie('csrftoken')
-  }
-  return dispatch => {
+    "X-CSRFToken": getCookie("csrftoken")
+  };
+  return (dispatch) => {
     dispatch({
       type: DELETE_NOTICE_REQUEST
-    })
-    fetch(urlUploadNotice(data), {
-      method: 'DELETE',
+    });
+    fetch(urlNoticeId(id), {
+      method: "DELETE",
       headers: headers
     })
-      .then(res => {
+      .then((res) => {
         dispatch({
-          type: DELETE_NOTICE_SUCCESS
-        })
-        callback()
+          type: DELETE_NOTICE_SUCCESS,
+          payload: {
+            id: id,
+          }
+        });
+        callback();
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.response) {
           err.response.data
             ? dispatch({
@@ -38,8 +42,8 @@ export const deleteFile = (data, callback) => {
                 payload: {
                   error: err.response.statusText
                 }
-              })
+              });
         }
-      })
-  }
-}
+      });
+  };
+};

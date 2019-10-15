@@ -6,7 +6,8 @@ import {
   Loader,
   Pagination,
   Icon,
-  Segment
+  Segment,
+  Confirm
 } from 'semantic-ui-react'
 import Notice from './notice'
 import { connect } from 'react-redux'
@@ -14,9 +15,11 @@ import {
   getNotices,
   selectAll,
   noticeRead,
-  noticeBookmark
+  noticeBookmark,
 } from '../actions/index'
-import EditModal from './notice-modal'
+import {deleteNotice} from '../actions/delete-notice';
+import EditModal from './notice-modal';
+
 
 import notice from '../css/notice.css'
 class NoticeListView extends Component {
@@ -25,8 +28,10 @@ class NoticeListView extends Component {
     this.state = {
       displayselectAll: '',
       noNotices: '',
-      editId: '',
-      showEditModal: false
+      editId: -1,
+      showEditModal: false,
+      confirmDelete: false,
+      deleteId: -1,
     }
     this.modalRef = React.createRef()
   }
@@ -130,6 +135,22 @@ class NoticeListView extends Component {
     noticeRead(selectedNotices, toggle)
     selectAll(false)
   }
+
+  handleCancel = () => {
+    this.setState({ confirmDelete: false, deleteId: -1 });
+  }
+
+  handleConfirm = () => {
+    let { deleteId } = this.state
+    console.log(deleteNotice)
+    this.props.deleteNotice(deleteId)
+    this.handleCancel();
+  }
+
+  deleteNotice = (id) => {
+    this.setState({ deleteId: id, confirmDelete: true })
+  }
+
   render() {
     const {
       totalPages,
@@ -142,9 +163,9 @@ class NoticeListView extends Component {
       notices,
       importantNotices,
       history,
-      showImp
+      showImp,
     } = this.props
-    const { displayselectAll, noNotices, showEditModal, editId } = this.state
+    const { displayselectAll, noNotices, showEditModal, editId, confirmDelete } = this.state
     let currentNotices = notices
     if (showImp) {
       currentNotices = importantNotices
@@ -269,6 +290,7 @@ class NoticeListView extends Component {
                           history={history}
                           uploader={noticeInfo.uploader}
                           editNotice={this.handleEditNotice}
+                          deleteNotice={this.deleteNotice}
                         />
                       ))}
                   </Table.Body>
@@ -294,6 +316,12 @@ class NoticeListView extends Component {
             handleModal={this.handleEditModal}
           />
         ) : null}
+
+        <Confirm
+          open={confirmDelete}
+          onCancel={this.handleCancel}
+          onConfirm={this.handleConfirm}
+        />
 
         <Container styleName="notice.pagination-box notice.notice-container-width">
           <Pagination
@@ -363,6 +391,9 @@ const mapDispatchToProps = dispatch => {
     },
     noticeRead: (noticeIdList, toggle) => {
       dispatch(noticeRead(noticeIdList, toggle))
+    },
+    deleteNotice: (id) => {
+      dispatch(deleteNotice(id, null));
     }
   }
 }

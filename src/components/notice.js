@@ -52,6 +52,7 @@ class Notice extends Component {
       toggleSelect(id)
     )
   }
+
   render() {
     const {
       date,
@@ -64,6 +65,7 @@ class Notice extends Component {
       user,
       id,
       editNotice,
+      deleteNotice,
       important
     } = this.props
     const { check } = this.state
@@ -150,6 +152,15 @@ class Notice extends Component {
         >
           {uploader && uploader.fullName === user.fullName ? (
             <Icon name="pencil" />
+          ) : null}
+        </Table.Cell>
+        <Table.Cell
+          onClick={() => deleteNotice(id)}
+          collapsing
+          styleName="notice.cell-width-1 notice.cell-hover"
+        >
+          {uploader && uploader.fullName === user.fullName ? (
+            <Icon name="trash" />
           ) : null}
         </Table.Cell>
       </Table.Row>

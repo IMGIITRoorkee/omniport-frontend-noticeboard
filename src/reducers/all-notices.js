@@ -12,7 +12,10 @@ import {
   HIDE_IMP,
   EDIT_NOTICE_FAILURE,
   EDIT_NOTICE_REQUEST,
-  EDIT_NOTICE_SUCCESS
+  EDIT_NOTICE_SUCCESS,
+  DELETE_NOTICE_FAILURE,
+  DELETE_NOTICE_REQUEST,
+  DELETE_NOTICE_SUCCESS
 } from '../constants/action-types'
 
 const initialState = {
@@ -48,6 +51,25 @@ const allNotices = (state = initialState, action) => {
         ...state,
         showImp: false
       }
+
+    case DELETE_NOTICE_SUCCESS:
+      let newNotices = state.notices.filter(notice => notice.id != action.payload.id)
+      let newImpNotices = state.importantNotices.filter(notice => notice.id != action.payload.id)
+      return{
+        notices: newNotices,
+        importantNotices: newImpNotices,
+        ...state
+      }
+    
+    case DELETE_NOTICE_REQUEST:
+        return{
+          ...state
+        }
+      
+    case DELETE_NOTICE_FAILURE:
+        return{
+          ...state
+        }
 
     case GET_NOTICES:
       let newState = {
