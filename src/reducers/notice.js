@@ -1,7 +1,7 @@
 import { REQUEST_NOTICE, GET_NOTICE } from '../constants/action-types'
 
 const initialState = {
-  isFetchingNotice: true,
+  isFetchingNotice: false,
   notice: '',
   noticeExists: null,
   noticeId: ''

@@ -215,7 +215,7 @@ class NoticeModal extends Component {
           <Modal
             open={showModal}
             onClose={() => this.handleModal(false)}
-            styleName={modalType === 'edit' ? 'upload.modal-height' : null}
+            styleName={modalType === 'edit' ? 'upload.modal-height' : ''}
             closeIcon
           >
             <Modal.Header>
