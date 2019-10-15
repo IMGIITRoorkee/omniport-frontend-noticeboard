@@ -93,6 +93,10 @@ export function urlNoticeId(id) {
   return `${urlMainApp()}new/${id}`;
 }
 
+export function urlEditNotice(id) {
+  return `${urlMainApp()}new/${id}/`
+}
+
 export function urlPermissions() {
   return `${urlMainApp()}permissions/`;
 }

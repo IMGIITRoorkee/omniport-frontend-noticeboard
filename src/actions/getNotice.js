@@ -22,7 +22,7 @@ function receiveNotice(noticeData, noticeExists) {
   }
 }
 
-export const getNotice = (noticeId, expired) => {
+export const getNotice = (noticeId, callback, expired = false) => {
   return dispatch => {
     let url
 
@@ -32,7 +32,7 @@ export const getNotice = (noticeId, expired) => {
       .then(json => {
         if (json.detail != 'Not found.') {
           dispatch(receiveNotice(json, true))
-
+          callback()
           if (!expired) {
             if (!json.read) {
               let headers = {
