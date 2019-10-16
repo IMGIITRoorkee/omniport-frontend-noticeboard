@@ -85,11 +85,17 @@ export default class UploadNoticeEditor extends Component {
         <Editor
           apiKey={config.apiKey}
           init={{
-            plugins: 'link image code',
-            toolbar: 'undo redo | link image | code',
             image_title: true,
             automatic_uploads: true,
-            plugins: 'link image code',
+            plugins: [
+              'advlist autolink lists link image charmap print preview anchor',
+              'searchreplace visualblocks code fullscreen',
+              'insertdatetime media table paste code help wordcount'
+            ],
+            toolbar:
+              'undo redo | formatselect | bold italic backcolor | \
+              alignleft aligncenter alignright alignjustify | \
+              bullist numlist outdent indent | removeformat | help',
             insert_button_items: 'image link | inserttable',
             file_picker_callback: (callback, value, meta) => {
               this.handleClick(callback, value, meta)

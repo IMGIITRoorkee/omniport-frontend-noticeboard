@@ -55,7 +55,10 @@ class NoticeModal extends Component {
     let tempCheck = false
 
     for (let i = 0; i < normalPer.length; i++) {
-      if (normalPer[i].banner.id === tmpNotice.banner.id) {
+      if (
+        normalPer[i].banner.id === tmpNotice.banner.id &&
+        normalPer[i].banner.isSuperUploader
+      ) {
         tempCheck = true
       }
     }
