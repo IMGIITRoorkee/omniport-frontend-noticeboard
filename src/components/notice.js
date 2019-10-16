@@ -2,17 +2,19 @@ import React, { Component } from 'react'
 import { Icon, Table } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { noticeBookmark, toggleSelect } from '../actions/index'
+import { deleteNotice, noticeBookmark, toggleSelect } from '../actions/index'
 import { INTIAL_PAGE } from '../constants/constants'
 
 import notice from '../css/notice.css'
+
 class Notice extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       check: false
     }
   }
+
   openNotice = e => {
     const { id, history, expired } = this.props
     let path
@@ -26,7 +28,8 @@ class Notice extends Component {
       state: { page: INTIAL_PAGE, expired: expired }
     })
   }
-  componentDidUpdate(prevProps) {
+
+  componentDidUpdate (prevProps) {
     const { selectAllActive, id, selectedNotices } = this.props
     if (selectAllActive !== prevProps.selectAllActive) {
       this.setState({
@@ -53,7 +56,8 @@ class Notice extends Component {
     )
   }
 
-  render() {
+
+render () {
     const {
       date,
       banner,
@@ -66,7 +70,8 @@ class Notice extends Component {
       id,
       editNotice,
       deleteNotice,
-      important
+      important,
+      permission
     } = this.props
     const { check } = this.state
     return (
@@ -77,40 +82,34 @@ class Notice extends Component {
             : 'notice.notice-row-unread notice.notice-row'
         }
       >
-        <Table.Cell
-          styleName={
-            expired
-              ? 'notice.cell-width-1'
-              : 'notice.cell-width-1 notice.cell-hover'
-          }
-          onClick={this.selectNotice}
-        >
-          {expired ? (
-            <Icon name="square outline" />
-          ) : (
-            <Icon
-              name={check ? 'square' : 'square outline'}
-              color={check ? 'blue' : 'grey'}
-            />
-          )}
-        </Table.Cell>
-        <Table.Cell
-          styleName={
-            expired
-              ? 'notice.cell-width-1'
-              : 'notice.cell-width-1 notice.cell-hover'
-          }
-          onClick={this.bookmarkNotice}
-        >
-          {expired ? (
-            <Icon name="bookmark outline" />
-          ) : (
-            <Icon
-              name={bookmark ? 'bookmark' : 'bookmark outline'}
-              color="yellow"
-            />
-          )}
-        </Table.Cell>
+        {
+          expired ? null
+            : (<Table.Cell
+                styleName={'notice.cell-width-1 notice.cell-hover'}
+                onClick={this.selectNotice}
+              >
+                <Icon
+                  name={check ? 'square' : 'square outline'}
+                  color={check ? 'blue' : 'grey'}
+                />
+              </Table.Cell>
+            )
+        }
+
+        {
+          expired ? null
+            : (<Table.Cell
+                styleName={'notice.cell-width-1 notice.cell-hover'}
+                onClick={this.bookmarkNotice}
+              >
+                <Icon
+                  name={bookmark ? 'bookmark' : 'bookmark outline'}
+                  color="yellow"
+                />
+              </Table.Cell>
+            )
+        }
+
         <Table.Cell
           collapsing
           onClick={this.openNotice}
@@ -125,44 +124,61 @@ class Notice extends Component {
         >
           <span styleName="notice.tag-margin-right">
             {important ? (
-              <Icon name="tag" color="blue" />
+              <Icon name="tag" color="blue"/>
             ) : (
-              <Icon name={null} />
+              <Icon name={null}/>
             )}
           </span>
           {title}
         </Table.Cell>
         <Table.Cell
           onClick={this.openNotice}
-          textAlign="center"
-          styleName="notice.cell-width-3 notice.cell-hover notice.cell-date"
+          styleName="notice.cell-width-3 notice.cell-hover"
         >
-          By {uploader.fullName}
+          {uploader.fullName}
         </Table.Cell>
         <Table.Cell
           onClick={this.openNotice}
-          styleName="notice.cell-width-3 notice.cell-date notice.cell-hover"
+          textAlign='center'
+          styleName="notice.cell-width-2 notice.cell-hover"
         >
-          {moment(date).format('MMM Do, h:mm a')}
+          {
+            moment(date).format(
+              (Date.now().year === moment(date).year()
+                ? 'DD/MM/YY' : 'MMM Do')
+            )
+          }
         </Table.Cell>
-        <Table.Cell
-          onClick={() => editNotice(id)}
-          collapsing
-          styleName="notice.cell-width-1 notice.cell-hover"
-        >
-          {uploader && uploader.fullName === user.fullName ? (
-            <Icon name="pencil" />
-          ) : null}
-        </Table.Cell>
-        <Table.Cell
-          onClick={() => deleteNotice(id)}
-          collapsing
-          styleName="notice.cell-width-1 notice.cell-hover"
-        >
-          {uploader && uploader.fullName === user.fullName ? (
-            <Icon name="trash" />
-          ) : null}
-        </Table.Cell>
+        {
+          (permission.length > 0 && !expired)
+            ? <>
+              <Table.Cell
+                onClick={() => editNotice(id)}
+                collapsing
+                textAlign='center'
+                styleName="notice.cell-width-1"
+              >
+                {
+                  !expired && uploader && uploader.id === user.id
+                    ? <Icon name="pencil" styleName="notice.cell-hover"/>
+                    : null
+                }
+              </Table.Cell>
+              <Table.Cell
+                onClick={() => deleteNotice(id)}
+                collapsing
+                textAlign='center'
+                styleName="notice.cell-width-1"
+              >
+                {
+                  !expired && uploader && uploader.id === user.id
+                    ? <Icon name="trash" styleName="notice.cell-hover"/>
+                    : null
+                }
+              </Table.Cell>
+            </>
+          : null
+        }
       </Table.Row>
     )
   }
@@ -173,7 +189,8 @@ const mapStateToProps = state => {
     expired: state.allNotices.expired,
     selectAllActive: state.allNotices.selectAllActive,
     selectedNotices: state.allNotices.selectedNotices,
-    user: state.user.user
+    user: state.user.user,
+    permission: state.permission.permission
   }
 }
 

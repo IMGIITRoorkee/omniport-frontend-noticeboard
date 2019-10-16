@@ -15,7 +15,12 @@ class SideNav extends Component {
     string === 'important' ? showImportant() : hideImportant()
     history.push({
       pathname: path,
-      state: { page: INTIAL_PAGE, searchKeyword: '', narrowBookmark: false }
+      state: {
+        page: INTIAL_PAGE,
+        searchKeyword: '',
+        narrowBookmark: false,
+        expired: false,
+      }
     })
   }
 

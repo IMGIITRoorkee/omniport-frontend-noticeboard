@@ -23,7 +23,14 @@ class BackLink extends Component {
     if (narrowTemp) {
       narrowTemp = !narrowTemp
     }
+
     setPosition(position)
+
+    let expiredTemp = expired
+    if (expiredTemp) {
+      expiredTemp = !expired
+    }
+
     history.push({
       pathname: path,
       state: {
@@ -32,7 +39,7 @@ class BackLink extends Component {
         narrowBookmark: narrowTemp,
         bannerId: bannerId,
         mainCategorySlug: mainCategorySlug,
-        expired: expired,
+        expired: expiredTemp,
         dateRange: dateRange
       }
     })

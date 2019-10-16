@@ -11,6 +11,7 @@ import {
 } from 'semantic-ui-react'
 import Notice from './notice'
 import { connect } from 'react-redux'
+import moment from 'moment'
 import {
   getNotices,
   selectAll,
@@ -21,6 +22,7 @@ import { deleteNotice } from '../actions/delete-notice'
 import EditModal from './notice-modal'
 
 import notice from '../css/notice.css'
+
 class NoticeListView extends Component {
   constructor(props) {
     super(props)
@@ -35,7 +37,7 @@ class NoticeListView extends Component {
     this.modalRef = React.createRef()
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     const { notices, importantNotices, showImp } = this.props
     if (prevProps.showImp !== showImp) {
       if (showImp) this.showImportant()
@@ -44,8 +46,8 @@ class NoticeListView extends Component {
       showImp && importantNotices.length > 0 ? importantNotices : notices
     if (prevProps.notices !== notices) {
       this.setState({
-        noNotices: currentNotices.length > 0 ? false : true,
-        displayselectAll: currentNotices.length > 0 ? true : false
+        noNotices: currentNotices.length === 0,
+        displayselectAll: currentNotices.length > 0,
       })
     }
   }
@@ -159,7 +161,8 @@ class NoticeListView extends Component {
       notices,
       importantNotices,
       history,
-      showImp
+      showImp,
+      expired
     } = this.props
     const {
       displayselectAll,
@@ -187,11 +190,13 @@ class NoticeListView extends Component {
     }
 
     if (dateRange) {
-      dateDisplay = dateRange.start + ' to ' + dateRange.end
+      dateDisplay = moment(dateRange.start).format('MMM Do')
+        + ' to ' + moment(dateRange.end).format('MMM Do')
     }
     return (
       <div styleName="notice.notice-list">
-        {/* Select all button */}
+        {
+        !expired ?
         <Container styleName="notice.select-all-container notice.notice-container-width">
           {displayselectAll ? (
             <div>
@@ -266,6 +271,8 @@ class NoticeListView extends Component {
             <div></div>
           )}
         </Container>
+        : null
+        }
 
         {/* Notice Table */}
         {isFetchingNotices ? (
@@ -276,7 +283,7 @@ class NoticeListView extends Component {
           <div>
             {!noNotices ? (
               <Container styleName="notice.notice-list-view notice.notice-container-width">
-                <Table fixed basic singleLine compact>
+                <Table fixed basic celled singleLine compact>
                   <Table.Body>
                     {currentNotices &&
                       currentNotices.map(noticeInfo => (

@@ -207,7 +207,7 @@
 }
 
 .notice-row-read {
-  background: #f5f5f5 !important;
+  background: #f7f7f7 !important;
 }
 
 .notice-row-unread {
@@ -216,7 +216,6 @@
 
 .cell-width-1 {
   width: 0.16% !important;
-  border-right: 1px solid #e6e6e6;
   color: #999999;
 }
 
@@ -227,14 +226,8 @@
 }
 
 .cell-width-2 {
-  width: 0.33% !important;
-  text-align: center;
+  width: 0.4% !important;
   color: #878787;
-}
-
-.cell-date {
-  border-right: 1px solid #e6e6e6;
-  border-left: 1px solid #e6e6e6;
 }
 
 .cell-width-3 {
