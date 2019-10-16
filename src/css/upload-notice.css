@@ -52,6 +52,11 @@
   margin: 1rem 0;
 }
 
+.notice-public-check-icon {
+  margin-left: 0.5rem !important;
+  font-size: 0.75rem;
+}
+
 @media only screen and (max-width: 600px) {
   .input-width {
     width: 95%;

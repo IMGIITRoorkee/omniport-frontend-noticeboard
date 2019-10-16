@@ -14,8 +14,9 @@
 }
 
 .notice-type-heading span {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   margin-left: 0.5rem;
+  font-weight: 600;
 }
 
 .top-bar {

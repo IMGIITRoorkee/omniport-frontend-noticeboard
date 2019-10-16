@@ -11,7 +11,8 @@ import {
   Responsive,
   Message,
   Loader,
-  Dimmer
+  Dimmer,
+  Popup
 } from 'semantic-ui-react'
 import { DateInput } from 'semantic-ui-calendar-react'
 import {
@@ -70,7 +71,8 @@ class NoticeModal extends Component {
       isImportant: tmpNotice.isImportant,
       endDate: tmpNotice.expiryDate,
       showImpCheck: tempCheck,
-      isSendEmail: notice.sendEmail
+      isSendEmail: tmpNotice.sendEmail,
+      isPublic: tmpNotice.isPublic
     })
   }
 
@@ -115,7 +117,8 @@ class NoticeModal extends Component {
       editorContent,
       endDate,
       isImportant,
-      isSendEmail
+      isSendEmail,
+      isPublic
     } = this.state
     const { uploadNotice, editNotice, modalType, id } = this.props
 
@@ -150,9 +153,10 @@ class NoticeModal extends Component {
       title: title,
       content: editorContent,
       banner: checkedState,
-      expiry_date: endDate,
-      is_important: isImportant,
-      send_email: isSendEmail
+      expiryDate: endDate,
+      isImportant: isImportant,
+      sendEmail: isSendEmail,
+      isPublic: isPublic
     }
 
     modalType === 'edit'
@@ -203,7 +207,8 @@ class NoticeModal extends Component {
       bannerError,
       showImpCheck,
       editorContent,
-      isSendEmail
+      isSendEmail,
+      isPublic
     } = this.state
     const {
       isUploading,
@@ -347,6 +352,25 @@ class NoticeModal extends Component {
                   name="isSendEmail"
                   label="Send Email"
                 />
+                <div>
+                  <Checkbox
+                    styleName="upload.notice-send-email-checkbox"
+                    checked={isPublic}
+                    onChange={this.handleCheckChange}
+                    name="isPublic"
+                    label="Public"
+                  />
+                  <Popup
+                    content="Lorem Ipsum"
+                    inverted
+                    trigger={
+                      <Icon
+                        styleName="upload.notice-public-check-icon"
+                        name="help circle"
+                      />
+                    }
+                  />
+                </div>
               </div>
             </Modal.Content>
           ) : (

@@ -45,8 +45,15 @@ class SideNav extends Component {
   }
 
   filterNotices = (bannerId, all, path, position = '', subPosition = '') => {
-    const { searchKeyword, dateRange, history, setPosition } = this.props
+    const {
+      searchKeyword,
+      dateRange,
+      history,
+      setPosition,
+      hideImportant
+    } = this.props
     setPosition(position, subPosition)
+    hideImportant()
     history.push({
       pathname: path,
       state: {
