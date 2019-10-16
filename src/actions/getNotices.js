@@ -1,6 +1,6 @@
 import { GET_NOTICES, REQUEST_NOTICES } from '../constants/action-types'
 import {
-  urlAddImportant,
+  urlImportantNotices,
   urlBookmarkedNotices,
   urlExpiredNotices,
   urlFilter,
@@ -81,11 +81,11 @@ export const getNotices = (
       url = urlFilter(page, bannerId, searchKeyword, mainCategorySlug)
     } else if (narrowBookmark) {
       url = urlBookmarkedNotices(page)
+    } else if (showImp) {
+      url = urlImportantNotices(page)
     } else {
       url = urlNotices(page, searchKeyword)
     }
-
-    if (showImp) url = urlAddImportant(url)
 
     return fetch(url)
       .then(response => response.json())

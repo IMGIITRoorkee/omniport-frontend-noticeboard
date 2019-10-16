@@ -17,6 +17,7 @@ import UploadNotice from './upload-notice'
 
 import dropdown from '../css/notice.css'
 import { SHOW_IMP, HIDE_IMP } from '../constants/action-types'
+import { setPosition } from '../actions'
 
 class DropdownView extends Component {
   constructor(props) {
@@ -260,7 +261,16 @@ class DropdownView extends Component {
       }
     })
   }
-
+  handleBack = () => {
+    const { setPosition, hideImportant } = this.props
+    setPosition('home')
+    hideImportant()
+  }
+  handleImportant = () => {
+    const { setPosition, showImportant } = this.props
+    setPosition('important')
+    showImportant()
+  }
   render() {
     const {
       dateFilterActive,
@@ -297,7 +307,7 @@ class DropdownView extends Component {
                 color="blue"
                 content="Show All"
                 styleName="dropdown.important-button"
-                onClick={showImportant}
+                onClick={this.handleImportant}
               />
             </div>
           </div>
@@ -306,7 +316,7 @@ class DropdownView extends Component {
             <Menu.Item styleName="dropdown.back-button">
               <Button
                 styleName="dropdown.menu-button-border dropdown.tab-button"
-                onClick={hideImportant}
+                onClick={this.handleBack}
                 icon="arrow left"
                 content="Back"
               />
@@ -417,6 +427,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    setPosition: position => {
+      dispatch(setPosition(position))
+    },
     showImportant: () => {
       dispatch({
         type: SHOW_IMP,

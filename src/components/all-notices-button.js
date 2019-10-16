@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import { Button, Menu } from 'semantic-ui-react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { setPosition } from '../actions'
 
 import backlink from '../css/notice.css'
 
 class BackLink extends Component {
-  allNotices = path => {
+  allNotices = (path, position) => {
     const {
       page,
       searchKeyword,
@@ -15,13 +16,14 @@ class BackLink extends Component {
       mainCategorySlug,
       expired,
       dateRange,
-      history
+      history,
+      setPosition
     } = this.props
     let narrowTemp = narrowBookmark
     if (narrowTemp) {
       narrowTemp = !narrowTemp
     }
-
+    setPosition(position)
     history.push({
       pathname: path,
       state: {
@@ -41,7 +43,7 @@ class BackLink extends Component {
         <Menu.Item styleName="backlink.back-button">
           <Button
             styleName="backlink.menu-button-border backlink.tab-button"
-            onClick={() => this.allNotices('/noticeboard/')}
+            onClick={() => this.allNotices('/noticeboard/', 'home')}
             icon="arrow left"
             content="Back"
           />
@@ -63,4 +65,17 @@ const mapStateToProps = state => {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(BackLink))
+const mapDispatchToProps = dispatch => {
+  return {
+    setPosition: position => {
+      dispatch(setPosition(position))
+    }
+  }
+}
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(BackLink)
+)

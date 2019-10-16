@@ -40,7 +40,8 @@ class NoticeListView extends Component {
     if (prevProps.showImp !== showImp) {
       if (showImp) this.showImportant()
     }
-    let currentNotices = showImp ? importantNotices : notices
+    let currentNotices =
+      showImp && importantNotices.length > 0 ? importantNotices : notices
     if (prevProps.notices !== notices) {
       this.setState({
         noNotices: currentNotices.length > 0 ? false : true,
@@ -87,20 +88,18 @@ class NoticeListView extends Component {
 
   showImportant = e => {
     const {
-      narrowBookmark,
       bannerId,
       dateRange,
       mainCategorySlug,
       getNotices,
-      searchKeyword,
-      expired
+      searchKeyword
     } = this.props
     let activePage = 1
     getNotices(
       activePage,
       searchKeyword,
-      narrowBookmark,
-      expired,
+      false,
+      false,
       bannerId,
       mainCategorySlug,
       dateRange,

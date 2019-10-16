@@ -17,3 +17,7 @@
   float: none !important;
   margin-right: 0.7rem !important;
 }
+
+.sidenav-active-item {
+  background: rgba(0, 0, 0, 0.1) !important;
+}

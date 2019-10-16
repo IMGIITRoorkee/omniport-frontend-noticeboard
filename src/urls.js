@@ -26,7 +26,7 @@ export function urlExpiredNotices(page, search_keyword) {
   return urlSearchGetParam(url, search_keyword)
 }
 
-export function urlImportantNotices(page, search_keyword) {
+export function urlImportantNotices(page = 1, search_keyword) {
   let url = `${urlMainApp()}new/?important=true&page=${page}`
   return urlSearchGetParam(url, search_keyword)
 }

@@ -2,15 +2,17 @@ import React, { Component } from 'react'
 import { Dropdown, Menu, Divider, Icon } from 'semantic-ui-react'
 import 'rc-calendar/assets/index.css'
 import { connect } from 'react-redux'
+import { setPosition } from '../actions/index'
 import { INTIAL_PAGE } from '../constants/constants'
 import { SHOW_IMP, HIDE_IMP } from '../constants/action-types'
 
 import sidenav from '../css/sidenav.css'
 
 class SideNav extends Component {
-  goHome = (path, important = false) => {
-    const { showImportant, hideImportant, history } = this.props
-    important ? showImportant() : hideImportant()
+  goHome = (path, string) => {
+    const { showImportant, hideImportant, history, setPosition } = this.props
+    setPosition(string)
+    string === 'important' ? showImportant() : hideImportant()
     history.push({
       pathname: path,
       state: { page: INTIAL_PAGE, searchKeyword: '', narrowBookmark: false }
@@ -18,21 +20,28 @@ class SideNav extends Component {
   }
 
   expiredNotices = path => {
-    this.props.history.push({
+    const { history, setPosition, hideImportant } = this.props
+    setPosition('expired')
+    hideImportant()
+    history.push({
       pathname: path,
       state: { page: INTIAL_PAGE, expired: true }
     })
   }
 
   narrowBookmarks(path) {
-    this.props.history.push({
+    const { history, setPosition, hideImportant } = this.props
+    setPosition('bookmark')
+    hideImportant()
+    history.push({
       pathname: path,
-      state: { page: INTIAL_PAGE, narrowBookmark: true }
+      state: { page: INTIAL_PAGE, narrowBookmark: true, important: false }
     })
   }
 
-  filterNotices = (bannerId, all, path) => {
-    const { searchKeyword, dateRange, history } = this.props
+  filterNotices = (bannerId, all, path, position = '', subPosition = '') => {
+    const { searchKeyword, dateRange, history, setPosition } = this.props
+    setPosition(position, subPosition)
     history.push({
       pathname: path,
       state: {
@@ -47,11 +56,21 @@ class SideNav extends Component {
 
   renderInnerDropdownItems = items => {
     const all = false
+    const { subPosition } = this.props
     if (items.length) {
       return items.map((item, index) => (
         <Dropdown.Item
           key={index}
-          onClick={() => this.filterNotices(item.id, all, '/noticeboard/')}
+          active={subPosition === item.name}
+          onClick={() =>
+            this.filterNotices(
+              item.id,
+              all,
+              '/noticeboard/',
+              item.parentCategory.name,
+              item.name
+            )
+          }
         >
           {item.name}
         </Dropdown.Item>
@@ -66,12 +85,22 @@ class SideNav extends Component {
   }
 
   renderInnerDropdownAll = item => {
+    const { subPosition } = this.props
     if (item.banner.length) {
       const all = true
       return (
         <Dropdown.Item
           key={0}
-          onClick={() => this.filterNotices(item.slug, all, '/noticeboard/')}
+          active={subPosition === item.name}
+          onClick={() =>
+            this.filterNotices(
+              item.slug,
+              all,
+              '/noticeboard/',
+              item.name,
+              item.name
+            )
+          }
         >
           All {item.name}
         </Dropdown.Item>
@@ -80,10 +109,15 @@ class SideNav extends Component {
   }
 
   renderOuterDropdownItems = items => {
+    const { position } = this.props
     if (items.length > 0) {
       return items.map((item, index) => (
         <Dropdown
-          styleName="sidenav.sidenav-items"
+          styleName={
+            position === item.name
+              ? 'sidenav.sidenav-active-item'
+              : 'sidenav.sidenav-items'
+          }
           item
           text={item.name}
           key={index}
@@ -100,7 +134,7 @@ class SideNav extends Component {
   }
 
   render() {
-    const { filters } = this.props
+    const { filters, position } = this.props
     return (
       <Menu
         secondary
@@ -112,7 +146,8 @@ class SideNav extends Component {
       >
         <Menu.Item
           name="All Notices"
-          onClick={() => this.goHome('/noticeboard/')}
+          active={position === 'home'}
+          onClick={() => this.goHome('/noticeboard/', 'home')}
         >
           <Icon styleName="sidenav.sidenav-icon-styling" name="home" />
           All Notices
@@ -120,7 +155,8 @@ class SideNav extends Component {
 
         <Menu.Item
           name="Important Notices"
-          onClick={() => this.goHome('/noticeboard/', true)}
+          active={position === 'important'}
+          onClick={() => this.goHome('/noticeboard/', 'important')}
         >
           <Icon styleName="sidenav.sidenav-icon-styling" name="tag" />
           Important Notices
@@ -132,6 +168,7 @@ class SideNav extends Component {
 
         <Menu.Item
           name="Bookmarks"
+          active={position === 'bookmark'}
           onClick={() => this.narrowBookmarks('/noticeboard/')}
         >
           <Icon styleName="sidenav.sidenav-icon-styling" name="bookmark" />
@@ -142,6 +179,7 @@ class SideNav extends Component {
 
         <Menu.Item
           name="Expired"
+          active={position === 'expired'}
           onClick={() => this.expiredNotices('/noticeboard/')}
         >
           <Icon styleName="sidenav.sidenav-icon-styling" name="time" />
@@ -157,12 +195,17 @@ const mapStateToProps = state => {
     filters: state.filters.filters,
     dateRange: state.allNotices.dateRange,
     searchKeyword: state.allNotices.searchKeyword,
-    bannerId: state.allNotices.bannerId
+    bannerId: state.allNotices.bannerId,
+    position: state.current.currentPosition,
+    subPosition: state.current.subPosition
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
+    setPosition: (position, subPosition) => {
+      dispatch(setPosition(position, subPosition))
+    },
     showImportant: () => {
       dispatch({
         type: SHOW_IMP,

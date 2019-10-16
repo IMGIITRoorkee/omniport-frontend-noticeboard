@@ -73,7 +73,8 @@ class App extends React.PureComponent {
           location.state.expired,
           location.state.bannerId,
           location.state.mainCategorySlug,
-          location.state.dateRange
+          location.state.dateRange,
+          location.state.important
         )
       }
     })
