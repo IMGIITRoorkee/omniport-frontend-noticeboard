@@ -421,7 +421,8 @@ const mapStateToProps = state => {
     mainCategorySlug: state.allNotices.mainCategorySlug,
     bannerId: state.allNotices.bannerId,
     showImp: state.allNotices.showImp,
-    permission: state.permission.permission
+    permission: state.permission.permission,
+    importantNotices: state.allNotices.importantNotices
   }
 }
 

@@ -29,6 +29,7 @@ export default class UploadNotice extends Component {
             modalRef={this.modalRef}
             modalType="create"
             handleModal={this.handleModal}
+            modal={showModal}
           />
         ) : null}
       </React.Fragment>

@@ -21,3 +21,7 @@
 .sidenav-active-item {
   background: rgba(0, 0, 0, 0.1) !important;
 }
+
+.menu-item-color {
+  color: red !important;
+}

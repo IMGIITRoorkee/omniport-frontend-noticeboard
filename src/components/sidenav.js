@@ -19,7 +19,7 @@ class SideNav extends Component {
         page: INTIAL_PAGE,
         searchKeyword: '',
         narrowBookmark: false,
-        expired: false,
+        expired: false
       }
     })
   }

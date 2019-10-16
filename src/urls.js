@@ -90,7 +90,7 @@ export function urlUploadNotice() {
 }
 
 export function urlNoticeId(id) {
-  return `${urlMainApp()}new/${id}`
+  return `${urlMainApp()}new/${id}/`
 }
 
 export function urlPermissions() {
@@ -102,5 +102,5 @@ export function urlCopyMedia() {
 }
 
 export function whoAmI() {
-  return `/kernel/who_am_i`
+  return `/kernel/who_am_i/`
 }

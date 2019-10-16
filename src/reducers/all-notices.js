@@ -43,7 +43,10 @@ const allNotices = (state = initialState, action) => {
     case SHOW_IMP:
       return {
         ...state,
-        showImp: true
+        showImp: true,
+        narrowBookmark: false,
+        bannerId: null,
+        expired: false
       }
 
     case HIDE_IMP:
@@ -53,23 +56,27 @@ const allNotices = (state = initialState, action) => {
       }
 
     case DELETE_NOTICE_SUCCESS:
-      let newNotices = state.notices.filter(notice => notice.id != action.payload.id)
-      let newImpNotices = state.importantNotices.filter(notice => notice.id != action.payload.id)
-      return{
+      let newNotices = state.notices.filter(
+        notice => notice.id != action.payload.id
+      )
+      let newImpNotices = state.importantNotices.filter(
+        notice => notice.id != action.payload.id
+      )
+      return {
         notices: newNotices,
         importantNotices: newImpNotices,
         ...state
       }
-    
+
     case DELETE_NOTICE_REQUEST:
-        return{
-          ...state
-        }
-      
+      return {
+        ...state
+      }
+
     case DELETE_NOTICE_FAILURE:
-        return{
-          ...state
-        }
+      return {
+        ...state
+      }
 
     case GET_NOTICES:
       let newState = {

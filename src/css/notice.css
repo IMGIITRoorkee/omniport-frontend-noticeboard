@@ -9,6 +9,15 @@
   width: 1000px !important;
 }
 
+.notice-type-heading {
+  margin: 1rem 0;
+}
+
+.notice-type-heading span {
+  font-size: 1.1rem;
+  margin-left: 0.5rem;
+}
+
 .top-bar {
   margin-left: 0px !important;
   margin-top: 2em !important;
@@ -255,7 +264,7 @@
   width: 100%;
 }
 .upload-item-padding {
-  padding-right: 0px !important;
+  padding-right: 0.6rem !important;
 }
 
 .flex {

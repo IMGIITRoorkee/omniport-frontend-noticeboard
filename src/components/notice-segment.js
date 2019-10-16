@@ -7,7 +7,8 @@ import {
   Pagination,
   Icon,
   Segment,
-  Confirm
+  Confirm,
+  Header
 } from 'semantic-ui-react'
 import Notice from './notice'
 import { connect } from 'react-redux'
@@ -20,6 +21,7 @@ import {
 } from '../actions/index'
 import { deleteNotice } from '../actions/delete-notice'
 import EditModal from './notice-modal'
+import { iconName, headingName } from '../utils'
 
 import notice from '../css/notice.css'
 
@@ -37,7 +39,7 @@ class NoticeListView extends Component {
     this.modalRef = React.createRef()
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     const { notices, importantNotices, showImp } = this.props
     if (prevProps.showImp !== showImp) {
       if (showImp) this.showImportant()
@@ -47,7 +49,7 @@ class NoticeListView extends Component {
     if (prevProps.notices !== notices) {
       this.setState({
         noNotices: currentNotices.length === 0,
-        displayselectAll: currentNotices.length > 0,
+        displayselectAll: currentNotices.length > 0
       })
     }
   }
@@ -162,7 +164,8 @@ class NoticeListView extends Component {
       importantNotices,
       history,
       showImp,
-      expired
+      expired,
+      position
     } = this.props
     const {
       displayselectAll,
@@ -190,89 +193,103 @@ class NoticeListView extends Component {
     }
 
     if (dateRange) {
-      dateDisplay = moment(dateRange.start).format('MMM Do')
-        + ' to ' + moment(dateRange.end).format('MMM Do')
+      dateDisplay =
+        moment(dateRange.start).format('MMM Do') +
+        ' to ' +
+        moment(dateRange.end).format('MMM Do')
     }
     return (
       <div styleName="notice.notice-list">
-        {
-        !expired ?
-        <Container styleName="notice.select-all-container notice.notice-container-width">
-          {displayselectAll ? (
-            <div>
-              {selectAllActive ? (
+        <Container styleName="notice.notice-container-width">
+          <div styleName="notice.notice-type-heading">
+            <Icon name={iconName(position)} color="blue" />
+            <span>{headingName(position)}</span>
+          </div>
+        </Container>
+        {!expired ? (
+          <React.Fragment>
+            <Container styleName="notice.select-all-container notice.notice-container-width">
+              {displayselectAll ? (
                 <div>
-                  <Button
-                    icon
-                    styleName="notice.select-all-button-activated notice.select-all-button notice.tab-button"
-                    onClick={this.selectAll}
-                  >
-                    <Icon name="square" color="blue"></Icon>
-                  </Button>
-                  <Segment styleName="notice.select-all-list notice.select-all-activated-list">
-                    <Button
-                      basic
-                      styleName="notice.tab-button"
-                      icon
-                      onClick={this.read}
-                    >
-                      <Icon
-                        name="envelope open outline"
-                        color="blue"
-                        styleName="notice.buttons-select-all"
-                      ></Icon>
-                      Mark as Read
-                    </Button>
-                    <Button
-                      basic
-                      styleName="notice.tab-button"
-                      icon
-                      onClick={this.bookmark}
-                    >
-                      <Icon
-                        name="bookmark"
-                        color="blue"
-                        styleName="notice.buttons-select-all"
-                      ></Icon>
-                      Bookmark
-                    </Button>
-                    <Button
-                      basic
-                      styleName="notice.tab-button"
-                      icon
-                      onClick={this.removeBookmark}
-                    >
-                      <Icon
-                        name="bookmark outline"
-                        color="blue"
-                        styleName="notice.buttons-select-all"
-                      ></Icon>
-                      Remove Bookmark
-                    </Button>
-                  </Segment>
+                  {selectAllActive ? (
+                    <div>
+                      <Button
+                        icon
+                        styleName="notice.select-all-button-activated notice.select-all-button notice.tab-button"
+                        onClick={this.selectAll}
+                      >
+                        <Icon name="square" color="blue"></Icon>
+                      </Button>
+                      <Segment styleName="notice.select-all-list notice.select-all-activated-list">
+                        <Button
+                          basic
+                          styleName="notice.tab-button"
+                          icon
+                          onClick={this.read}
+                        >
+                          <Icon
+                            name="envelope open outline"
+                            color="blue"
+                            styleName="notice.buttons-select-all"
+                          ></Icon>
+                          Mark as Read
+                        </Button>
+                        <Button
+                          basic
+                          styleName="notice.tab-button"
+                          icon
+                          onClick={this.bookmark}
+                        >
+                          <Icon
+                            name="bookmark"
+                            color="blue"
+                            styleName="notice.buttons-select-all"
+                          ></Icon>
+                          Bookmark
+                        </Button>
+                        <Button
+                          basic
+                          styleName="notice.tab-button"
+                          icon
+                          onClick={this.removeBookmark}
+                        >
+                          <Icon
+                            name="bookmark outline"
+                            color="blue"
+                            styleName="notice.buttons-select-all"
+                          ></Icon>
+                          Remove Bookmark
+                        </Button>
+                      </Segment>
+                    </div>
+                  ) : (
+                    <div styleName="notice.table-row">
+                      <Button
+                        icon
+                        styleName="notice.select-all-button-not-activated  notice.select-all-button"
+                        onClick={this.selectAll}
+                      >
+                        <Icon name="square outline"> </Icon>
+                      </Button>
+                      <Segment styleName="notice.select-all-list notice.display-filters">
+                        <div styleName="notice.filter-block">
+                          {' '}
+                          {bannerName}{' '}
+                        </div>
+                        <div styleName="notice.filter-block">
+                          {' '}
+                          {dateDisplay}{' '}
+                        </div>
+                      </Segment>
+                    </div>
+                  )}
                 </div>
               ) : (
-                <div styleName="notice.table-row">
-                  <Button
-                    icon
-                    styleName="notice.select-all-button-not-activated  notice.select-all-button"
-                    onClick={this.selectAll}
-                  >
-                    <Icon name="square outline"> </Icon>
-                  </Button>
-                  <Segment styleName="notice.select-all-list notice.display-filters">
-                    <div styleName="notice.filter-block"> {bannerName} </div>
-                    <div styleName="notice.filter-block"> {dateDisplay} </div>
-                  </Segment>
-                </div>
+                <div></div>
               )}
-            </div>
-          ) : (
-            <div></div>
-          )}
-        </Container>
-        : null
-        }
+            </Container>
+          </React.Fragment>
+        ) : null}
 
         {/* Notice Table */}
         {isFetchingNotices ? (
@@ -323,6 +340,7 @@ class NoticeListView extends Component {
             modalType="edit"
             modalRef={this.modalRef}
             handleModal={this.handleEditModal}
+            modal={showEditModal}
           />
         ) : null}
 
@@ -363,7 +381,8 @@ const mapStateToProps = state => {
     dateRange: state.allNotices.dateRange,
     selectAllActive: state.allNotices.selectAllActive,
     selectedNotices: state.allNotices.selectedNotices,
-    filters: state.filters.filters
+    filters: state.filters.filters,
+    position: state.current.currentPosition
   }
 }
 
