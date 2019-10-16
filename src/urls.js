@@ -89,8 +89,8 @@ export function urlUploadNotice() {
   return `${urlMainApp()}new/`
 }
 
-export function urlNoticeId(id) {
-  return `${urlMainApp()}new/${id}/`
+export function urlNoticeId(id, type = 'new') {
+  return `${urlMainApp()}${type}/${id}/`
 }
 
 export function urlPermissions() {

@@ -56,8 +56,7 @@ class Notice extends Component {
     )
   }
 
-
-render () {
+  render () {
     const {
       date,
       banner,
@@ -150,34 +149,45 @@ render () {
           }
         </Table.Cell>
         {
-          (permission.length > 0 && !expired)
+          (permission.length > 0)
             ? <>
+              {
+                !expired
+                  ? <Table.Cell
+                    onClick={
+                      uploader && uploader.id === user.id
+                        ? () => editNotice(id) : null
+                    }
+                    collapsing
+                    textAlign='center'
+                    styleName="notice.cell-width-1"
+                  >
+                    {
+                      uploader && uploader.id === user.id
+                        ? <Icon name="pencil" styleName="notice.cell-hover"/>
+                        : null
+                    }
+                  </Table.Cell>
+                  : null
+              }
               <Table.Cell
-                onClick={() => editNotice(id)}
-                collapsing
-                textAlign='center'
-                styleName="notice.cell-width-1"
-              >
-                {
-                  !expired && uploader && uploader.id === user.id
-                    ? <Icon name="pencil" styleName="notice.cell-hover"/>
+                onClick={
+                  uploader && uploader.id === user.id
+                    ? () => deleteNotice(id, expired ? 'old' : 'new')
                     : null
                 }
-              </Table.Cell>
-              <Table.Cell
-                onClick={() => deleteNotice(id)}
                 collapsing
                 textAlign='center'
                 styleName="notice.cell-width-1"
               >
                 {
-                  !expired && uploader && uploader.id === user.id
+                  uploader && uploader.id === user.id
                     ? <Icon name="trash" styleName="notice.cell-hover"/>
                     : null
                 }
               </Table.Cell>
             </>
-          : null
+            : null
         }
       </Table.Row>
     )

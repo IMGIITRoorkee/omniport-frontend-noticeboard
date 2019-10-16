@@ -277,13 +277,14 @@ class DropdownView extends Component {
       datesRange,
       searchDone,
       value,
-      unreadImpCount
+      unreadImpCount,
+      expired
     } = this.state
     const { showImportant, hideImportant, showImp, permission } = this.props
 
     return (
       <div>
-        {!showImp ? (
+        {!showImp && !expired ? (
           <div styleName="dropdown.important-main-box dropdown.flex dropdown.flex-row">
             <div styleName="dropdown.important-sub-left dropdown.flex dropdown.flex-column">
               <h4>

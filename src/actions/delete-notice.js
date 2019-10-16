@@ -7,7 +7,7 @@ import {
   DELETE_NOTICE_SUCCESS
 } from "../constants/action-types";
 
-export const deleteNotice = (id, callback) => {
+export const deleteNotice = (id, type, callback) => {
   let headers = {
     "X-CSRFToken": getCookie("csrftoken")
   };
@@ -15,7 +15,7 @@ export const deleteNotice = (id, callback) => {
     dispatch({
       type: DELETE_NOTICE_REQUEST
     });
-    fetch(urlNoticeId(id), {
+    fetch(urlNoticeId(id, type), {
       method: "DELETE",
       headers: headers
     })

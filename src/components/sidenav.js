@@ -151,7 +151,11 @@ class SideNav extends Component {
       >
         <Menu.Item
           name="All Notices"
-          active={position === 'home'}
+          styleName={
+            position === 'home'
+              ? 'sidenav.sidenav-active-item'
+              : 'sidenav.sidenav-items'
+          }
           onClick={() => this.goHome('/noticeboard/', 'home')}
         >
           <Icon styleName="sidenav.sidenav-icon-styling" name="home" />
@@ -160,7 +164,11 @@ class SideNav extends Component {
 
         <Menu.Item
           name="Important Notices"
-          active={position === 'important'}
+          styleName={
+            position === 'important'
+              ? 'sidenav.sidenav-active-item'
+              : 'sidenav.sidenav-items'
+          }
           onClick={() => this.goHome('/noticeboard/', 'important')}
         >
           <Icon styleName="sidenav.sidenav-icon-styling" name="tag" />
@@ -173,7 +181,11 @@ class SideNav extends Component {
 
         <Menu.Item
           name="Bookmarks"
-          active={position === 'bookmark'}
+          styleName={
+            position === 'bookmark'
+              ? 'sidenav.sidenav-active-item'
+              : 'sidenav.sidenav-items'
+          }
           onClick={() => this.narrowBookmarks('/noticeboard/')}
         >
           <Icon styleName="sidenav.sidenav-icon-styling" name="bookmark" />
@@ -184,7 +196,11 @@ class SideNav extends Component {
 
         <Menu.Item
           name="Expired"
-          active={position === 'expired'}
+          styleName={
+            position === 'expired'
+              ? 'sidenav.sidenav-active-item'
+              : 'sidenav.sidenav-items'
+          }
           onClick={() => this.expiredNotices('/noticeboard/')}
         >
           <Icon styleName="sidenav.sidenav-icon-styling" name="time" />

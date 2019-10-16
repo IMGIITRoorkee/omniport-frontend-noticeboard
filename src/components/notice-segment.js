@@ -44,9 +44,10 @@ class NoticeListView extends Component {
     if (prevProps.showImp !== showImp) {
       if (showImp) this.showImportant()
     }
+    console.log('HELLO IMP', showImp, importantNotices)
     let currentNotices =
       showImp && importantNotices.length > 0 ? importantNotices : notices
-    if (prevProps.notices !== notices) {
+    if (showImp ? prevProps.importantNotices !== importantNotices : prevProps.notices !== notices) {
       this.setState({
         noNotices: currentNotices.length === 0,
         displayselectAll: currentNotices.length > 0
@@ -142,13 +143,15 @@ class NoticeListView extends Component {
   }
 
   handleConfirm = () => {
-    let { deleteId } = this.state
-    this.props.deleteNotice(deleteId)
+    let { deleteId, deleteNoticeType } = this.state
+    this.props.deleteNotice(deleteId, deleteNoticeType)
     this.handleCancel()
   }
 
-  deleteNotice = id => {
-    this.setState({ deleteId: id, confirmDelete: true })
+  deleteNotice = (id, type='new') => {
+    this.setState({
+      deleteId: id, confirmDelete: true, deleteNoticeType: type
+    })
   }
 
   render() {
@@ -420,8 +423,8 @@ const mapDispatchToProps = dispatch => {
     noticeRead: (noticeIdList, toggle) => {
       dispatch(noticeRead(noticeIdList, toggle))
     },
-    deleteNotice: id => {
-      dispatch(deleteNotice(id, null))
+    deleteNotice: (id, type='new') => {
+      dispatch(deleteNotice(id, type, null))
     }
   }
 }
