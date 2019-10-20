@@ -296,7 +296,7 @@ class NoticeListView extends Component {
           <div>
             {!noNotices ? (
               <Container styleName="notice.notice-list-view notice.notice-container-width">
-                <Table fixed basic celled singleLine compact>
+                <Table basic celled singleLine compact unstackable selectable>
                   <Table.Body>
                     {notices &&
                       notices.map(noticeInfo => (

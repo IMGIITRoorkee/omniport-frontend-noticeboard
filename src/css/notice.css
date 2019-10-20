@@ -331,3 +331,8 @@
 .flex-wrap {
   flex-wrap: wrap !important;
 }
+
+.top-segment{
+  display: flex;
+  justify-content: space-between;
+}

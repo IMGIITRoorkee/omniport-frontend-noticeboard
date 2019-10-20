@@ -47,11 +47,14 @@ class NoticeView extends Component {
           <Container styleName="noticeView.notice-box noticeView.notice-container-width">
             {noticeExists ? (
               <Segment.Group>
-                <Segment as="h5">Subject: {notice.title} </Segment>
+                <Segment as="h5" styleName='noticeView.top-segment'>
+                  <span>Subject: {notice.title}</span>
+                  <span>{notice.banner.name}</span>
+                </Segment>
                 <Segment>
                   <div styleName="notice-list-div">
                     <p styleName="noticeView.notice-posted-by">
-                      Posted by: {notice.banner.name}
+                      Posted by: {notice.uploader.fullName}
                     </p>
                     <Popup
                       trigger={
