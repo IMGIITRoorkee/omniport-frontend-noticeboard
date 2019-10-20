@@ -14,13 +14,14 @@ import { INTIAL_PAGE } from '../constants/constants'
 import { DatesRangeInput } from 'semantic-ui-calendar-react'
 import { dateFormatMatch } from '../utils'
 import UploadNotice from './upload-notice'
+import Backlink from './all-notices-button'
 
 import dropdown from '../css/notice.css'
 import { SHOW_IMP, HIDE_IMP } from '../constants/action-types'
 import { setPosition } from '../actions'
 
 class DropdownView extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     let searchDone, value, dateFilterActive, dateRangeTemp
@@ -50,7 +51,7 @@ class DropdownView extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     const { notices } = this.props
     if (prevProps.notices !== notices) {
       let count = 0
@@ -261,17 +262,13 @@ class DropdownView extends Component {
       }
     })
   }
-  handleBack = () => {
-    const { setPosition, hideImportant } = this.props
-    setPosition('home')
-    hideImportant()
-  }
   handleImportant = () => {
     const { setPosition, showImportant } = this.props
     setPosition('important')
     showImportant()
   }
-  render() {
+
+  render () {
     const {
       dateFilterActive,
       datesRange,
@@ -285,8 +282,10 @@ class DropdownView extends Component {
     return (
       <div>
         {!showImp && !expired ? (
-          <div styleName="dropdown.important-main-box dropdown.flex dropdown.flex-row">
-            <div styleName="dropdown.important-sub-left dropdown.flex dropdown.flex-column">
+          <div
+            styleName="dropdown.important-main-box dropdown.flex dropdown.flex-row">
+            <div
+              styleName="dropdown.important-sub-left dropdown.flex dropdown.flex-column">
               <h4>
                 Important notices
                 {unreadImpCount > 0 ? (
@@ -312,18 +311,8 @@ class DropdownView extends Component {
               />
             </div>
           </div>
-        ) : (
-          <Menu.Menu position="left">
-            <Menu.Item styleName="dropdown.back-button">
-              <Button
-                styleName="dropdown.menu-button-border dropdown.tab-button"
-                onClick={this.handleBack}
-                icon="arrow left"
-                content="Back"
-              />
-            </Menu.Item>
-          </Menu.Menu>
-        )}
+        ) : <Backlink important={false} />
+        }
         {!showImp ? (
           <Menu.Menu position="left" styleName="dropdown.flex-wrap">
             <Menu.Item styleName="dropdown.date-bar">
@@ -403,7 +392,7 @@ class DropdownView extends Component {
                 position="right"
                 styleName="dropdown.upload-item-padding"
               >
-                <UploadNotice />
+                <UploadNotice/>
               </Menu.Item>
             ) : null}
           </Menu.Menu>

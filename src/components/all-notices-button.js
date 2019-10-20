@@ -5,9 +5,11 @@ import { connect } from 'react-redux'
 import { setPosition } from '../actions'
 
 import backlink from '../css/notice.css'
+import { HIDE_IMP } from '../constants/action-types'
 
 class BackLink extends Component {
   allNotices = (path, position) => {
+    console.log("CHECK PUSH")
     const {
       page,
       searchKeyword,
@@ -17,12 +19,17 @@ class BackLink extends Component {
       expired,
       dateRange,
       history,
-      setPosition
+      setPosition,
+      important,
+      hideImportant
     } = this.props
+
     let narrowTemp = narrowBookmark
     if (narrowTemp) {
       narrowTemp = !narrowTemp
     }
+
+    important === false ? hideImportant() : null
 
     setPosition(position)
 
@@ -76,6 +83,12 @@ const mapDispatchToProps = dispatch => {
   return {
     setPosition: position => {
       dispatch(setPosition(position))
+    },
+    hideImportant: () => {
+      dispatch({
+        type: HIDE_IMP,
+        payload: {}
+      })
     }
   }
 }
