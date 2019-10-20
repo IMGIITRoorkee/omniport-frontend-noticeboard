@@ -23,7 +23,6 @@ const initialState = {
   isFetchingNotices: true,
   totalPages: 0,
   notices: [],
-  importantNotices: [],
   showImp: false,
   searchKeyword: null,
   isLoaded: false,
@@ -59,12 +58,8 @@ const allNotices = (state = initialState, action) => {
       let newNotices = state.notices.filter(
         notice => notice.id != action.payload.id
       )
-      let newImpNotices = state.importantNotices.filter(
-        notice => notice.id != action.payload.id
-      )
       return {
         notices: newNotices,
-        importantNotices: newImpNotices,
         ...state
       }
 
@@ -90,11 +85,9 @@ const allNotices = (state = initialState, action) => {
         narrowBookmark: action.payload.narrowBookmark,
         bannerId: action.payload.bannerId,
         mainCategorySlug: action.payload.mainCategorySlug,
-        dateRange: action.payload.dateRange
+        dateRange: action.payload.dateRange,
+        notices: action.payload.notices
       }
-      if (action.payload.showImp)
-        newState['importantNotices'] = action.payload.notices
-      else newState['notices'] = action.payload.notices
 
       return newState
 
@@ -116,41 +109,23 @@ const allNotices = (state = initialState, action) => {
           }
         }
       }
-
-      for (let index = 0; index < noticeIdList.length; index++) {
-        for (let i = 0; i < state.importantNotices.length; i++) {
-          if (state.importantNotices[i].id === noticeIdList[index]) {
-            state.importantNotices[i].starred = action.payload.toggle
-          }
-        }
-      }
       return { ...state }
 
     case READ_NOTICE:
-      notice_id_list = action.payload.notice_id_list
+      noticeIdList = action.payload.noticeIdList
 
-      for (let index = 0; index < notice_id_list.length; index++) {
+      for (let index = 0; index < noticeIdList.length; index++) {
         for (let i = 0; i < state.notices.length; i++) {
-          if (state.notices[i].id === notice_id_list[index]) {
+          if (state.notices[i].id === noticeIdList[index]) {
             state.notices[i].read = action.payload.toggle
           }
         }
       }
-
-      for (let index = 0; index < notice_id_list.length; index++) {
-        for (let i = 0; i < state.importantNotices.length; i++) {
-          if (state.importantNotices[i].id === notice_id_list[index]) {
-            state.importantNotices[i].read = action.payload.toggle
-          }
-        }
-      }
-
       return { ...state }
 
     case SELECT_ALL:
-      let selectedNotices = []
       selectAllActive = action.payload.selectAllActive
-
+      let selectedNotices = []
       for (let i = 0; i < state.notices.length; i++) {
         if (selectAllActive) {
           selectedNotices.push(state.notices[i].id)

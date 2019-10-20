@@ -412,7 +412,6 @@ const mapStateToProps = state => {
     bannerId: state.allNotices.bannerId,
     showImp: state.allNotices.showImp,
     permission: state.permission.permission,
-    importantNotices: state.allNotices.importantNotices
   }
 }
 

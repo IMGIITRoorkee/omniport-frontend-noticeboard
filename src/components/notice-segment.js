@@ -40,17 +40,14 @@ class NoticeListView extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { notices, importantNotices, showImp } = this.props
+    const { notices, showImp } = this.props
     if (prevProps.showImp !== showImp) {
       if (showImp) this.showImportant()
     }
-    console.log('HELLO IMP', showImp, importantNotices)
-    let currentNotices =
-      showImp && importantNotices.length > 0 ? importantNotices : notices
-    if (showImp ? prevProps.importantNotices !== importantNotices : prevProps.notices !== notices) {
+    if (prevProps.notices !== notices) {
       this.setState({
-        noNotices: currentNotices.length === 0,
-        displayselectAll: currentNotices.length > 0
+        noNotices: notices.length === 0,
+        displayselectAll: notices.length > 0
       })
     }
   }
@@ -164,7 +161,6 @@ class NoticeListView extends Component {
       filters,
       dateRange,
       notices,
-      importantNotices,
       history,
       showImp,
       expired,
@@ -177,10 +173,7 @@ class NoticeListView extends Component {
       editId,
       confirmDelete
     } = this.state
-    let currentNotices = notices
-    if (showImp) {
-      currentNotices = importantNotices
-    }
+
 
     let bannerName, dateDisplay
     if (bannerId && filters.length > 0) {
@@ -305,8 +298,8 @@ class NoticeListView extends Component {
               <Container styleName="notice.notice-list-view notice.notice-container-width">
                 <Table fixed basic celled singleLine compact>
                   <Table.Body>
-                    {currentNotices &&
-                      currentNotices.map(noticeInfo => (
+                    {notices &&
+                      notices.map(noticeInfo => (
                         <Notice
                           key={noticeInfo.id}
                           id={noticeInfo.id}
@@ -371,7 +364,6 @@ class NoticeListView extends Component {
 const mapStateToProps = state => {
   return {
     notices: state.allNotices.notices,
-    importantNotices: state.allNotices.importantNotices,
     showImp: state.allNotices.showImp,
     totalPages: state.allNotices.totalPages,
     isFetchingNotices: state.allNotices.isFetchingNotices,
