@@ -47,7 +47,7 @@ class DropdownView extends Component {
       value: value,
       searchDone: searchDone,
       dateFilterActive: dateFilterActive,
-      unreadImpCount: 0
+      unreadImpCount: -1
     }
   }
 

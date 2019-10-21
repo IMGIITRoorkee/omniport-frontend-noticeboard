@@ -7,8 +7,7 @@ import {
   Pagination,
   Icon,
   Segment,
-  Confirm,
-  Header
+  Confirm
 } from 'semantic-ui-react'
 import Notice from './notice'
 import { connect } from 'react-redux'
@@ -145,9 +144,11 @@ class NoticeListView extends Component {
     this.handleCancel()
   }
 
-  deleteNotice = (id, type='new') => {
+  deleteNotice = (id, type = 'new') => {
     this.setState({
-      deleteId: id, confirmDelete: true, deleteNoticeType: type
+      deleteId: id,
+      confirmDelete: true,
+      deleteNoticeType: type
     })
   }
 
@@ -162,7 +163,6 @@ class NoticeListView extends Component {
       dateRange,
       notices,
       history,
-      showImp,
       expired,
       position
     } = this.props
@@ -173,7 +173,6 @@ class NoticeListView extends Component {
       editId,
       confirmDelete
     } = this.state
-
 
     let bannerName, dateDisplay
     if (bannerId && filters.length > 0) {
@@ -296,7 +295,15 @@ class NoticeListView extends Component {
           <div>
             {!noNotices ? (
               <Container styleName="notice.notice-list-view notice.notice-container-width">
-                <Table basic celled singleLine compact unstackable selectable>
+                <Table
+                  basic
+                  fixed
+                  celled
+                  singleLine
+                  compact
+                  unstackable
+                  selectable
+                >
                   <Table.Body>
                     {notices &&
                       notices.map(noticeInfo => (
@@ -415,7 +422,7 @@ const mapDispatchToProps = dispatch => {
     noticeRead: (noticeIdList, toggle) => {
       dispatch(noticeRead(noticeIdList, toggle))
     },
-    deleteNotice: (id, type='new') => {
+    deleteNotice: (id, type = 'new') => {
       dispatch(deleteNotice(id, type, null))
     }
   }

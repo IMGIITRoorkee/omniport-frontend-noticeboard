@@ -8,7 +8,7 @@ import { INTIAL_PAGE } from '../constants/constants'
 import notice from '../css/notice.css'
 
 class Notice extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       check: false
@@ -29,7 +29,7 @@ class Notice extends Component {
     })
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     const { selectAllActive, id, selectedNotices } = this.props
     if (selectAllActive !== prevProps.selectAllActive) {
       this.setState({
@@ -56,7 +56,7 @@ class Notice extends Component {
     )
   }
 
-  render () {
+  render() {
     const {
       date,
       banner,
@@ -81,33 +81,29 @@ class Notice extends Component {
             : 'notice.notice-row-unread notice.notice-row'
         }
       >
-        {
-          expired ? null
-            : (<Table.Cell
-                styleName={'notice.cell-width-1 notice.cell-hover'}
-                onClick={this.selectNotice}
-              >
-                <Icon
-                  name={check ? 'square' : 'square outline'}
-                  color={check ? 'blue' : 'grey'}
-                />
-              </Table.Cell>
-            )
-        }
+        {expired ? null : (
+          <Table.Cell
+            styleName={'notice.cell-width-1 notice.cell-hover'}
+            onClick={this.selectNotice}
+          >
+            <Icon
+              name={check ? 'square' : 'square outline'}
+              color={check ? 'blue' : 'grey'}
+            />
+          </Table.Cell>
+        )}
 
-        {
-          expired ? null
-            : (<Table.Cell
-                styleName={'notice.cell-width-1 notice.cell-hover'}
-                onClick={this.bookmarkNotice}
-              >
-                <Icon
-                  name={bookmark ? 'bookmark' : 'bookmark outline'}
-                  color="yellow"
-                />
-              </Table.Cell>
-            )
-        }
+        {expired ? null : (
+          <Table.Cell
+            styleName={'notice.cell-width-1 notice.cell-hover'}
+            onClick={this.bookmarkNotice}
+          >
+            <Icon
+              name={bookmark ? 'bookmark' : 'bookmark outline'}
+              color="yellow"
+            />
+          </Table.Cell>
+        )}
 
         <Table.Cell
           collapsing
@@ -123,9 +119,9 @@ class Notice extends Component {
         >
           <span styleName="notice.tag-margin-right">
             {important ? (
-              <Icon name="tag" color="blue"/>
+              <Icon name="tag" color="blue" />
             ) : (
-              <Icon name={null}/>
+              <Icon name={null} />
             )}
           </span>
           {title}
@@ -138,57 +134,47 @@ class Notice extends Component {
         </Table.Cell>
         <Table.Cell
           onClick={this.openNotice}
-          textAlign='center'
+          textAlign="center"
           styleName="notice.cell-width-2 notice.cell-hover"
         >
-          {
-            moment(date).format(
-              (Date.now().year === moment(date).year()
-                ? 'DD/MM/YY' : 'MMM Do')
-            )
-          }
+          {moment(date).format(
+            Date.now().year === moment(date).year() ? 'DD/MM/YY' : 'MMM Do'
+          )}
         </Table.Cell>
-        {
-          (permission.length > 0)
-            ? <>
-              {
-                !expired
-                  ? <Table.Cell
-                    onClick={
-                      uploader && uploader.id === user.id
-                        ? () => editNotice(id) : null
-                    }
-                    collapsing
-                    textAlign='center'
-                    styleName="notice.cell-width-1"
-                  >
-                    {
-                      uploader && uploader.id === user.id
-                        ? <Icon name="pencil" styleName="notice.cell-hover"/>
-                        : null
-                    }
-                  </Table.Cell>
-                  : null
-              }
+        {permission.length > 0 ? (
+          <>
+            {!expired ? (
               <Table.Cell
                 onClick={
                   uploader && uploader.id === user.id
-                    ? () => deleteNotice(id, expired ? 'old' : 'new')
+                    ? () => editNotice(id)
                     : null
                 }
                 collapsing
-                textAlign='center'
+                textAlign="center"
                 styleName="notice.cell-width-1"
               >
-                {
-                  uploader && uploader.id === user.id
-                    ? <Icon name="trash" styleName="notice.cell-hover"/>
-                    : null
-                }
+                {uploader && uploader.id === user.id ? (
+                  <Icon name="pencil" styleName="notice.cell-hover" />
+                ) : null}
               </Table.Cell>
-            </>
-            : null
-        }
+            ) : null}
+            <Table.Cell
+              onClick={
+                uploader && uploader.id === user.id
+                  ? () => deleteNotice(id, expired ? 'old' : 'new')
+                  : null
+              }
+              collapsing
+              textAlign="center"
+              styleName="notice.cell-width-1"
+            >
+              {uploader && uploader.id === user.id ? (
+                <Icon name="trash" styleName="notice.cell-hover" />
+              ) : null}
+            </Table.Cell>
+          </>
+        ) : null}
       </Table.Row>
     )
   }
