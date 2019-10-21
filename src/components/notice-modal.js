@@ -38,7 +38,8 @@ class NoticeModal extends Component {
       bannerError: false,
       editorError: false,
       showImpCheck: false,
-      isSendEmail: true
+      isSendEmail: true,
+      finalImportant: false
     }
     this.modalRef = React.createRef()
   }
@@ -69,6 +70,7 @@ class NoticeModal extends Component {
       editorContent: tmpNotice.content,
       checkedState: tmpNotice.banner,
       isImportant: tmpNotice.isImportant,
+      finalImportant: tmpNotice.isImportant,
       endDate: tmpNotice.expiryDate,
       showImpCheck: tempCheck,
       isSendEmail: tmpNotice.sendEmail,
@@ -80,10 +82,17 @@ class NoticeModal extends Component {
     this.props.handleModal(value)
   }
   handleRadioChange = (e, permission) => {
+    const { finalImportant } = this.state
+    let tempImpCheck = permission.banner.isSuperUploader ? true : false
     this.setState({
       checkedState: permission.banner,
       bannerError: false,
-      showImpCheck: permission.banner.isSuperUploader ? true : false
+      showImpCheck: tempImpCheck,
+      isImportant: tempImpCheck
+        ? finalImportant
+          ? true
+          : this.state.isImportant
+        : false
     })
   }
   onChange = e => {
@@ -152,7 +161,7 @@ class NoticeModal extends Component {
     let data = {
       title: title,
       content: editorContent,
-      banner: checkedState,
+      banner: modalType === 'edit' ? checkedState.id : checkedState,
       expiryDate: endDate,
       isImportant: isImportant,
       sendEmail: isSendEmail,
