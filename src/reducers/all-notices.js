@@ -15,7 +15,8 @@ import {
   EDIT_NOTICE_SUCCESS,
   DELETE_NOTICE_FAILURE,
   DELETE_NOTICE_REQUEST,
-  DELETE_NOTICE_SUCCESS
+  DELETE_NOTICE_SUCCESS,
+  RESET_PAGE
 } from '../constants/action-types'
 
 const initialState = {
@@ -56,11 +57,12 @@ const allNotices = (state = initialState, action) => {
 
     case DELETE_NOTICE_SUCCESS:
       let newNotices = state.notices.filter(
-        notice => notice.id != action.payload.id
+        notice => notice.id !== action.payload.id
       )
+      console.log(state.notices, newNotices)
       return {
-        notices: newNotices,
-        ...state
+        ...state,
+        notices: newNotices
       }
 
     case DELETE_NOTICE_REQUEST:

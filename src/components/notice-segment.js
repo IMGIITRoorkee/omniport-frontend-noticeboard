@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 import {
   Table,
   Container,
@@ -7,47 +7,47 @@ import {
   Pagination,
   Icon,
   Segment,
-  Confirm
-} from 'semantic-ui-react'
-import Notice from './notice'
-import { connect } from 'react-redux'
-import moment from 'moment'
+  Modal
+} from "semantic-ui-react";
+import Notice from "./notice";
+import { connect } from "react-redux";
+import moment from "moment";
 import {
   getNotices,
   selectAll,
   noticeRead,
   noticeBookmark
-} from '../actions/index'
-import { deleteNotice } from '../actions/delete-notice'
-import EditModal from './notice-modal'
-import { iconName, headingName } from '../utils'
+} from "../actions/index";
+import { deleteNotice } from "../actions/delete-notice";
+import EditModal from "./notice-modal";
+import { iconName, headingName } from "../utils";
 
-import notice from '../css/notice.css'
+import notice from "../css/notice.css";
 
 class NoticeListView extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      displayselectAll: '',
-      noNotices: '',
+      displayselectAll: "",
+      noNotices: "",
       editId: -1,
       showEditModal: false,
-      confirmDelete: false,
+      open: false,
       deleteId: -1
-    }
-    this.modalRef = React.createRef()
+    };
+    this.modalRef = React.createRef();
   }
 
   componentDidUpdate(prevProps) {
-    const { notices, showImp } = this.props
+    const { notices, showImp } = this.props;
     if (prevProps.showImp !== showImp) {
-      if (showImp) this.showImportant()
+      if (showImp) this.showImportant();
     }
     if (prevProps.notices !== notices) {
       this.setState({
         noNotices: notices.length === 0,
         displayselectAll: notices.length > 0
-      })
+      });
     }
   }
 
@@ -61,7 +61,7 @@ class NoticeListView extends Component {
       searchKeyword,
       expired,
       showImp
-    } = this.props
+    } = this.props;
     getNotices(
       activePage,
       searchKeyword,
@@ -71,31 +71,31 @@ class NoticeListView extends Component {
       mainCategorySlug,
       dateRange,
       showImp
-    )
-  }
+    );
+  };
 
-  handleEditNotice = id => {
+  handleEditNotice = (id) => {
     this.setState({
       showEditModal: true,
       editId: id
-    })
-  }
+    });
+  };
 
-  handleEditModal = value => {
+  handleEditModal = (value) => {
     this.setState({
       showEditModal: value
-    })
-  }
+    });
+  };
 
-  showImportant = e => {
+  showImportant = (e) => {
     const {
       bannerId,
       dateRange,
       mainCategorySlug,
       getNotices,
       searchKeyword
-    } = this.props
-    let activePage = 1
+    } = this.props;
+    let activePage = 1;
     getNotices(
       activePage,
       searchKeyword,
@@ -105,52 +105,52 @@ class NoticeListView extends Component {
       mainCategorySlug,
       dateRange,
       true
-    )
-  }
+    );
+  };
 
-  selectAll = e => {
-    const { selectAll, selectAllActive } = this.props
-    selectAll(!selectAllActive)
-  }
+  selectAll = (e) => {
+    const { selectAll, selectAllActive } = this.props;
+    selectAll(!selectAllActive);
+  };
 
-  bookmark = e => {
-    const { noticeBookmark, selectAll, selectedNotices } = this.props
-    let toggle = true
-    noticeBookmark(selectedNotices, toggle)
-    selectAll(false)
-  }
+  bookmark = (e) => {
+    const { noticeBookmark, selectAll, selectedNotices } = this.props;
+    let toggle = true;
+    noticeBookmark(selectedNotices, toggle);
+    selectAll(false);
+  };
 
-  removeBookmark = e => {
-    const { noticeBookmark, selectAll, selectedNotices } = this.props
-    let toggle = false
-    noticeBookmark(selectedNotices, toggle)
-    selectAll(false)
-  }
+  removeBookmark = (e) => {
+    const { noticeBookmark, selectAll, selectedNotices } = this.props;
+    let toggle = false;
+    noticeBookmark(selectedNotices, toggle);
+    selectAll(false);
+  };
 
-  read = e => {
-    const { noticeRead, selectAll, selectedNotices } = this.props
-    let toggle = true
-    noticeRead(selectedNotices, toggle)
-    selectAll(false)
-  }
+  read = (e) => {
+    const { noticeRead, selectAll, selectedNotices } = this.props;
+    let toggle = true;
+    noticeRead(selectedNotices, toggle);
+    selectAll(false);
+  };
 
   handleCancel = () => {
-    this.setState({ confirmDelete: false, deleteId: -1 })
-  }
+    this.setState({ open: false, deleteId: -1 });
+  };
 
   handleConfirm = () => {
-    let { deleteId, deleteNoticeType } = this.state
-    this.props.deleteNotice(deleteId, deleteNoticeType)
-    this.handleCancel()
-  }
+    let { deleteId, deleteNoticeType } = this.state;
+    this.props.deleteNotice(deleteId, deleteNoticeType);
+    this.handleCancel();
+  };
 
-  deleteNotice = (id, type = 'new') => {
+  deleteNotice = (id, type = "new") => {
     this.setState({
       deleteId: id,
-      confirmDelete: true,
+      open: true,
       deleteNoticeType: type
-    })
-  }
+    });
+  };
 
   render() {
     const {
@@ -165,33 +165,33 @@ class NoticeListView extends Component {
       history,
       expired,
       position
-    } = this.props
+    } = this.props;
     const {
       displayselectAll,
       noNotices,
       showEditModal,
       editId,
-      confirmDelete
-    } = this.state
-
-    let bannerName, dateDisplay
+      open
+    } = this.state;
+    console.log(totalPages)
+    let bannerName, dateDisplay;
     if (bannerId && filters.length > 0) {
       for (let index = 0; index < filters.length; index++) {
         for (let j = 0; j < filters[index].banner.length; j++) {
           if (bannerId === filters[index].banner[j].id) {
-            bannerName = filters[index].banner[j].name
+            bannerName = filters[index].banner[j].name;
           }
         }
       }
     } else {
-      bannerName = null
+      bannerName = null;
     }
 
     if (dateRange) {
       dateDisplay =
-        moment(dateRange.start).format('MMM Do') +
-        ' to ' +
-        moment(dateRange.end).format('MMM Do')
+        moment(dateRange.start).format("MMM Do") +
+        " to " +
+        moment(dateRange.end).format("MMM Do");
     }
     return (
       <div styleName="notice.notice-list">
@@ -268,12 +268,12 @@ class NoticeListView extends Component {
                       </Button>
                       <Segment styleName="notice.select-all-list notice.display-filters">
                         <div styleName="notice.filter-block">
-                          {' '}
-                          {bannerName}{' '}
+                          {" "}
+                          {bannerName}{" "}
                         </div>
                         <div styleName="notice.filter-block">
-                          {' '}
-                          {dateDisplay}{' '}
+                          {" "}
+                          {dateDisplay}{" "}
                         </div>
                       </Segment>
                     </div>
@@ -306,7 +306,7 @@ class NoticeListView extends Component {
                 >
                   <Table.Body>
                     {notices &&
-                      notices.map(noticeInfo => (
+                      notices.map((noticeInfo) => (
                         <Notice
                           key={noticeInfo.id}
                           id={noticeInfo.id}
@@ -347,11 +347,22 @@ class NoticeListView extends Component {
           />
         ) : null}
 
-        <Confirm
-          open={confirmDelete}
-          onCancel={this.handleCancel}
-          onConfirm={this.handleConfirm}
-        />
+        <Modal size='tiny' open={open} onClose={this.close}>
+          <Modal.Header>Delete Your Account</Modal.Header>
+          <Modal.Content>
+            <p>Are you sure you want to delete your account</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={this.handleCancel}>No</Button>
+            <Button
+              positive
+              icon="checkmark"
+              labelPosition="right"
+              content="Yes"
+              onClick={this.handleConfirm}
+            />
+          </Modal.Actions>
+        </Modal>
 
         <Container styleName="notice.pagination-box notice.notice-container-width">
           <Pagination
@@ -359,16 +370,16 @@ class NoticeListView extends Component {
             totalPages={totalPages}
             firstItem={null}
             onPageChange={this.handlePaginationChange}
-            defaultActivePage={page}
+            defaultActivePage={1}
             lastItem={null}
           />
         </Container>
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     notices: state.allNotices.notices,
     showImp: state.allNotices.showImp,
@@ -385,10 +396,10 @@ const mapStateToProps = state => {
     selectedNotices: state.allNotices.selectedNotices,
     filters: state.filters.filters,
     position: state.current.currentPosition
-  }
-}
+  };
+};
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     getNotices: (
       page,
@@ -411,24 +422,24 @@ const mapDispatchToProps = dispatch => {
           dateRange,
           showImp
         )
-      )
+      );
     },
-    selectAll: selectAllActive => {
-      dispatch(selectAll(selectAllActive))
+    selectAll: (selectAllActive) => {
+      dispatch(selectAll(selectAllActive));
     },
     noticeBookmark: (noticeIdList, toggle) => {
-      dispatch(noticeBookmark(noticeIdList, toggle))
+      dispatch(noticeBookmark(noticeIdList, toggle));
     },
     noticeRead: (noticeIdList, toggle) => {
-      dispatch(noticeRead(noticeIdList, toggle))
+      dispatch(noticeRead(noticeIdList, toggle));
     },
-    deleteNotice: (id, type = 'new') => {
-      dispatch(deleteNotice(id, type, null))
+    deleteNotice: (id, type = "new") => {
+      dispatch(deleteNotice(id, type, null));
     }
-  }
-}
+  };
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(NoticeListView)
+)(NoticeListView);

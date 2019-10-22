@@ -1,4 +1,4 @@
-import { SET_CURRENT_POSITION } from '../constants/action-types'
+import { SET_CURRENT_POSITION, RESET_PAGE } from '../constants/action-types'
 
 function setPositionFunc(position, subPosition) {
   return {
