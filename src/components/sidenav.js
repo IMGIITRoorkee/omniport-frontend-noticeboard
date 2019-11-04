@@ -6,7 +6,6 @@ import { INTIAL_PAGE } from '../constants/constants'
 import { SHOW_IMP, HIDE_IMP } from '../constants/action-types'
 
 import sidenav from '../css/sidenav.css'
-url = urlImportantNotices(page)
 import 'rc-calendar/assets/index.css'
 
 

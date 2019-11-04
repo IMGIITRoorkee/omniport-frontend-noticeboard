@@ -33,7 +33,8 @@ class NoticeListView extends Component {
       editId: -1,
       showEditModal: false,
       open: false,
-      deleteId: -1
+      deleteId: -1,
+      activePage: 1,
     };
     this.modalRef = React.createRef();
   }
@@ -59,6 +60,9 @@ class NoticeListView extends Component {
       expired,
       showImp
     } = this.props;
+    this.setState({
+      activePage: activePage,
+    })
     getNotices(
       activePage,
       searchKeyword,
@@ -242,13 +246,11 @@ class NoticeListView extends Component {
                         <Icon name="square outline"> </Icon>
                       </Button>
                       <Segment styleName="notice.select-all-list notice.display-filters">
-                        <div styleName="notice.filter-block">
-                          {" "}
-                          {bannerName}{" "}
-                        </div>
-                        <div styleName="notice.filter-block">
-                          {" "}
-                          {dateDisplay}{" "}
+                      <div styleName="notice.filter-block">
+                          {(bannerName || dateDisplay)? "Filters:" : null}
+                          {bannerName ? ` ${bannerName}`: null}
+                          {(bannerName && dateDisplay) ? '; ' : null }
+                          {dateDisplay ? ` ${dateDisplay}`: null}
                         </div>
                       </Segment>
                     </div>
@@ -339,16 +341,21 @@ class NoticeListView extends Component {
           </Modal.Actions>
         </Modal>
 
-        <Container styleName="notice.pagination-box notice.notice-container-width">
-          <Pagination
-            styleName="notice.pagination"
-            totalPages={totalPages}
-            firstItem={null}
-            onPageChange={this.handlePaginationChange}
-            defaultActivePage={1}
-            lastItem={null}
-          />
-        </Container>
+        {
+          !noNotices
+          ? <Container styleName="notice.pagination-box notice.notice-container-width">
+              <Pagination
+                styleName="notice.pagination"
+                totalPages={totalPages}
+                firstItem={null}
+                activePage={this.state.activePage}
+                onPageChange={this.handlePaginationChange}
+                defaultActivePage={1}
+                lastItem={null}
+              />
+            </Container>
+          : null
+        }
       </div>
     );
   }

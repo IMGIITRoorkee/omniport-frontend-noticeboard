@@ -292,7 +292,6 @@ class DropdownView extends Component {
                   </Label>
                 ) : null}
               </h4>
-              <p>From director, deans and 3 more.</p>
             </div>
             <div styleName="dropdown.important-sub-right">
               <Button

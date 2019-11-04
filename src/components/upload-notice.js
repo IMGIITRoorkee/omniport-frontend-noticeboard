@@ -20,7 +20,7 @@ export default class UploadNotice extends Component {
     const { showModal } = this.state
     return (
       <React.Fragment>
-        <Button onClick={() => this.handleModal(true)} primary>
+        <Button styleName="upload.upload-btn" onClick={() => this.handleModal(true)} primary>
           Upload
         </Button>
         <div styleName="upload.modal-mount-parent" ref={this.modalRef}></div>

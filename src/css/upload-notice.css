@@ -1,3 +1,8 @@
+.upload-btn {
+  margin: 1em;
+  width: 7.5em;
+  border-radius: 0px!important;
+}
 .modal-mount-parent {
   z-index: 100000000;
 }
