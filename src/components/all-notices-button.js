@@ -9,7 +9,6 @@ import { HIDE_IMP } from '../constants/action-types'
 
 class BackLink extends Component {
   allNotices = (path, position) => {
-    console.log("CHECK PUSH")
     const {
       page,
       searchKeyword,

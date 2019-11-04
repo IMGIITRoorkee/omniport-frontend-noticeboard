@@ -31,7 +31,7 @@ function receiveNotices(
   showImp
 ) {
   let totalPages = Math.ceil(noticeDataList.count / 10)
-  if (totalPages == 0) {
+  if (totalPages === 0) {
     // The total pages can't be 0 in Pagination component
     totalPages = 1
   }
@@ -45,6 +45,7 @@ function receiveNotices(
       mainCategorySlug: mainCategorySlug,
       dateRange: dateRange,
       notices: noticeDataList.results,
+      importantUnreadCount: noticeDataList.importantUnreadCount,
       searchKeyword: searchKeyword,
       totalPages: totalPages,
       page: page,

@@ -161,7 +161,7 @@ class NoticeModal extends Component {
     let data = {
       title: title,
       content: editorContent,
-      banner: modalType === 'edit' ? checkedState.id : checkedState,
+      banner: checkedState.id,
       expiryDate: endDate,
       isImportant: isImportant,
       sendEmail: isSendEmail,
@@ -392,7 +392,7 @@ class NoticeModal extends Component {
               loading={isUploading}
               onClick={this.handleSubmit}
               primary
-              disabled={(modalType === 'edit' && isFetchingNotice) || false}
+              disabled={(modalType === 'edit' && isFetchingNotice) || isUploading}
             >
               {modalType !== 'edit' ? 'Create' : 'Edit'}
             </Button>

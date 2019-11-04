@@ -74,7 +74,7 @@ class App extends React.PureComponent {
           location.state.bannerId,
           location.state.mainCategorySlug,
           location.state.dateRange,
-          location.state.important
+          location.state.showImp,
         )
       }
     })
@@ -144,7 +144,8 @@ const mapDispatchToProps = dispatch => {
       expired,
       bannerId,
       mainCategorySlug,
-      dateRange
+      dateRange,
+      showImp
     ) => {
       dispatch(
         getNotices(
@@ -154,7 +155,8 @@ const mapDispatchToProps = dispatch => {
           expired,
           bannerId,
           mainCategorySlug,
-          dateRange
+          dateRange,
+          showImp
         )
       )
     },

@@ -23,6 +23,7 @@ const initialState = {
   page: 1,
   isFetchingNotices: true,
   totalPages: 0,
+  importantUnreadCount: 0,
   notices: [],
   showImp: false,
   searchKeyword: null,
@@ -59,7 +60,6 @@ const allNotices = (state = initialState, action) => {
       let newNotices = state.notices.filter(
         notice => notice.id !== action.payload.id
       )
-      console.log(state.notices, newNotices)
       return {
         ...state,
         notices: newNotices
@@ -88,7 +88,8 @@ const allNotices = (state = initialState, action) => {
         bannerId: action.payload.bannerId,
         mainCategorySlug: action.payload.mainCategorySlug,
         dateRange: action.payload.dateRange,
-        notices: action.payload.notices
+        notices: action.payload.notices,
+        importantUnreadCount: action.payload.importantUnreadCount
       }
 
       return newState
@@ -97,6 +98,7 @@ const allNotices = (state = initialState, action) => {
       return {
         ...state,
         isFetchingNotices: true,
+        notices: [],
         page: action.payload.page,
         searchKeyword: action.payload.searchKeyword
       }

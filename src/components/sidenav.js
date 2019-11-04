@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { Dropdown, Menu, Divider, Icon } from 'semantic-ui-react'
-import 'rc-calendar/assets/index.css'
 import { connect } from 'react-redux'
 import { setPosition } from '../actions/index'
 import { INTIAL_PAGE } from '../constants/constants'
 import { SHOW_IMP, HIDE_IMP } from '../constants/action-types'
 
 import sidenav from '../css/sidenav.css'
+url = urlImportantNotices(page)
+import 'rc-calendar/assets/index.css'
+
 
 class SideNav extends Component {
   goHome = (path, string) => {
@@ -19,7 +21,8 @@ class SideNav extends Component {
         page: INTIAL_PAGE,
         searchKeyword: '',
         narrowBookmark: false,
-        expired: false
+        expired: false,
+        showImp: string === 'important'
       }
     })
   }
@@ -30,7 +33,7 @@ class SideNav extends Component {
     hideImportant()
     history.push({
       pathname: path,
-      state: { page: INTIAL_PAGE, expired: true }
+      state: { page: INTIAL_PAGE, expired: true, showImp: false }
     })
   }
 
@@ -40,7 +43,7 @@ class SideNav extends Component {
     hideImportant()
     history.push({
       pathname: path,
-      state: { page: INTIAL_PAGE, narrowBookmark: true, important: false }
+      state: { page: INTIAL_PAGE, narrowBookmark: true, showImp: false }
     })
   }
 

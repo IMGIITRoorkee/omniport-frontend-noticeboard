@@ -47,21 +47,14 @@ class DropdownView extends Component {
       value: value,
       searchDone: searchDone,
       dateFilterActive: dateFilterActive,
-      unreadImpCount: -1
     }
   }
 
   componentDidUpdate (prevProps) {
     const { notices } = this.props
     if (prevProps.notices !== notices) {
-      let count = 0
-      for (let i = 0; i < notices.length; i++) {
-        if (notices[i].isImportant && !notices[i].read) {
-          count = count + 1
-        }
-      }
       this.setState({
-        unreadImpCount: count
+        importantUnreadCount: this.props.importantUnreadCount
       })
     }
   }
@@ -274,7 +267,7 @@ class DropdownView extends Component {
       datesRange,
       searchDone,
       value,
-      unreadImpCount,
+      importantUnreadCount,
       expired
     } = this.state
     const { showImportant, hideImportant, showImp, permission } = this.props
@@ -288,14 +281,14 @@ class DropdownView extends Component {
               styleName="dropdown.important-sub-left dropdown.flex dropdown.flex-column">
               <h4>
                 Important notices
-                {unreadImpCount > 0 ? (
+                {importantUnreadCount > 0 ? (
                   <Label
                     styleName="dropdown.unread-label"
                     size="small"
                     color="red"
                     horizontal
                   >
-                    {unreadImpCount} unread
+                    {importantUnreadCount} unread
                   </Label>
                 ) : null}
               </h4>
@@ -412,6 +405,7 @@ const mapStateToProps = state => {
     bannerId: state.allNotices.bannerId,
     showImp: state.allNotices.showImp,
     permission: state.permission.permission,
+    importantUnreadCount: state.allNotices.importantUnreadCount
   }
 }
 

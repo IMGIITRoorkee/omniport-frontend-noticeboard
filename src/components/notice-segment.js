@@ -39,10 +39,7 @@ class NoticeListView extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { notices, showImp } = this.props;
-    if (prevProps.showImp !== showImp) {
-      if (showImp) this.showImportant();
-    }
+    const { notices } = this.props;
     if (prevProps.notices !== notices) {
       this.setState({
         noNotices: notices.length === 0,
@@ -85,27 +82,6 @@ class NoticeListView extends Component {
     this.setState({
       showEditModal: value
     });
-  };
-
-  showImportant = (e) => {
-    const {
-      bannerId,
-      dateRange,
-      mainCategorySlug,
-      getNotices,
-      searchKeyword
-    } = this.props;
-    let activePage = 1;
-    getNotices(
-      activePage,
-      searchKeyword,
-      false,
-      false,
-      bannerId,
-      mainCategorySlug,
-      dateRange,
-      true
-    );
   };
 
   selectAll = (e) => {
@@ -173,7 +149,6 @@ class NoticeListView extends Component {
       editId,
       open
     } = this.state;
-    console.log(totalPages)
     let bannerName, dateDisplay;
     if (bannerId && filters.length > 0) {
       for (let index = 0; index < filters.length; index++) {
