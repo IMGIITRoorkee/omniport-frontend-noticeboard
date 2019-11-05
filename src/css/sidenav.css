@@ -6,6 +6,21 @@
 
 .sidenav-items {
   color: rgba(255, 255, 255, 0.7) !important;
+  flex-grow: 1 !important;
+}
+
+.dropdown-sidenav-space-between {
+  display: flex !important;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.7) !important;
+  flex-grow: 1 !important;
+}
+
+.dropdown-sidenav-space-between-active {
+  display: flex !important;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.2) !important;
+  flex-grow: 1 !important;
 }
 
 .sidenav-divider {
@@ -19,9 +34,16 @@
 }
 
 .sidenav-active-item {
-  background: rgba(255, 255, 255, .2) !important;
+  background: rgba(255, 255, 255, 0.2) !important;
 }
 
 .menu-item-color {
   color: red !important;
+}
+.dropdown-item-span {
+  display: flex;
+}
+.dropdown-item-span img {
+  width: 1.18em;
+  margin: 0 0.7em 0 0.5em;
 }

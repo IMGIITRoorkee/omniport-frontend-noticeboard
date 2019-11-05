@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dropdown, Menu, Divider, Icon } from 'semantic-ui-react'
+import { Dropdown, Menu, Divider, Icon, Image } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { setPosition } from '../actions/index'
 import { INTIAL_PAGE } from '../constants/constants'
@@ -7,7 +7,6 @@ import { SHOW_IMP, HIDE_IMP } from '../constants/action-types'
 
 import sidenav from '../css/sidenav.css'
 import 'rc-calendar/assets/index.css'
-
 
 class SideNav extends Component {
   goHome = (path, string) => {
@@ -129,11 +128,18 @@ class SideNav extends Component {
         <Dropdown
           styleName={
             position === item.name
-              ? 'sidenav.sidenav-active-item'
-              : 'sidenav.sidenav-items'
+              ? 'sidenav.dropdown-sidenav-space-between-active'
+              : 'sidenav.dropdown-sidenav-space-between'
           }
           item
-          text={item.name}
+          trigger={
+            <span styleName="sidenav.dropdown-item-span">
+              {item.meta && item.meta.icon && item.meta.icon.staticPath ? (
+                <Image src={`/static${item.meta.icon.staticPath}`} />
+              ) : null}
+              {item.name}
+            </span>
+          }
           key={index}
           scrolling={true}
         >
