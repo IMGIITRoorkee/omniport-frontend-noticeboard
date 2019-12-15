@@ -39,7 +39,8 @@ class NoticeModal extends Component {
       editorError: false,
       showImpCheck: false,
       isSendEmail: true,
-      finalImportant: false
+      finalImportant: false,
+      isSendEmailRole: 'all'
     }
     this.modalRef = React.createRef()
   }
@@ -49,6 +50,12 @@ class NoticeModal extends Component {
     if (modalType === 'edit') {
       getNotice(id, this.successNoticeCallback)
     }
+  }
+
+  handleEmailRoleChange = str => {
+    this.setState({
+      isSendEmailRole: str
+    })
   }
 
   successNoticeCallback = () => {
@@ -217,7 +224,8 @@ class NoticeModal extends Component {
       showImpCheck,
       editorContent,
       isSendEmail,
-      isPublic
+      isPublic,
+      isSendEmailRole
     } = this.state
     const {
       isUploading,
@@ -237,7 +245,7 @@ class NoticeModal extends Component {
         <Modal
           open={modal}
           onClose={() => this.handleModal(false)}
-          size="large"
+          size='large'
           closeIcon
         >
           <Modal.Header>
@@ -246,18 +254,18 @@ class NoticeModal extends Component {
           {(modalType === 'edit' && !isFetchingNotice) ||
           modalType === 'create' ? (
             <Modal.Content scrolling>
-              <div styleName="upload.display-flex">
-                <div styleName="upload.input-width">
+              <div styleName='upload.display-flex'>
+                <div styleName='upload.input-width'>
                   <label>
-                    Title<span styleName="upload.field-required">*</span>
+                    Title<span styleName='upload.field-required'>*</span>
                   </label>
                   <Input
                     fluid
-                    placeholder="Title of notice"
+                    placeholder='Title of notice'
                     value={title}
-                    name="title"
+                    name='title'
                     onChange={this.onChange}
-                    styleName="upload.margin-above"
+                    styleName='upload.margin-above'
                   />
                   {titleError ? (
                     <Message
@@ -266,21 +274,21 @@ class NoticeModal extends Component {
                     />
                   ) : null}
                 </div>
-                <div styleName="upload.input-width">
+                <div styleName='upload.input-width'>
                   <label>
-                    Expires On<span styleName="upload.field-required">*</span>
+                    Expires On<span styleName='upload.field-required'>*</span>
                   </label>
                   <Responsive {...Responsive.onlyMobile}>
                     <DateInput
                       closable
-                      name="endDate"
+                      name='endDate'
                       minDate={dateCurrent}
-                      placeholder="Expires on"
+                      placeholder='Expires on'
                       value={endDate}
-                      iconPosition="left"
+                      iconPosition='left'
                       inline
                       required
-                      dateFormat="YYYY-MM-DD"
+                      dateFormat='YYYY-MM-DD'
                       onChange={this.handleDateChange}
                     />
                   </Responsive>
@@ -288,16 +296,16 @@ class NoticeModal extends Component {
                     <DateInput
                       closable
                       fluid
-                      popupPosition="bottom center"
-                      name="endDate"
+                      popupPosition='bottom center'
+                      name='endDate'
                       minDate={new Date()}
-                      placeholder="Expires on"
+                      placeholder='Expires on'
                       value={endDate}
-                      iconPosition="left"
+                      iconPosition='left'
                       required
-                      dateFormat="YYYY-MM-DD"
+                      dateFormat='YYYY-MM-DD'
                       onChange={this.handleDateChange}
-                      styleName="upload.margin-above"
+                      styleName='upload.margin-above'
                     />
                   </Responsive>
                   {endDateError ? (
@@ -308,29 +316,29 @@ class NoticeModal extends Component {
                   ) : null}
                 </div>
               </div>
-              <div styleName="upload.category-div-margin">
+              <div styleName='upload.category-div-margin'>
                 {bannerError ? (
                   <Message
                     error
                     content={`Choose a category`}
-                    styleName="upload.banner-error"
+                    styleName='upload.banner-error'
                   />
                 ) : null}
                 {permission &&
                   permission.map((permission, index) => (
-                    <div key={index} styleName="upload.sub-categories-parent">
-                      <Header content={permission.groupName} as="h3" />
-                      <div styleName="upload.sub-categories-radio-parent">
+                    <div key={index} styleName='upload.sub-categories-parent'>
+                      <Header content={permission.groupName} as='h3' />
+                      <div styleName='upload.sub-categories-radio-parent'>
                         {permission.child.length > 0 &&
                           permission.child.map((child, index) => (
                             <Radio
                               key={index}
-                              styleName="upload.radio-buttons-margin"
-                              name="permission-radio"
+                              styleName='upload.radio-buttons-margin'
+                              name='permission-radio'
                               label={child.banner.name}
                               onChange={e => this.handleRadioChange(e, child)}
                               checked={checkedState.name === child.banner.name}
-                            ></Radio>
+                            />
                           ))}
                       </div>
                     </div>
@@ -344,38 +352,66 @@ class NoticeModal extends Component {
                 mountedNode={modalRef}
                 content={editorContent}
               />
-              <div styleName="upload.checkbox-parent">
+              <div styleName='upload.checkbox-parent'>
                 {showImpCheck ? (
                   <Checkbox
-                    styleName="upload.notice-upload-checkbox"
+                    styleName='upload.notice-upload-checkbox'
                     checked={isImportant}
                     onChange={this.handleCheckChange}
-                    name="isImportant"
-                    label="Make the notice as IMPORTANT"
+                    name='isImportant'
+                    label='Make the notice as IMPORTANT'
                   />
                 ) : null}
                 <Checkbox
-                  styleName="upload.notice-send-email-checkbox"
+                  styleName='upload.notice-send-email-checkbox'
                   checked={isSendEmail}
                   onChange={this.handleCheckChange}
-                  name="isSendEmail"
-                  label="Send Email"
+                  name='isSendEmail'
+                  label='Send Email'
+                  toggle
                 />
+                {isSendEmail ? (
+                  <div styleName='upload.email-role-radio'>
+                    <Radio
+                      styleName='upload.radio-buttons-margin'
+                      checked={isSendEmailRole === 'all'}
+                      onChange={() => this.handleEmailRoleChange('all')}
+                      name='email-role'
+                      label='All'
+                    />
+                    <Radio
+                      styleName='upload.radio-buttons-margin'
+                      checked={isSendEmailRole === 'student'}
+                      onChange={() => this.handleEmailRoleChange('student')}
+                      name='email-role'
+                      label='Students'
+                    />
+                    <Radio
+                      styleName='upload.radio-buttons-margin'
+                      checked={isSendEmailRole === 'faculty'}
+                      onChange={() => this.handleEmailRoleChange('faculty')}
+                      name='email-role'
+                      label='Faculty'
+                    />
+                  </div>
+                ) : (
+                  <></>
+                )}
                 <div>
                   <Checkbox
-                    styleName="upload.notice-send-email-checkbox"
+                    styleName='upload.notice-send-email-checkbox'
                     checked={isPublic}
                     onChange={this.handleCheckChange}
-                    name="isPublic"
-                    label="Public"
+                    name='isPublic'
+                    label='Public'
                   />
                   <Popup
-                    content="Lorem Ipsum"
+                    content='Lorem Ipsum'
                     inverted
                     trigger={
                       <Icon
-                        styleName="upload.notice-public-check-icon"
-                        name="help circle"
+                        styleName='upload.notice-public-check-icon'
+                        name='help circle'
                       />
                     }
                   />
@@ -384,7 +420,7 @@ class NoticeModal extends Component {
             </Modal.Content>
           ) : (
             <Dimmer active inverted>
-              <Loader size="medium">Loading</Loader>
+              <Loader size='medium'>Loading</Loader>
             </Dimmer>
           )}
           <Modal.Actions>
@@ -392,7 +428,9 @@ class NoticeModal extends Component {
               loading={isUploading}
               onClick={this.handleSubmit}
               primary
-              disabled={(modalType === 'edit' && isFetchingNotice) || isUploading}
+              disabled={
+                (modalType === 'edit' && isFetchingNotice) || isUploading
+              }
             >
               {modalType !== 'edit' ? 'Create' : 'Edit'}
             </Button>
@@ -456,7 +494,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NoticeModal)
+export default connect(mapStateToProps, mapDispatchToProps)(NoticeModal)

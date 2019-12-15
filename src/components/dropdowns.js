@@ -15,13 +15,13 @@ import { DatesRangeInput } from 'semantic-ui-calendar-react'
 import { dateFormatMatch } from '../utils'
 import UploadNotice from './upload-notice'
 import Backlink from './all-notices-button'
-
-import dropdown from '../css/notice.css'
 import { SHOW_IMP, HIDE_IMP } from '../constants/action-types'
 import { setPosition } from '../actions'
 
+import dropdown from '../css/notice.css'
+
 class DropdownView extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     let searchDone, value, dateFilterActive, dateRangeTemp
@@ -46,11 +46,11 @@ class DropdownView extends Component {
       datesRange: dateRangeTemp,
       value: value,
       searchDone: searchDone,
-      dateFilterActive: dateFilterActive,
+      dateFilterActive: dateFilterActive
     }
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     const { notices } = this.props
     if (prevProps.notices !== notices) {
       this.setState({
@@ -185,8 +185,8 @@ class DropdownView extends Component {
     if (items.length > 0) {
       return items.map((item, index) => (
         <Dropdown.Item key={index}>
-          <Dropdown text={item.name} pointing="left">
-            <Dropdown.Menu styleName="dropdown.dropdown-left">
+          <Dropdown text={item.name} pointing='left'>
+            <Dropdown.Menu styleName='dropdown.dropdown-left'>
               {this.renderInnerDropdownItems(item.banner)}
             </Dropdown.Menu>
           </Dropdown>
@@ -261,7 +261,7 @@ class DropdownView extends Component {
     showImportant()
   }
 
-  render () {
+  render() {
     const {
       dateFilterActive,
       datesRange,
@@ -270,22 +270,20 @@ class DropdownView extends Component {
       importantUnreadCount,
       expired
     } = this.state
-    const { showImportant, hideImportant, showImp, permission } = this.props
+    const { showImp, permission } = this.props
 
     return (
       <div>
         {!showImp && !expired ? (
-          <div
-            styleName="dropdown.important-main-box dropdown.flex dropdown.flex-row">
-            <div
-              styleName="dropdown.important-sub-left dropdown.flex dropdown.flex-column">
+          <div styleName='dropdown.important-main-box dropdown.flex dropdown.flex-row'>
+            <div styleName='dropdown.important-sub-left dropdown.flex dropdown.flex-column'>
               <h4>
                 Important notices
                 {importantUnreadCount > 0 ? (
                   <Label
-                    styleName="dropdown.unread-label"
-                    size="small"
-                    color="red"
+                    styleName='dropdown.unread-label'
+                    size='small'
+                    color='red'
                     horizontal
                   >
                     {importantUnreadCount} unread
@@ -293,67 +291,67 @@ class DropdownView extends Component {
                 ) : null}
               </h4>
             </div>
-            <div styleName="dropdown.important-sub-right">
+            <div styleName='dropdown.important-sub-right'>
               <Button
                 basic
-                color="blue"
-                content="Show All"
-                styleName="dropdown.important-button"
+                color='blue'
+                content='Show All'
+                styleName='dropdown.important-button'
                 onClick={this.handleImportant}
               />
             </div>
           </div>
-        ) : <Backlink important={false} />
-        }
+        ) : (
+          <Backlink important={false} />
+        )}
         {!showImp ? (
-          <Menu.Menu position="left" styleName="dropdown.flex-wrap">
-            <Menu.Item styleName="dropdown.date-bar">
+          <Menu.Menu position='left' styleName='dropdown.flex-wrap'>
+            <Menu.Item styleName='dropdown.date-bar'>
               {!dateFilterActive ? (
-                <Form onSubmit={this.handleDateFilterSubmit} autoComplete="off">
+                <Form onSubmit={this.handleDateFilterSubmit} autoComplete='off'>
                   <DatesRangeInput
-                    styleName="dropdown.input-bar"
-                    name="datesRange"
-                    placeholder="Date: From - To"
+                    styleName='dropdown.input-bar'
+                    name='datesRange'
+                    placeholder='Date: From - To'
                     closable={true}
                     closeOnMouseLeave={true}
                     value={datesRange}
-                    dateFormat="YYYY-MM-DD"
+                    dateFormat='YYYY-MM-DD'
                     onChange={this.handleDateFilterChange}
                   />
                 </Form>
               ) : (
-                <Form onSubmit={this.handleDateFilterSubmit} autoComplete="off">
+                <Form onSubmit={this.handleDateFilterSubmit} autoComplete='off'>
                   <DatesRangeInput
-                    styleName="dropdown.input-bar"
-                    name="datesRange"
-                    placeholder="Date: From - To"
+                    styleName='dropdown.input-bar'
+                    name='datesRange'
+                    placeholder='Date: From - To'
                     closable={true}
                     icon={
                       <Icon
-                        name="delete"
+                        name='delete'
                         link
                         onClick={this.handleDateDelete}
                       />
                     }
                     closeOnMouseLeave={true}
                     value={datesRange}
-                    dateFormat="YYYY-MM-DD"
+                    dateFormat='YYYY-MM-DD'
                     onChange={this.handleDateFilterChange}
                   />
                 </Form>
               )}
             </Menu.Item>
-
             <Menu.Item>
               {!searchDone ? (
                 <Form onSubmit={this.handleSearchSubmit}>
                   <Input
-                    styleName="dropdown.input-bar dropdown.search-bar"
+                    styleName='dropdown.input-bar dropdown.search-bar'
                     onChange={this.handleSearchChange}
-                    type="text"
+                    type='text'
                     icon={
                       <Icon
-                        name="search"
+                        name='search'
                         link
                         onClick={this.handleSearchSubmit}
                       />
@@ -364,12 +362,12 @@ class DropdownView extends Component {
               ) : (
                 <Form onSubmit={this.handleSearchSubmit}>
                   <Input
-                    styleName="dropdown.input-bar dropdown.search-bar"
-                    type="text"
+                    styleName='dropdown.input-bar dropdown.search-bar'
+                    type='text'
                     onChange={this.handleSearchChange}
                     icon={
                       <Icon
-                        name="delete"
+                        name='delete'
                         link
                         onClick={this.handleSearchDelete}
                       />
@@ -381,10 +379,10 @@ class DropdownView extends Component {
             </Menu.Item>
             {permission.length > 0 ? (
               <Menu.Item
-                position="right"
-                styleName="dropdown.upload-item-padding"
+                position='right'
+                styleName='dropdown.upload-item-padding'
               >
-                <UploadNotice/>
+                <UploadNotice />
               </Menu.Item>
             ) : null}
           </Menu.Menu>
@@ -428,7 +426,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DropdownView)
+export default connect(mapStateToProps, mapDispatchToProps)(DropdownView)
