@@ -237,28 +237,28 @@ class NoticeListView extends Component {
                       </Segment>
                     </div>
                   ) : (
-                    <div styleName="notice.table-row">
-                      <Button
-                        icon
-                        styleName="notice.select-all-button-not-activated  notice.select-all-button"
-                        onClick={this.selectAll}
-                      >
-                        <Icon name="square outline"> </Icon>
-                      </Button>
-                      <Segment styleName="notice.select-all-list notice.display-filters">
-                      <div styleName="notice.filter-block">
-                          {(bannerName || dateDisplay)? "Filters:" : null}
-                          {bannerName ? ` ${bannerName}`: null}
-                          {(bannerName && dateDisplay) ? '; ' : null }
-                          {dateDisplay ? ` ${dateDisplay}`: null}
-                        </div>
-                      </Segment>
-                    </div>
-                  )}
+                      <div styleName="notice.table-row">
+                        <Button
+                          icon
+                          styleName="notice.select-all-button-not-activated  notice.select-all-button"
+                          onClick={this.selectAll}
+                        >
+                          <Icon name="square outline"> </Icon>
+                        </Button>
+                        <Segment styleName="notice.select-all-list notice.display-filters">
+                          <div styleName="notice.filter-block">
+                            {(bannerName || dateDisplay) ? "Filters:" : null}
+                            {bannerName ? ` ${bannerName}` : null}
+                            {(bannerName && dateDisplay) ? '; ' : null}
+                            {dateDisplay ? ` ${dateDisplay}` : null}
+                          </div>
+                        </Segment>
+                      </div>
+                    )}
                 </div>
               ) : (
-                <div></div>
-              )}
+                  <div></div>
+                )}
             </Container>
           </React.Fragment>
         ) : null}
@@ -269,48 +269,48 @@ class NoticeListView extends Component {
             <Loader active styleName="notice.loader-element" />
           </Container>
         ) : (
-          <div>
-            {!noNotices ? (
-              <Container styleName="notice.notice-list-view notice.notice-container-width">
-                <Table
-                  basic
-                  fixed
-                  celled
-                  singleLine
-                  compact
-                  unstackable
-                  selectable
-                >
-                  <Table.Body>
-                    {notices &&
-                      notices.map((noticeInfo) => (
-                        <Notice
-                          key={noticeInfo.id}
-                          id={noticeInfo.id}
-                          date={noticeInfo.datetimeModified}
-                          banner={noticeInfo.banner}
-                          title={noticeInfo.title}
-                          read={noticeInfo.read}
-                          important={noticeInfo.isImportant}
-                          bookmark={noticeInfo.starred}
-                          history={history}
-                          uploader={noticeInfo.uploader}
-                          editNotice={this.handleEditNotice}
-                          deleteNotice={this.deleteNotice}
-                        />
-                      ))}
-                  </Table.Body>
-                </Table>
-              </Container>
-            ) : (
-              <Container styleName="notice.notice-list-view notice.notice-container-width">
-                <div styleName="notice.notice-list-no-notice">
-                  <h1 styleName="no-results-found"> No results found </h1>
-                </div>
-              </Container>
-            )}
-          </div>
-        )}
+            <div>
+              {!noNotices ? (
+                <Container styleName="notice.notice-list-view notice.notice-container-width">
+                  <Table
+                    basic
+                    fixed
+                    celled
+                    singleLine
+                    compact
+                    unstackable
+                    selectable
+                  >
+                    <Table.Body>
+                      {notices &&
+                        notices.map((noticeInfo) => (
+                          <Notice
+                            key={noticeInfo.id}
+                            id={noticeInfo.id}
+                            date={noticeInfo.datetimeModified}
+                            banner={noticeInfo.banner}
+                            title={noticeInfo.title}
+                            read={noticeInfo.read}
+                            important={noticeInfo.isImportant}
+                            bookmark={noticeInfo.starred}
+                            history={history}
+                            uploader={noticeInfo.uploader}
+                            editNotice={this.handleEditNotice}
+                            deleteNotice={this.deleteNotice}
+                          />
+                        ))}
+                    </Table.Body>
+                  </Table>
+                </Container>
+              ) : (
+                  <Container styleName="notice.notice-list-view notice.notice-container-width">
+                    <div styleName="notice.notice-list-no-notice">
+                      <h1 styleName="no-results-found"> No results found </h1>
+                    </div>
+                  </Container>
+                )}
+            </div>
+          )}
 
         <div styleName="notice.modal-mount-parent" ref={this.modalRef}></div>
 
@@ -325,16 +325,22 @@ class NoticeListView extends Component {
         ) : null}
 
         <Modal size='tiny' open={open} onClose={this.close}>
-          <Modal.Header>Delete Your Account</Modal.Header>
+          <Modal.Header>Delete this Notice</Modal.Header>
           <Modal.Content>
-            <p>Are you sure you want to delete your account</p>
+            <p>Are you sure you want to delete this notice?</p>
           </Modal.Content>
           <Modal.Actions>
-            <Button negative onClick={this.handleCancel}>No</Button>
             <Button
+              basic
+              icon='left arrow'
+              content='Keep'
               positive
-              icon="checkmark"
-              labelPosition="right"
+              onClick={this.handleCancel} />
+            <Button
+              basic
+              icon='trash alternate'
+              content="Delete, I'm sure"
+              negative
               content="Yes"
               onClick={this.handleConfirm}
             />
@@ -343,7 +349,7 @@ class NoticeListView extends Component {
 
         {
           !noNotices
-          ? <Container styleName="notice.pagination-box notice.notice-container-width">
+            ? <Container styleName="notice.pagination-box notice.notice-container-width">
               <Pagination
                 styleName="notice.pagination"
                 totalPages={totalPages}
@@ -354,7 +360,7 @@ class NoticeListView extends Component {
                 lastItem={null}
               />
             </Container>
-          : null
+            : null
         }
       </div>
     );
