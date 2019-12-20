@@ -141,13 +141,6 @@ class DropdownView extends Component {
     })
   }
 
-  goHome = path => {
-    this.props.history.push({
-      pathname: path,
-      state: { page: INTIAL_PAGE, narrowBookmark: false, expired: false }
-    })
-  }
-
   expiredNotices = path => {
     this.props.history.push({
       pathname: path,
