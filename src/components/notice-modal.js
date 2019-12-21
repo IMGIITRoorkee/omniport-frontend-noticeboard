@@ -33,6 +33,7 @@ class NoticeModal extends Component {
       checkedState: '',
       endDate: '',
       isImportant: false,
+      isPublic: true,
       titleError: false,
       endDateError: false,
       bannerError: false,
@@ -120,9 +121,9 @@ class NoticeModal extends Component {
       this.setState({ [name]: value, [name + 'Error']: false })
     }
   }
-  handleCheckChange = (event, { name, value }) => {
+  handleCheckChange = (event, { name, checked }) => {
     this.setState({
-      [name]: !this.state[name]
+      [name]: checked
     })
   }
   handleSubmit = e => {
