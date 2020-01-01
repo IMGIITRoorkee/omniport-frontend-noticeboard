@@ -228,6 +228,7 @@
 .cell-width-1 {
   width: 0.16% !important;
   color: #999999;
+  overflow: visible !important;
 }
 
 @media only screen and (max-width: 1000px) {

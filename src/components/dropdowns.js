@@ -141,13 +141,6 @@ class DropdownView extends Component {
     })
   }
 
-  goHome = path => {
-    this.props.history.push({
-      pathname: path,
-      state: { page: INTIAL_PAGE, narrowBookmark: false, expired: false }
-    })
-  }
-
   expiredNotices = path => {
     this.props.history.push({
       pathname: path,
@@ -256,9 +249,19 @@ class DropdownView extends Component {
     })
   }
   handleImportant = () => {
-    const { setPosition, showImportant } = this.props
+    const { history, setPosition, showImportant } = this.props
     setPosition('important')
     showImportant()
+    history.push({
+      pathname: '/noticeboard/',
+      state: {
+        page: INTIAL_PAGE,
+        searchKeyword: '',
+        narrowBookmark: false,
+        expired: false,
+        showImp: true,
+      }
+    })
   }
 
   render() {
