@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+import { toast } from 'react-semantic-toasts'
 import { GET_USER } from '../constants/action-types'
 import { whoAmI } from '../urls'
 
@@ -14,7 +15,24 @@ export const getUser = () => {
         })
       })
       .catch(err => {
-        console.log(err)
+        if (err.response) {
+          err.response.data
+            ? toast({
+                type: 'error',
+                title: 'Failed to fetch user!',
+                description: err.response.data.msg
+              })
+            : toast({
+                type: 'error',
+                title: 'Failed to fetch user!',
+                description: err.response.statusText
+              })
+        } else {
+          toast({
+            type: 'error',
+            title: 'Failed to fetch user!'
+          })
+        }
       })
   }
 }

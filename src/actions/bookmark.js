@@ -1,6 +1,7 @@
 import { BOOKMARK_NOTICE } from '../constants/action-types'
 import { getCookie } from 'formula_one'
 import { urlStarRead } from '../urls'
+import { toast } from 'react-semantic-toasts'
 
 function bookmarkNotice(noticeIdList, toggle) {
   return {
@@ -34,6 +35,34 @@ export const noticeBookmark = (noticeIdList, toggle) => {
       method: 'post',
       headers: headers,
       body: body
-    }).then(response => dispatch(bookmarkNotice(noticeIdList, toggle)))
+    })
+      .then(response => dispatch(bookmarkNotice(noticeIdList, toggle)))
+      .catch(err => {
+        if (err.response) {
+          err.response.data
+            ? toast({
+                type: 'error',
+                title:
+                  keyword === 'star'
+                    ? 'Unable to bookmark!'
+                    : 'Delete bookmark failed!'
+              })
+            : toast({
+                type: 'error',
+                title:
+                  keyword === 'star'
+                    ? 'Unable to bookmark!'
+                    : 'Delete bookmark failed!'
+              })
+        } else {
+          toast({
+            type: 'error',
+            title:
+              keyword === 'star'
+                ? 'Unable to bookmark!'
+                : 'Delete bookmark failed!'
+          })
+        }
+      })
   }
 }

@@ -2,10 +2,10 @@ import axios from 'axios'
 import { getCookie } from 'formula_one'
 import { urlNoticeId } from '../urls'
 import {
-  EDIT_NOTICE_FAILURE,
   EDIT_NOTICE_REQUEST,
   EDIT_NOTICE_SUCCESS
 } from '../constants/action-types'
+import { toast } from 'react-semantic-toasts'
 
 export const editNotice = (id, data, callback) => {
   let headers = {
@@ -26,18 +26,21 @@ export const editNotice = (id, data, callback) => {
       .catch(err => {
         if (err.response) {
           err.response.data
-            ? dispatch({
-                type: EDIT_NOTICE_FAILURE,
-                payload: {
-                  error: err.response.data.msg
-                }
+            ? toast({
+                type: 'error',
+                title: 'Failed to edit notice!',
+                description: err.response.data.msg
               })
-            : dispatch({
-                type: EDIT_NOTICE_FAILURE,
-                payload: {
-                  error: err.response.statusText
-                }
+            : toast({
+                type: 'error',
+                title: 'Failed to edit notice!',
+                description: err.response.statusText
               })
+        } else {
+          toast({
+            type: 'error',
+            title: 'Failed to edit notice!'
+          })
         }
       })
   }

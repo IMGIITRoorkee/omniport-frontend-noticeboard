@@ -1,6 +1,7 @@
 import { GET_NOTICE, REQUEST_NOTICE } from '../constants/action-types'
 import { urlNotice, urlStarRead } from '../urls'
 import { getCookie } from 'formula_one'
+import { toast } from 'react-semantic-toasts'
 
 function requestNotice(noticeId) {
   return {
@@ -52,6 +53,26 @@ export const getNotice = (noticeId, callback, expired = false) => {
           callback()
         } else {
           dispatch(receiveNotice(null, false))
+        }
+      })
+      .catch(err => {
+        if (err.response) {
+          err.response.data
+            ? toast({
+                type: 'error',
+                title: 'Failed to fetch notice!',
+                description: err.response.data.msg
+              })
+            : toast({
+                type: 'error',
+                title: 'Failed to fetch notice!',
+                description: err.response.statusText
+              })
+        } else {
+          toast({
+            type: 'error',
+            title: 'Failed to fetch notice!'
+          })
         }
       })
   }

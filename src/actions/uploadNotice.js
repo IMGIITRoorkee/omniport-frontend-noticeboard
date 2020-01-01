@@ -6,6 +6,7 @@ import {
   UPLOAD_NOTICE_REQUEST,
   UPLOAD_NOTICE_SUCCESS
 } from '../constants/action-types'
+import { toast } from 'react-semantic-toasts'
 
 export const uploadNotice = (data, callback) => {
   let headers = {
@@ -24,12 +25,24 @@ export const uploadNotice = (data, callback) => {
         callback()
       })
       .catch(err => {
-        dispatch({
-          type: UPLOAD_NOTICE_FAILURE,
-          payload: {
-            error: err
-          }
-        })
+        if (err.response) {
+          err.response.data
+            ? toast({
+                type: 'error',
+                title: 'Failed to upload the notice!',
+                description: err.response.data.msg
+              })
+            : toast({
+                type: 'error',
+                title: 'Failed to upload the notice!',
+                description: err.response.statusText
+              })
+        } else {
+          toast({
+            type: 'error',
+            title: 'Failed to upload the notice!'
+          })
+        }
       })
   }
 }

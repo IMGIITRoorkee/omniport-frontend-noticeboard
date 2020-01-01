@@ -7,6 +7,7 @@ import {
   urlNotices,
   urlDateFilter
 } from '../urls'
+import { toast } from 'react-semantic-toasts'
 // import { urlWhoAmI, urlGetMaintainers, getCookie } from 'formula_one'
 
 function requestNotices(page, searchKeyword) {
@@ -105,5 +106,25 @@ export const getNotices = (
           )
         )
       )
+      .catch(err => {
+        if (err.response) {
+          err.response.data
+            ? toast({
+                type: 'error',
+                title: 'Failed to fetch notices!',
+                description: err.response.data.msg
+              })
+            : toast({
+                type: 'error',
+                title: 'Failed to fetch notices!',
+                description: err.response.statusText
+              })
+        } else {
+          toast({
+            type: 'error',
+            title: 'Failed to fetch notices!'
+          })
+        }
+      })
   }
 }

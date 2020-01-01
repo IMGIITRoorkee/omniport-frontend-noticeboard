@@ -1,25 +1,25 @@
-import { getCookie } from "formula_one" 
-import { urlNoticeId } from "../urls"
+import { getCookie } from 'formula_one'
+import { urlNoticeId } from '../urls'
 
 import {
-  DELETE_NOTICE_FAILURE,
   DELETE_NOTICE_REQUEST,
   DELETE_NOTICE_SUCCESS
-} from "../constants/action-types"
+} from '../constants/action-types'
+import { toast } from 'react-semantic-toasts'
 
 export const deleteNotice = (id, type, callback) => {
   let headers = {
-    "X-CSRFToken": getCookie("csrftoken")
+    'X-CSRFToken': getCookie('csrftoken')
   }
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: DELETE_NOTICE_REQUEST
     })
     fetch(urlNoticeId(id, type), {
-      method: "DELETE",
+      method: 'DELETE',
       headers: headers
     })
-      .then((res) => {
+      .then(res => {
         dispatch({
           type: DELETE_NOTICE_SUCCESS,
           payload: {
@@ -28,21 +28,24 @@ export const deleteNotice = (id, type, callback) => {
         })
         callback()
       })
-      .catch((err) => {
+      .catch(err => {
         if (err.response) {
           err.response.data
-            ? dispatch({
-                type: DELETE_NOTICE_FAILURE,
-                payload: {
-                  error: err.response.data.msg
-                }
+            ? toast({
+                type: 'error',
+                title: 'Failed to delete notice!',
+                description: err.response.data.msg
               })
-            : dispatch({
-                type: DELETE_NOTICE_FAILURE,
-                payload: {
-                  error: err.response.statusText
-                }
+            : toast({
+                type: 'error',
+                title: 'Failed to delete notice!',
+                description: err.response.statusText
               })
+        } else {
+          toast({
+            type: 'error',
+            title: 'Failed to delete notice!'
+          })
         }
       })
   }
