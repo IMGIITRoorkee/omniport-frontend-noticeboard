@@ -1,6 +1,6 @@
 // Frontend
 export function urlFileManager() {
-  return `/file_manager`
+  return `/file-manager`
 }
 
 // Backend
