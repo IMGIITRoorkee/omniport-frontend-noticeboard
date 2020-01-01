@@ -259,7 +259,7 @@ class DropdownView extends Component {
         searchKeyword: '',
         narrowBookmark: false,
         expired: false,
-        showImp: true,
+        showImp: true
       }
     })
   }

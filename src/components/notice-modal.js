@@ -324,7 +324,7 @@ class NoticeModal extends Component {
                     styleName='upload.banner-error'
                   />
                 ) : null}
-                {permission &&
+                {permission.length > 0 &&
                   permission.map((permission, index) => (
                     <div key={index} styleName='upload.sub-categories-parent'>
                       <Header content={permission.groupName} as='h3' />
