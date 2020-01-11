@@ -274,7 +274,6 @@ class NoticeListView extends Component {
                 <Container styleName="notice.notice-list-view notice.notice-container-width">
                   <Table
                     basic
-                    fixed
                     celled
                     singleLine
                     compact

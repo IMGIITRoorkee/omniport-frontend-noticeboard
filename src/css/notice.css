@@ -248,6 +248,16 @@
   color: #878787;
 }
 
+.cell-width-4 {
+  max-width: 2.5rem !important;
+  text-align: center;
+  white-space: nowrap;
+  box-sizing: content-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 .cell-hover {
   cursor: pointer;
 }
