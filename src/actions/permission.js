@@ -7,7 +7,7 @@ import {
 } from '../constants/action-types'
 import { toast } from 'react-semantic-toasts'
 
-export const getPermissions = callback => {
+export const getPermissions = () => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -22,7 +22,6 @@ export const getPermissions = callback => {
           type: FETCH_PERMISSION,
           payload: res.data
         })
-        callback()
       })
       .catch(err => {
         if (err.response) {

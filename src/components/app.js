@@ -74,7 +74,7 @@ class App extends React.PureComponent {
           location.state.bannerId,
           location.state.mainCategorySlug,
           location.state.dateRange,
-          location.state.showImp,
+          location.state.showImp
         )
       }
     })
@@ -104,22 +104,22 @@ class App extends React.PureComponent {
 
     return (
       <React.Fragment>
-        <div styleName="main.app">
-          <AppHeader appName="noticeboard" userDropdown mode="app" />
+        <div styleName='main.app'>
+          <AppHeader appName='noticeboard' userDropdown mode='app' />
           <AppMain>
-            <div styleName="main.app-main">
+            <div styleName='main.app-main'>
               <SideNav history={history} />
               <Scrollbars autoHide>
-                <div styleName="app.notice-container">
+                <div styleName='app.notice-container'>
                   <TabList history={history} />
                   <Route
                     exact
-                    path="/noticeboard"
+                    path='/noticeboard'
                     render={props => (
                       <NoticeListView {...props} history={history} />
                     )}
                   />
-                  <Route path="/noticeboard/notice" component={NoticeView} />
+                  <Route path='/noticeboard/notice' component={NoticeView} />
                 </div>
               </Scrollbars>
             </div>
@@ -175,9 +175,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(App)
-)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))

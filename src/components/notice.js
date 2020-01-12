@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Icon, Table } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import { ifRole } from 'formula_one'
 import { deleteNotice, noticeBookmark, toggleSelect } from '../actions/index'
 import { INTIAL_PAGE } from '../constants/constants'
 
@@ -81,7 +82,8 @@ class Notice extends Component {
             : 'notice.notice-row-unread notice.notice-row'
         }
       >
-        {expired ? null : (
+        {(user && ifRole(user.roles, 'Guest') === 'IS_ACTIVE') ||
+        expired ? null : (
           <Table.Cell
             styleName={'notice.cell-width-1 notice.cell-hover'}
             onClick={this.selectNotice}
@@ -93,14 +95,15 @@ class Notice extends Component {
           </Table.Cell>
         )}
 
-        {expired ? null : (
+        {(user && ifRole(user.roles, 'Guest') === 'IS_ACTIVE') ||
+        expired ? null : (
           <Table.Cell
             styleName={'notice.cell-width-1 notice.cell-hover'}
             onClick={this.bookmarkNotice}
           >
             <Icon
               name={bookmark ? 'bookmark' : 'bookmark outline'}
-              color="yellow"
+              color='yellow'
             />
           </Table.Cell>
         )}
@@ -108,18 +111,18 @@ class Notice extends Component {
         <Table.Cell
           collapsing
           onClick={this.openNotice}
-          styleName="notice.cell-width-3 notice.cell-hover"
+          styleName='notice.cell-width-3 notice.cell-hover'
         >
           {banner.name}
         </Table.Cell>
         <Table.Cell
           collapsing
           onClick={this.openNotice}
-          styleName="notice.cell-hover"
+          styleName='notice.cell-hover'
         >
-          <span styleName="notice.tag-margin-right">
+          <span styleName='notice.tag-margin-right'>
             {important ? (
-              <Icon name="tag" color="blue" />
+              <Icon name='tag' color='blue' />
             ) : (
               <Icon name={null} />
             )}
@@ -128,14 +131,14 @@ class Notice extends Component {
         </Table.Cell>
         <Table.Cell
           onClick={this.openNotice}
-          styleName="notice.cell-width-3 notice.cell-hover"
+          styleName='notice.cell-width-3 notice.cell-hover'
         >
           {uploader.fullName}
         </Table.Cell>
         <Table.Cell
           onClick={this.openNotice}
-          textAlign="center"
-          styleName="notice.cell-width-2 notice.cell-hover"
+          textAlign='center'
+          styleName='notice.cell-width-2 notice.cell-hover'
         >
           {moment(date).format(
             Date.now().year === moment(date).year() ? 'DD/MM/YY' : 'MMM Do'
@@ -151,11 +154,11 @@ class Notice extends Component {
                     : null
                 }
                 collapsing
-                textAlign="center"
-                styleName="notice.cell-width-1"
+                textAlign='center'
+                styleName='notice.cell-width-1'
               >
                 {uploader && uploader.id === user.id ? (
-                  <Icon name="pencil" styleName="notice.cell-hover" />
+                  <Icon name='pencil' styleName='notice.cell-hover' />
                 ) : null}
               </Table.Cell>
             ) : null}
@@ -166,11 +169,11 @@ class Notice extends Component {
                   : null
               }
               collapsing
-              textAlign="center"
-              styleName="notice.cell-width-1"
+              textAlign='center'
+              styleName='notice.cell-width-1'
             >
               {uploader && uploader.id === user.id ? (
-                <Icon name="trash" styleName="notice.cell-hover" />
+                <Icon name='trash' styleName='notice.cell-hover' />
               ) : null}
             </Table.Cell>
           </>
@@ -201,7 +204,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Notice)
+export default connect(mapStateToProps, mapDispatchToProps)(Notice)
