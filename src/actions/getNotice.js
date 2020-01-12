@@ -2,6 +2,8 @@ import { GET_NOTICE, REQUEST_NOTICE } from '../constants/action-types'
 import { urlNotice, urlStarRead } from '../urls'
 import { getCookie } from 'formula_one'
 import { toast } from 'react-semantic-toasts'
+import { store } from '../store'
+import { ifRole } from 'formula_one'
 
 function requestNotice(noticeId) {
   return {
@@ -23,10 +25,10 @@ function receiveNotice(noticeData, noticeExists) {
   }
 }
 
-export const getNotice = (noticeId, callback, expired = false) => {
+export const getNotice = (noticeId, expired = false) => {
   return dispatch => {
     let url
-
+    let roles = store.getState().user.user.roles
     dispatch(requestNotice(noticeId))
     return fetch(urlNotice(noticeId, expired))
       .then(response => response.json())
@@ -34,7 +36,7 @@ export const getNotice = (noticeId, callback, expired = false) => {
         if (json.detail != 'Not found.') {
           dispatch(receiveNotice(json, true))
           if (!expired) {
-            if (!json.read) {
+            if (!json.read && roles && ifRole(roles, 'Guest') !== 'IS_ACTIVE') {
               let headers = {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCookie('csrftoken')
@@ -50,7 +52,6 @@ export const getNotice = (noticeId, callback, expired = false) => {
               })
             }
           }
-          callback()
         } else {
           dispatch(receiveNotice(null, false))
         }
