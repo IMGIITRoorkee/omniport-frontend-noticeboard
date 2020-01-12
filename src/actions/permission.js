@@ -27,20 +27,15 @@ export const getPermissions = () => {
         if (err.response) {
           err.response.data
             ? toast({
-                type: 'error',
-                title: 'Failed to fetch permissions!',
-                description: err.response.data.msg
-              })
+              type: 'error',
+              title: 'Failed to fetch permissions!',
+              description: err.response.data.msg
+            })
             : toast({
-                type: 'error',
-                title: 'Failed to fetch permissions!',
-                description: err.response.statusText
-              })
-        } else {
-          toast({
-            type: 'error',
-            title: 'Failed to fetch permissions!'
-          })
+              type: 'error',
+              title: 'Failed to fetch permissions!',
+              description: err.response.statusText
+            })
         }
       })
   }

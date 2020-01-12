@@ -33,6 +33,7 @@ class NoticeModal extends Component {
       checkedState: '',
       endDate: '',
       isImportant: false,
+      isPublic: true,
       titleError: false,
       endDateError: false,
       bannerError: false,
@@ -120,9 +121,9 @@ class NoticeModal extends Component {
       this.setState({ [name]: value, [name + 'Error']: false })
     }
   }
-  handleCheckChange = (event, { name, value }) => {
+  handleCheckChange = (event, { name, checked }) => {
     this.setState({
-      [name]: !this.state[name]
+      [name]: checked
     })
   }
   handleSubmit = e => {
@@ -134,7 +135,8 @@ class NoticeModal extends Component {
       endDate,
       isImportant,
       isSendEmail,
-      isPublic
+      isPublic,
+      isSendEmailRole
     } = this.state
     const { uploadNotice, editNotice, modalType, id } = this.props
 
@@ -172,7 +174,8 @@ class NoticeModal extends Component {
       expiryDate: endDate,
       isImportant: isImportant,
       sendEmail: isSendEmail,
-      isPublic: isPublic
+      isPublic: isPublic,
+      isSendEmailRole: isSendEmailRole
     }
 
     modalType === 'edit'
@@ -403,10 +406,11 @@ class NoticeModal extends Component {
                     checked={isPublic}
                     onChange={this.handleCheckChange}
                     name='isPublic'
-                    label='Public'
+                    label='Publish to website'
                   />
                   <Popup
-                    content='Lorem Ipsum'
+                    content='Checking this box will publish the notice to the website.
+                    Uncheck if you do not want this notice to be publically available on the website.'
                     inverted
                     trigger={
                       <Icon

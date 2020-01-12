@@ -7,6 +7,7 @@ import config from '../../config.json'
 
 import editor from '../css/upload-notice-editor.css'
 
+
 export default class UploadNoticeEditor extends Component {
   constructor(props) {
     super(props)
@@ -18,18 +19,21 @@ export default class UploadNoticeEditor extends Component {
       newPath: ''
     }
   }
+
+  messageReceiver = (e) => {
+    if (e && e.data && e.data.file && e.data.fileName) {
+      this.setState({
+        data: e.data,
+        isConfirmModal: true
+      })
+    }
+  }
+
   componentDidMount() {
     var self = this
     window.addEventListener(
       'message',
-      function(e) {
-        if (e && e.data && e.data.file && e.data.fileName) {
-          self.setState({
-            data: e.data,
-            isConfirmModal: true
-          })
-        }
-      },
+      this.messageReceiver,
       false
     )
   }
@@ -39,21 +43,21 @@ export default class UploadNoticeEditor extends Component {
         width=1000px,height=500px,left=100px,top=100px`
     window.open(urlFileManager(), 'title', params)
 
-    window.addEventListener('click', function(e) {
+    window.addEventListener('click', function clickEventListener(e) {
       this.setTimeout(function() {
         if (
           self.state.newPath &&
           self.state.data.fileName &&
           self.state.isConfirm
         ) {
-          callback(self.state.newPath, { title: self.state.data.fileName })
+          callback( self.state.newPath, { title: self.state.data.fileName })
+          window.removeEventListener('click', clickEventListener);
         }
       }, 200)
     })
   }
   componentWillUnmount() {
-    window.removeEventListener('message', function() {})
-    window.removeEventListener('click', function() {})
+    window.removeEventListener('message', this.messageReceiver, false)
   }
   closeConfirmationModal = () => {
     this.setState({
@@ -86,6 +90,9 @@ export default class UploadNoticeEditor extends Component {
           apiKey={config.apiKey}
           init={{
             image_title: true,
+            relative_urls:false,
+            remove_script_host: false,
+            document_base_url: window.location.host,
             automatic_uploads: true,
             plugins: [
               'advlist autolink lists link image charmap print preview anchor',

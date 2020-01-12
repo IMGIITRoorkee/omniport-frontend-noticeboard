@@ -111,7 +111,7 @@ class Notice extends Component {
         <Table.Cell
           collapsing
           onClick={this.openNotice}
-          styleName='notice.cell-width-3 notice.cell-hover'
+          styleName='notice.cell-width-4 notice.cell-hover'
         >
           {banner.name}
         </Table.Cell>
