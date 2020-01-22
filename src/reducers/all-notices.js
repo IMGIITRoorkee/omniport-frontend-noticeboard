@@ -16,8 +16,10 @@ import {
   DELETE_NOTICE_FAILURE,
   DELETE_NOTICE_REQUEST,
   DELETE_NOTICE_SUCCESS,
-  RESET_PAGE
+  RESET_PAGE,
+  TOGGLE_SIDEBAR
 } from '../constants/action-types'
+import { isMobile } from 'react-device-detect'
 
 const initialState = {
   page: 1,
@@ -36,7 +38,8 @@ const initialState = {
   selectedNotices: [],
   mainCategorySlug: false,
   isUploading: false,
-  error: ''
+  error: '',
+  sidenavOpen: !isMobile
 }
 
 const allNotices = (state = initialState, action) => {
@@ -197,7 +200,11 @@ const allNotices = (state = initialState, action) => {
         ...state,
         isUploading: true
       }
-
+    case TOGGLE_SIDEBAR:
+      return {
+        ...state,
+        sidenavOpen: !state.sidenavOpen
+      }
     default:
       return state
   }

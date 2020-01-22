@@ -44,29 +44,29 @@ class NoticeView extends Component {
     return (
       <div>
         {!isFetchingNotice ? (
-          <Container styleName="noticeView.notice-box noticeView.notice-container-width">
+          <Container styleName='noticeView.notice-box noticeView.notice-container-width'>
             {noticeExists ? (
               <Segment.Group>
-                <Segment as="h5" styleName='noticeView.top-segment'>
+                <Segment as='h5' styleName='noticeView.top-segment'>
                   <span>Subject: {notice.title}</span>
                   <span>{notice.banner.name}</span>
                 </Segment>
                 <Segment>
-                  <div styleName="notice-list-div">
-                    <p styleName="noticeView.notice-posted-by">
+                  <div styleName='notice-list-div'>
+                    <p styleName='noticeView.notice-posted-by'>
                       Posted by: {notice.uploader.fullName}
                     </p>
                     <Popup
                       trigger={
                         <p
-                          styleName="noticeView.get_shareable_link"
+                          styleName='noticeView.get_shareable_link'
                           onClick={this.copyUrl}
                         >
                           Get shareable link
                         </p>
                       }
                       content={`Copied!`}
-                      on="click"
+                      on='click'
                       hideOnScroll
                       onClose={this.handleClose}
                       open={this.state.isOpen}
@@ -84,28 +84,31 @@ class NoticeView extends Component {
                 <Divider fitted />
 
                 <Container
-                  textAlign="justified"
-                  styleName="noticeView.notice-view-container"
+                  textAlign='justified'
+                  styleName='noticeView.notice-view-container'
                 >
-                  <Header as="h2" styleName="noticeView.notice-box-header">
+                  <Header as='h2' styleName='noticeView.notice-box-header'>
                     {notice.title}
                   </Header>
-                  <div dangerouslySetInnerHTML={{ __html: notice.content }} />
+                  <div
+                    styleName='noticeView.notice-content'
+                    dangerouslySetInnerHTML={{ __html: notice.content }}
+                  />
                 </Container>
               </Segment.Group>
             ) : (
               <div>
-                <Container styleName="noticeView.notice-list-view">
-                  <div styleName="noticeView.notice-view-no-notice">
-                    <h1 styleName="no-results-found"> No notice found </h1>
+                <Container styleName='noticeView.notice-list-view'>
+                  <div styleName='noticeView.notice-view-no-notice'>
+                    <h1 styleName='no-results-found'> No notice found </h1>
                   </div>
                 </Container>
               </div>
             )}
           </Container>
         ) : (
-          <Container styleName="noticeView.notice-box noticeView.notice-view-loading noticeView.notice-container-width">
-            <Loader active styleName="noticeView.loader-element" />
+          <Container styleName='noticeView.notice-box noticeView.notice-view-loading noticeView.notice-container-width'>
+            <Loader active styleName='noticeView.loader-element' />
           </Container>
         )}
       </div>

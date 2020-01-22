@@ -345,7 +345,7 @@ class DropdownView extends Component {
                 </Form>
               )}
             </Menu.Item>
-            <Menu.Item>
+            <Menu.Item styleName='dropdown.search-menu-item'>
               {!searchDone ? (
                 <Form onSubmit={this.handleSearchSubmit}>
                   <Input

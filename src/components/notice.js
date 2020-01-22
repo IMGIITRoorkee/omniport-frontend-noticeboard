@@ -7,6 +7,7 @@ import { deleteNotice, noticeBookmark, toggleSelect } from '../actions/index'
 import { INTIAL_PAGE } from '../constants/constants'
 
 import notice from '../css/notice.css'
+import { isMobile } from 'react-device-detect'
 
 class Notice extends Component {
   constructor(props) {
@@ -87,6 +88,7 @@ class Notice extends Component {
           <Table.Cell
             styleName={'notice.cell-width-1 notice.cell-hover'}
             onClick={this.selectNotice}
+            collapsing
           >
             <Icon
               name={check ? 'square' : 'square outline'}
@@ -107,14 +109,17 @@ class Notice extends Component {
             />
           </Table.Cell>
         )}
-
-        <Table.Cell
-          collapsing
-          onClick={this.openNotice}
-          styleName='notice.cell-width-4 notice.cell-hover'
-        >
-          {banner.name}
-        </Table.Cell>
+        {!isMobile ? (
+          <Table.Cell
+            collapsing
+            onClick={this.openNotice}
+            styleName='notice.cell-width-4 notice.cell-hover'
+          >
+            {banner.name}
+          </Table.Cell>
+        ) : (
+          <></>
+        )}
         <Table.Cell
           collapsing
           onClick={this.openNotice}
@@ -129,21 +134,31 @@ class Notice extends Component {
           </span>
           {title}
         </Table.Cell>
-        <Table.Cell
-          onClick={this.openNotice}
-          styleName='notice.cell-width-3 notice.cell-hover'
-        >
-          {uploader.fullName}
-        </Table.Cell>
-        <Table.Cell
-          onClick={this.openNotice}
-          textAlign='center'
-          styleName='notice.cell-width-2 notice.cell-hover'
-        >
-          {moment(date).format(
-            Date.now().year === moment(date).year() ? 'DD/MM/YY' : 'MMM Do'
-          )}
-        </Table.Cell>
+        {!isMobile ? (
+          <Table.Cell
+            onClick={this.openNotice}
+            collapsing
+            styleName='notice.cell-width-3 notice.cell-hover'
+          >
+            {uploader.fullName}
+          </Table.Cell>
+        ) : (
+          <></>
+        )}
+        {!isMobile ? (
+          <Table.Cell
+            onClick={this.openNotice}
+            textAlign='center'
+            collapsing
+            styleName='notice.cell-width-2 notice.cell-hover'
+          >
+            {moment(date).format(
+              Date.now().year === moment(date).year() ? 'DD/MM/YY' : 'MMM Do'
+            )}
+          </Table.Cell>
+        ) : (
+          <></>
+        )}
         {permission.length > 0 ? (
           <>
             {!expired ? (

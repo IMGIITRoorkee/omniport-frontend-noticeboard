@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import { Dropdown, Menu, Divider, Icon, Image } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { setPosition } from '../actions/index'
@@ -133,7 +134,7 @@ class SideNav extends Component {
           }
           item
           trigger={
-            <span styleName="sidenav.dropdown-item-span">
+            <span styleName='sidenav.dropdown-item-span'>
               {item.meta && item.meta.icon && item.meta.icon.staticPath ? (
                 <Image src={`/static${item.meta.icon.staticPath}`} />
               ) : null}
@@ -161,11 +162,11 @@ class SideNav extends Component {
         vertical
         inverted
         attached
-        styleName="sidenav.sidenav-menu"
+        styleName='sidenav.sidenav-menu'
         color={'blue'}
       >
         <Menu.Item
-          name="All Notices"
+          name='All Notices'
           styleName={
             position === 'home'
               ? 'sidenav.sidenav-active-item'
@@ -173,12 +174,12 @@ class SideNav extends Component {
           }
           onClick={() => this.goHome('/noticeboard/', 'home')}
         >
-          <Icon styleName="sidenav.sidenav-icon-styling" name="home" />
+          <Icon styleName='sidenav.sidenav-icon-styling' name='home' />
           All Notices
         </Menu.Item>
 
         <Menu.Item
-          name="Important Notices"
+          name='Important Notices'
           styleName={
             position === 'important'
               ? 'sidenav.sidenav-active-item'
@@ -186,16 +187,16 @@ class SideNav extends Component {
           }
           onClick={() => this.goHome('/noticeboard/', 'important')}
         >
-          <Icon styleName="sidenav.sidenav-icon-styling" name="tag" />
+          <Icon styleName='sidenav.sidenav-icon-styling' name='tag' />
           Important Notices
         </Menu.Item>
 
         {this.renderOuterDropdownItems(filters)}
 
-        <Divider styleName="sidenav.sidenav-divider" />
+        <Divider styleName='sidenav.sidenav-divider' />
 
         <Menu.Item
-          name="Bookmarks"
+          name='Bookmarks'
           styleName={
             position === 'bookmark'
               ? 'sidenav.sidenav-active-item'
@@ -203,14 +204,14 @@ class SideNav extends Component {
           }
           onClick={() => this.narrowBookmarks('/noticeboard/')}
         >
-          <Icon styleName="sidenav.sidenav-icon-styling" name="bookmark" />
+          <Icon styleName='sidenav.sidenav-icon-styling' name='bookmark' />
           Bookmarks
         </Menu.Item>
 
-        <Divider styleName="sidenav.sidenav-divider" />
+        <Divider styleName='sidenav.sidenav-divider' />
 
         <Menu.Item
-          name="Expired"
+          name='Expired'
           styleName={
             position === 'expired'
               ? 'sidenav.sidenav-active-item'
@@ -218,8 +219,24 @@ class SideNav extends Component {
           }
           onClick={() => this.expiredNotices('/noticeboard/')}
         >
-          <Icon styleName="sidenav.sidenav-icon-styling" name="time" />
+          <Icon styleName='sidenav.sidenav-icon-styling' name='time' />
           Expired
+        </Menu.Item>
+
+        <Divider styleName='sidenav.sidenav-divider' />
+
+        <Menu.Item name='Link to old notices' styleName='sidenav.sidenav-items'>
+          <a
+            href='https://channeli.in/#notices'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            <Icon
+              styleName='sidenav.sidenav-icon-styling'
+              name='arrow alternate circle right'
+            />
+            Link to old notices
+          </a>
         </Menu.Item>
       </Menu>
     )
@@ -233,7 +250,8 @@ const mapStateToProps = state => {
     searchKeyword: state.allNotices.searchKeyword,
     bannerId: state.allNotices.bannerId,
     position: state.current.currentPosition,
-    subPosition: state.current.subPosition
+    subPosition: state.current.subPosition,
+    sidenavOpen: state.allNotices.sidenavOpen
   }
 }
 
@@ -257,7 +275,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SideNav)
+export default connect(mapStateToProps, mapDispatchToProps)(SideNav)

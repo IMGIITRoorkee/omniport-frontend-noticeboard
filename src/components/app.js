@@ -1,9 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { Scrollbars } from 'react-custom-scrollbars'
+import { isMobile } from 'react-device-detect'
 
 import { AppHeader, AppFooter, AppMain } from 'formula_one'
 import { INTIAL_PAGE } from '../constants/constants'
+
+import { Sidebar, Menu, Segment } from 'semantic-ui-react'
 
 import NoticeListView from './notice-segment'
 import NoticeView from './notice-view'
@@ -16,9 +19,11 @@ import {
   getNotices,
   getFilters,
   getPermissions,
-  getUser
+  getUser,
+  toggleSidenav
 } from '../actions/index'
 
+import sidenav from '../css/sidenav.css'
 import main from 'formula_one/src/css/app.css'
 import app from '../css/notice.css'
 
@@ -81,7 +86,7 @@ class App extends React.PureComponent {
   }
 
   render() {
-    const { history } = this.props
+    const { history, sidenavOpen, toggleSidenav } = this.props
     const creators = [
       {
         name: 'Rhea Parekh',
@@ -101,14 +106,32 @@ class App extends React.PureComponent {
         role: 'Android Developer'
       }
     ]
-
     return (
       <React.Fragment>
         <div styleName='main.app'>
-          <AppHeader appName='noticeboard' userDropdown mode='app' />
+          <AppHeader
+            sideBarButton={isMobile}
+            sideBarVisibility={sidenavOpen}
+            onSidebarClick={toggleSidenav}
+            appName='noticeboard'
+            userDropdown
+            mode='app'
+          />
           <AppMain>
             <div styleName='main.app-main'>
-              <SideNav history={history} />
+              {isMobile ? (
+                <div styleName='sidenav.app-sidebar-main'>
+                  <Sidebar
+                    animation='overlay'
+                    styleName='sidenav.app-sidebar-wrapper'
+                    visible={sidenavOpen}
+                  >
+                    <SideNav history={history} />
+                  </Sidebar>
+                </div>
+              ) : (
+                <SideNav history={history} />
+              )}
               <Scrollbars autoHide>
                 <div styleName='app.notice-container'>
                   <TabList history={history} />
@@ -132,7 +155,11 @@ class App extends React.PureComponent {
 }
 
 const mapStateToProps = state => {
-  return { notices: state, search: state.allNotices.searchKeyword }
+  return {
+    notices: state,
+    search: state.allNotices.searchKeyword,
+    sidenavOpen: state.allNotices.sidenavOpen
+  }
 }
 
 const mapDispatchToProps = dispatch => {
@@ -171,6 +198,9 @@ const mapDispatchToProps = dispatch => {
     },
     getUser: () => {
       dispatch(getUser())
+    },
+    toggleSidenav: () => {
+      dispatch(toggleSidenav())
     }
   }
 }

@@ -1,7 +1,8 @@
 .sidenav-menu {
   padding-top: 10px !important;
   margin-left: 0px !important;
-  width: 16em !important;
+  width: 18em !important;
+  height: 100%;
 }
 
 .sidenav-items {
@@ -46,4 +47,19 @@
 .dropdown-item-span img {
   width: 1.18em;
   margin: 0 0.7em 0 0.5em;
+}
+.app-sidebar-main {
+  position: relative;
+}
+.app-sidebar-wrapper {
+  position: absolute !important;
+  top: 0 !important;
+  width: 100vw !important;
+  box-shadow: none !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .sidenav-menu {
+    width: 14em !important;
+  }
 }
