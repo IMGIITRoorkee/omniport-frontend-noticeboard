@@ -10,7 +10,7 @@ import notice from '../css/notice.css'
 import { isMobile } from 'react-device-detect'
 
 class Notice extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       check: false
@@ -31,7 +31,7 @@ class Notice extends Component {
     })
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     const { selectAllActive, id, selectedNotices } = this.props
     if (selectAllActive !== prevProps.selectAllActive) {
       this.setState({
@@ -58,7 +58,7 @@ class Notice extends Component {
     )
   }
 
-  render() {
+  render () {
     const {
       date,
       banner,

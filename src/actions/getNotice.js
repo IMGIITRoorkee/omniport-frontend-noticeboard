@@ -5,7 +5,7 @@ import { toast } from 'react-semantic-toasts'
 import { store } from '../store'
 import { ifRole } from 'formula_one'
 
-function requestNotice(noticeId) {
+function requestNotice (noticeId) {
   return {
     type: REQUEST_NOTICE,
     payload: {
@@ -15,7 +15,7 @@ function requestNotice(noticeId) {
   }
 }
 
-function receiveNotice(noticeData, noticeExists) {
+function receiveNotice (noticeData, noticeExists) {
   return {
     type: GET_NOTICE,
     payload: {
@@ -60,15 +60,15 @@ export const getNotice = (noticeId, expired = false) => {
         if (err.response) {
           err.response.data
             ? toast({
-                type: 'error',
-                title: 'Failed to fetch notice!',
-                description: err.response.data.msg
-              })
+              type: 'error',
+              title: 'Failed to fetch notice!',
+              description: err.response.data.msg
+            })
             : toast({
-                type: 'error',
-                title: 'Failed to fetch notice!',
-                description: err.response.statusText
-              })
+              type: 'error',
+              title: 'Failed to fetch notice!',
+              description: err.response.statusText
+            })
         } else {
           toast({
             type: 'error',
