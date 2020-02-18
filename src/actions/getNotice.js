@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { GET_NOTICE, REQUEST_NOTICE } from '../constants/action-types'
 import { urlNotice, urlStarRead } from '../urls'
 import { getCookie } from 'formula_one'
@@ -45,11 +46,30 @@ export const getNotice = (noticeId, expired = false) => {
                 keyword: 'read',
                 notices: [json.id]
               })
-              fetch(urlStarRead(), {
-                method: 'post',
-                headers: headers,
-                body: body
-              })
+              axios
+                .post(urlStarRead(), body, {
+                  headers: headers
+                })
+                .catch(err => {
+                  if (err.response) {
+                    err.response.data
+                      ? toast({
+                        type: 'error',
+                        title: 'Failed to read notice!',
+                        description: err.response.data.msg
+                      })
+                      : toast({
+                        type: 'error',
+                        title: 'Failed to read notice!',
+                        description: err.response.statusText
+                      })
+                  } else {
+                    toast({
+                      type: 'error',
+                      title: 'Failed to read notice!'
+                    })
+                  }
+                })
             }
           }
         } else {

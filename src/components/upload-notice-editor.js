@@ -7,20 +7,20 @@ import config from '../../config.json'
 
 import editor from '../css/upload-notice-editor.css'
 
-
 export default class UploadNoticeEditor extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       data: '',
       isConfirmModal: false,
       isConfirm: false,
       error: false,
-      newPath: ''
+      newPath: '',
+      isConfirmLoading: false
     }
   }
 
-  messageReceiver = (e) => {
+  messageReceiver = e => {
     if (e && e.data && e.data.file && e.data.fileName) {
       this.setState({
         data: e.data,
@@ -29,13 +29,9 @@ export default class UploadNoticeEditor extends Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     var self = this
-    window.addEventListener(
-      'message',
-      this.messageReceiver,
-      false
-    )
+    window.addEventListener('message', this.messageReceiver, false)
   }
   handleClick = (callback, value, meta) => {
     let self = this
@@ -43,20 +39,20 @@ export default class UploadNoticeEditor extends Component {
         width=1000px,height=500px,left=100px,top=100px`
     window.open(urlFileManager(), 'title', params)
 
-    window.addEventListener('click', function clickEventListener(e) {
-      this.setTimeout(function() {
+    window.addEventListener('mousemove', function clickEventListener (e) {
+      this.setTimeout(function () {
         if (
           self.state.newPath &&
           self.state.data.fileName &&
           self.state.isConfirm
         ) {
-          callback( self.state.newPath, { title: self.state.data.fileName })
-          window.removeEventListener('click', clickEventListener);
+          callback(self.state.newPath, { title: self.state.data.fileName })
+          window.removeEventListener('mousemove', clickEventListener)
         }
-      }, 200)
+      }, 100)
     })
   }
-  componentWillUnmount() {
+  componentWillUnmount () {
     window.removeEventListener('message', this.messageReceiver, false)
   }
   closeConfirmationModal = () => {
@@ -66,6 +62,9 @@ export default class UploadNoticeEditor extends Component {
     })
   }
   handleConfirmation = path => {
+    this.setState({
+      isConfirmLoading: true
+    })
     copyMedia({ path: path }, this.callback)
   }
   callback = data => {
@@ -73,37 +72,41 @@ export default class UploadNoticeEditor extends Component {
       this.setState({
         isConfirmModal: false,
         isConfirm: true,
-        newPath: data.path
+        newPath: data.path,
+        isConfirmLoading: false
       })
     } else {
       this.setState({
-        error: true
+        error: true,
+        isConfirmLoading: false
       })
     }
   }
-  render() {
-    const { isConfirmModal, data, error } = this.state
+  render () {
+    const { isConfirmModal, data, error, isConfirmLoading } = this.state
     const { mountedNode, handleEditorChange, content } = this.props
     return (
-      <div styleName="editor.editor-parent">
+      <div styleName='editor.editor-parent'>
         <Editor
           apiKey={config.apiKey}
           init={{
+            height: '300',
             image_title: true,
-            relative_urls:false,
+            relative_urls: false,
             remove_script_host: false,
             document_base_url: window.location.host,
             automatic_uploads: true,
+            content_style: 'img {width: 100%;height:auto}',
             plugins: [
               'advlist autolink lists link image charmap print preview anchor',
               'searchreplace visualblocks code fullscreen',
               'insertdatetime media table paste code help wordcount'
             ],
             toolbar:
-              'undo redo | formatselect | bold italic backcolor | \
+              'undo redo | formatselect | image | bold italic backcolor | \
               alignleft aligncenter alignright alignjustify | \
-              bullist numlist outdent indent | removeformat | help',
-            insert_button_items: 'image link | inserttable',
+              bullist numlist outdent indent |removeformat | help',
+            insert_button_items: 'inserttable',
             file_picker_callback: (callback, value, meta) => {
               this.handleClick(callback, value, meta)
             },
@@ -116,12 +119,12 @@ export default class UploadNoticeEditor extends Component {
         />
         {isConfirmModal ? (
           <Modal
-            size="large"
+            size='large'
             open={isConfirmModal}
             onClose={this.closeConfirmationModal}
             mountNode={mountedNode ? mountedNode.current : null}
           >
-            {error ? <Message error header="Something went wrong!" /> : null}
+            {error ? <Message error header='Something went wrong!' /> : null}
             <Modal.Header>
               Do you really want to select "{data.fileName}"
             </Modal.Header>
@@ -134,9 +137,10 @@ export default class UploadNoticeEditor extends Component {
               </Button>
               <Button
                 positive
-                icon="checkmark"
-                labelPosition="right"
-                content="Yes"
+                icon='checkmark'
+                labelPosition='right'
+                loading={isConfirmLoading}
+                content='Yes'
                 onClick={() => this.handleConfirmation(data.path)}
               />
             </Modal.Actions>

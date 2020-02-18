@@ -3,7 +3,7 @@ import { getCookie } from 'formula_one'
 import { urlStarRead } from '../urls'
 import { toast } from 'react-semantic-toasts'
 
-function readNotice(noticeIdList, toggle) {
+function readNotice (noticeIdList, toggle) {
   return {
     type: READ_NOTICE,
     payload: {

@@ -7,7 +7,7 @@ import {
 } from '../constants/action-types'
 import { toast } from 'react-semantic-toasts'
 
-export const deleteNotice = (id, type, callback) => {
+export const deleteNotice = (id, type) => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -26,21 +26,20 @@ export const deleteNotice = (id, type, callback) => {
             id: id
           }
         })
-        callback()
       })
       .catch(err => {
         if (err.response) {
           err.response.data
             ? toast({
-                type: 'error',
-                title: 'Failed to delete notice!',
-                description: err.response.data.msg
-              })
+              type: 'error',
+              title: 'Failed to delete notice!',
+              description: err.response.data.msg
+            })
             : toast({
-                type: 'error',
-                title: 'Failed to delete notice!',
-                description: err.response.statusText
-              })
+              type: 'error',
+              title: 'Failed to delete notice!',
+              description: err.response.statusText
+            })
         } else {
           toast({
             type: 'error',

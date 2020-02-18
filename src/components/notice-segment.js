@@ -26,7 +26,7 @@ import { iconName, headingName } from '../utils'
 import notice from '../css/notice.css'
 
 class NoticeListView extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       displayselectAll: '',
@@ -40,7 +40,7 @@ class NoticeListView extends Component {
     this.modalRef = React.createRef()
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     const { notices } = this.props
     if (prevProps.notices !== notices) {
       this.setState({
@@ -133,7 +133,7 @@ class NoticeListView extends Component {
     })
   }
 
-  render() {
+  render () {
     const {
       totalPages,
       selectAllActive,
@@ -417,7 +417,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(noticeRead(noticeIdList, toggle))
     },
     deleteNotice: (id, type = 'new') => {
-      dispatch(deleteNotice(id, type, null))
+      dispatch(deleteNotice(id, type))
     }
   }
 }
