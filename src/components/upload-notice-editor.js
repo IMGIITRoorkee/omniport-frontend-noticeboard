@@ -46,7 +46,9 @@ export default class UploadNoticeEditor extends Component {
           self.state.data.fileName &&
           self.state.isConfirm
         ) {
-          callback(self.state.newPath, { title: self.state.data.fileName })
+          callback(self.state.newPath, {
+            title: self.state.data.fileName
+          })
           window.removeEventListener('mousemove', clickEventListener)
         }
       }, 100)
@@ -96,21 +98,21 @@ export default class UploadNoticeEditor extends Component {
             remove_script_host: false,
             document_base_url: window.location.host,
             automatic_uploads: true,
-            content_style: 'img {width: 100%;height:auto}',
+            content_style: 'img { max-width: 100%; height:auto}',
             plugins: [
               'advlist autolink lists link image charmap print preview anchor',
               'searchreplace visualblocks code fullscreen',
-              'insertdatetime media table paste code help wordcount'
+              'insertdatetime media imagetools table paste code help wordcount'
             ],
             toolbar:
               'undo redo | formatselect | image | bold italic backcolor | \
               alignleft aligncenter alignright alignjustify | \
               bullist numlist outdent indent |removeformat | help',
-            insert_button_items: 'inserttable',
             file_picker_callback: (callback, value, meta) => {
               this.handleClick(callback, value, meta)
             },
             file_browser_callback_types: 'file image media link',
+            image_dimensions: false,
             branding: false
           }}
           onChange={handleEditorChange}
