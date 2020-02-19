@@ -6,7 +6,7 @@ import { isMobile } from 'react-device-detect'
 import { AppHeader, AppFooter, AppMain } from 'formula_one'
 import { INTIAL_PAGE } from '../constants/constants'
 
-import { Sidebar, Menu, Segment } from 'semantic-ui-react'
+import { Sidebar } from 'semantic-ui-react'
 
 import NoticeListView from './notice-segment'
 import NoticeView from './notice-view'
@@ -56,10 +56,10 @@ class App extends React.PureComponent {
     if (location.pathname.startsWith('/noticeboard/notice/')) {
       if (location.pathname.startsWith('/noticeboard/notice/old/')) {
         let id = getIdFromNoticeUrl(location.pathname, true)
-        getNotice(id, true)
+        getNotice(id, true, () => {})
       } else {
         let id = getIdFromNoticeUrl(location.pathname, false)
-        getNotice(id, false)
+        getNotice(id, false, () => {})
       }
     } else {
       getNotices(INTIAL_PAGE)
@@ -69,7 +69,7 @@ class App extends React.PureComponent {
     history.listen(location => {
       if (location.pathname.startsWith('/noticeboard/notice/')) {
         let id = getIdFromNoticeUrl(location.pathname, location.state.expired)
-        getNotice(id, location.state.expired)
+        getNotice(id, location.state.expired, () => {})
       } else {
         getNotices(
           location.state.page,
@@ -92,6 +92,11 @@ class App extends React.PureComponent {
         name: 'Rhea Parekh',
         role: 'Backend and Frontend Developer',
         link: 'https://github.com/rheaparekh/'
+      },
+      {
+        name: 'Tushar Varshney',
+        role: 'Frontend Developer',
+        link: 'https://github.com/Tushar19varshney/'
       },
       {
         name: 'Gouranshi Choudhary',
@@ -187,8 +192,8 @@ const mapDispatchToProps = dispatch => {
         )
       )
     },
-    getNotice: (noticeId, expired) => {
-      dispatch(getNotice(noticeId, expired))
+    getNotice: (noticeId, expired, callback) => {
+      dispatch(getNotice(noticeId, expired, callback))
     },
     getFilters: () => {
       dispatch(getFilters())

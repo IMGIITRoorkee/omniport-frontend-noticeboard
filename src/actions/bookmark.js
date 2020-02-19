@@ -3,7 +3,7 @@ import { getCookie } from 'formula_one'
 import { urlStarRead } from '../urls'
 import { toast } from 'react-semantic-toasts'
 
-function bookmarkNotice(noticeIdList, toggle) {
+function bookmarkNotice (noticeIdList, toggle) {
   return {
     type: BOOKMARK_NOTICE,
     payload: {

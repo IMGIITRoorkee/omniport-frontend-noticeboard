@@ -10,7 +10,7 @@ import {
 import { toast } from 'react-semantic-toasts'
 // import { urlWhoAmI, urlGetMaintainers, getCookie } from 'formula_one'
 
-function requestNotices(page, searchKeyword) {
+function requestNotices (page, searchKeyword) {
   return {
     type: REQUEST_NOTICES,
     payload: {
@@ -20,7 +20,7 @@ function requestNotices(page, searchKeyword) {
   }
 }
 
-function receiveNotices(
+function receiveNotices (
   page,
   noticeDataList,
   searchKeyword,
@@ -110,15 +110,15 @@ export const getNotices = (
         if (err.response) {
           err.response.data
             ? toast({
-                type: 'error',
-                title: 'Failed to fetch notices!',
-                description: err.response.data.msg
-              })
+              type: 'error',
+              title: 'Failed to fetch notices!',
+              description: err.response.data.msg
+            })
             : toast({
-                type: 'error',
-                title: 'Failed to fetch notices!',
-                description: err.response.statusText
-              })
+              type: 'error',
+              title: 'Failed to fetch notices!',
+              description: err.response.statusText
+            })
         } else {
           toast({
             type: 'error',

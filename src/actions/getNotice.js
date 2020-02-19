@@ -26,15 +26,14 @@ function receiveNotice (noticeData, noticeExists) {
   }
 }
 
-export const getNotice = (noticeId, expired = false) => {
+export const getNotice = (noticeId, expired = false, callback) => {
   return dispatch => {
-    let url
     let roles = store.getState().user.user.roles
     dispatch(requestNotice(noticeId))
     return fetch(urlNotice(noticeId, expired))
       .then(response => response.json())
       .then(json => {
-        if (json.detail != 'Not found.') {
+        if (json.detail !== 'Not found.') {
           dispatch(receiveNotice(json, true))
           if (!expired) {
             if (!json.read && roles && ifRole(roles, 'Guest') !== 'IS_ACTIVE') {
@@ -72,6 +71,7 @@ export const getNotice = (noticeId, expired = false) => {
                 })
             }
           }
+          callback()
         } else {
           dispatch(receiveNotice(null, false))
         }

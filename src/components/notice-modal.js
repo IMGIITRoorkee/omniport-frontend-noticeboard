@@ -25,7 +25,7 @@ import NoticeEditor from './upload-notice-editor'
 
 import upload from '../css/upload-notice.css'
 class NoticeModal extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       editorContent: '',
@@ -46,10 +46,10 @@ class NoticeModal extends Component {
     this.modalRef = React.createRef()
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { modalType, id, getNotice } = this.props
     if (modalType === 'edit') {
-      getNotice(id, this.successNoticeCallback)
+      getNotice(id, false, this.successNoticeCallback)
     }
   }
 
@@ -127,7 +127,7 @@ class NoticeModal extends Component {
     })
   }
   handleSubmit = e => {
-    e.preventDefault()
+    e.preventDefault
     const {
       title,
       checkedState,
@@ -214,7 +214,7 @@ class NoticeModal extends Component {
       this.props.handleModal(false)
     )
   }
-  render() {
+  render () {
     const {
       title,
       checkedState,
@@ -492,8 +492,8 @@ const mapDispatchToProps = dispatch => {
     editNotice: (id, data, callback) => {
       dispatch(editNotice(id, data, callback))
     },
-    getNotice: (noticeId, callback) => {
-      dispatch(getNotice(noticeId, callback))
+    getNotice: (noticeId, expired, callback) => {
+      dispatch(getNotice(noticeId, expired, callback))
     }
   }
 }

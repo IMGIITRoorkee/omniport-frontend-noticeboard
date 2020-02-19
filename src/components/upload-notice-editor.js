@@ -29,8 +29,18 @@ export default class UploadNoticeEditor extends Component {
     }
   }
 
+  getHeight = (url, parentThis) => {
+    var img = new Image()
+    img.onload = function () {
+      parentThis.setState({
+        imgHeight: this.height,
+        imgWidth: this.width
+      })
+    }
+    img.src = url
+  }
+
   componentDidMount () {
-    var self = this
     window.addEventListener('message', this.messageReceiver, false)
   }
   handleClick = (callback, value, meta) => {
@@ -47,7 +57,11 @@ export default class UploadNoticeEditor extends Component {
           self.state.isConfirm
         ) {
           callback(self.state.newPath, {
-            title: self.state.data.fileName
+            title: self.state.data.fileName,
+            width: '768',
+            height: `${parseInt(
+              (self.state.imgHeight * 768) / self.state.imgWidth
+            )}`
           })
           window.removeEventListener('mousemove', clickEventListener)
         }
@@ -71,12 +85,17 @@ export default class UploadNoticeEditor extends Component {
   }
   callback = data => {
     if (data.success) {
-      this.setState({
-        isConfirmModal: false,
-        isConfirm: true,
-        newPath: data.path,
-        isConfirmLoading: false
-      })
+      this.setState(
+        {
+          isConfirmModal: false,
+          isConfirm: true,
+          newPath: data.path,
+          isConfirmLoading: false
+        },
+        () => {
+          this.getHeight(data.path, this)
+        }
+      )
     } else {
       this.setState({
         error: true,
@@ -96,7 +115,6 @@ export default class UploadNoticeEditor extends Component {
             image_title: true,
             relative_urls: false,
             remove_script_host: false,
-            document_base_url: window.location.host,
             automatic_uploads: true,
             content_style: 'img { max-width: 100%; height:auto}',
             plugins: [
@@ -112,7 +130,6 @@ export default class UploadNoticeEditor extends Component {
               this.handleClick(callback, value, meta)
             },
             file_browser_callback_types: 'file image media link',
-            image_dimensions: false,
             branding: false
           }}
           onChange={handleEditorChange}
