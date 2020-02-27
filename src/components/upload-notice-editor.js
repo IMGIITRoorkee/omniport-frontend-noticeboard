@@ -113,8 +113,9 @@ export default class UploadNoticeEditor extends Component {
           init={{
             height: '300',
             image_title: true,
-            relative_urls: false,
+            relative_urls: true,
             remove_script_host: false,
+            convert_urls: false,
             automatic_uploads: true,
             content_style: 'img { max-width: 100%; height:auto}',
             plugins: [

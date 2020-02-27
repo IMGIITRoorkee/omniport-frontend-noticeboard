@@ -185,84 +185,82 @@ class NoticeListView extends Component {
         {(user && ifRole(user.roles, 'Guest') === 'IS_ACTIVE') ||
         expired ? null : (
           <React.Fragment>
-            <Container styleName='notice.select-all-container notice.notice-container-width'>
-              {displayselectAll ? (
-                <div>
-                  {selectAllActive ? (
-                    <div>
+            {displayselectAll ? (
+              <Container styleName='notice.select-all-container notice.notice-container-width'>
+                {selectAllActive ? (
+                  <div>
+                    <Button
+                      icon
+                      styleName='notice.select-all-button-activated notice.select-all-button notice.tab-button'
+                      onClick={this.selectAll}
+                    >
+                      <Icon name='square' color='blue'></Icon>
+                    </Button>
+                    <Segment styleName='notice.select-all-list notice.select-all-activated-list'>
                       <Button
+                        basic
+                        styleName='notice.tab-button'
                         icon
-                        styleName='notice.select-all-button-activated notice.select-all-button notice.tab-button'
-                        onClick={this.selectAll}
+                        onClick={this.read}
                       >
-                        <Icon name='square' color='blue'></Icon>
+                        <Icon
+                          name='envelope open outline'
+                          color='blue'
+                          styleName='notice.buttons-select-all'
+                        ></Icon>
+                        Mark as Read
                       </Button>
-                      <Segment styleName='notice.select-all-list notice.select-all-activated-list'>
-                        <Button
-                          basic
-                          styleName='notice.tab-button'
-                          icon
-                          onClick={this.read}
-                        >
-                          <Icon
-                            name='envelope open outline'
-                            color='blue'
-                            styleName='notice.buttons-select-all'
-                          ></Icon>
-                          Mark as Read
-                        </Button>
-                        <Button
-                          basic
-                          styleName='notice.tab-button'
-                          icon
-                          onClick={this.bookmark}
-                        >
-                          <Icon
-                            name='bookmark'
-                            color='blue'
-                            styleName='notice.buttons-select-all'
-                          ></Icon>
-                          Bookmark
-                        </Button>
-                        <Button
-                          basic
-                          styleName='notice.tab-button'
-                          icon
-                          onClick={this.removeBookmark}
-                        >
-                          <Icon
-                            name='bookmark outline'
-                            color='blue'
-                            styleName='notice.buttons-select-all'
-                          ></Icon>
-                          Remove Bookmark
-                        </Button>
-                      </Segment>
-                    </div>
-                  ) : (
-                    <div styleName='notice.table-row'>
                       <Button
+                        basic
+                        styleName='notice.tab-button'
                         icon
-                        styleName='notice.select-all-button-not-activated  notice.select-all-button'
-                        onClick={this.selectAll}
+                        onClick={this.bookmark}
                       >
-                        <Icon name='square outline'> </Icon>
+                        <Icon
+                          name='bookmark'
+                          color='blue'
+                          styleName='notice.buttons-select-all'
+                        ></Icon>
+                        Bookmark
                       </Button>
-                      <Segment styleName='notice.select-all-list notice.display-filters'>
-                        <div styleName='notice.filter-block'>
-                          {bannerName || dateDisplay ? 'Filters:' : null}
-                          {bannerName ? ` ${bannerName}` : null}
-                          {bannerName && dateDisplay ? '; ' : null}
-                          {dateDisplay ? ` ${dateDisplay}` : null}
-                        </div>
-                      </Segment>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div></div>
-              )}
-            </Container>
+                      <Button
+                        basic
+                        styleName='notice.tab-button'
+                        icon
+                        onClick={this.removeBookmark}
+                      >
+                        <Icon
+                          name='bookmark outline'
+                          color='blue'
+                          styleName='notice.buttons-select-all'
+                        ></Icon>
+                        Remove Bookmark
+                      </Button>
+                    </Segment>
+                  </div>
+                ) : (
+                  <div styleName='notice.table-row'>
+                    <Button
+                      icon
+                      styleName='notice.select-all-button-not-activated  notice.select-all-button'
+                      onClick={this.selectAll}
+                    >
+                      <Icon name='square outline'> </Icon>
+                    </Button>
+                    <Segment styleName='notice.select-all-list notice.display-filters'>
+                      <div styleName='notice.filter-block'>
+                        {bannerName || dateDisplay ? 'Filters:' : null}
+                        {bannerName ? ` ${bannerName}` : null}
+                        {bannerName && dateDisplay ? '; ' : null}
+                        {dateDisplay ? ` ${dateDisplay}` : null}
+                      </div>
+                    </Segment>
+                  </div>
+                )}
+              </Container>
+            ) : (
+              <></>
+            )}
           </React.Fragment>
         )}
 

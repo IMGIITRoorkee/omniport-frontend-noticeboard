@@ -1,5 +1,9 @@
 import axios from 'axios'
-import { GET_NOTICE, REQUEST_NOTICE } from '../constants/action-types'
+import {
+  FETCH_NOTICE_FAILURE,
+  FETCH_NOTICE_REQUEST,
+  FETCH_NOTICE_SUCCESS
+} from '../constants/action-types'
 import { urlNotice, urlStarRead } from '../urls'
 import { getCookie } from 'formula_one'
 import { toast } from 'react-semantic-toasts'
@@ -8,7 +12,7 @@ import { ifRole } from 'formula_one'
 
 function requestNotice (noticeId) {
   return {
-    type: REQUEST_NOTICE,
+    type: FETCH_NOTICE_REQUEST,
     payload: {
       noticeId: noticeId,
       isFetchingNotice: true
@@ -18,7 +22,7 @@ function requestNotice (noticeId) {
 
 function receiveNotice (noticeData, noticeExists) {
   return {
-    type: GET_NOTICE,
+    type: FETCH_NOTICE_SUCCESS,
     payload: {
       notice: noticeData,
       noticeExists: noticeExists
@@ -53,15 +57,15 @@ export const getNotice = (noticeId, expired = false, callback) => {
                   if (err.response) {
                     err.response.data
                       ? toast({
-                        type: 'error',
-                        title: 'Failed to read notice!',
-                        description: err.response.data.msg
-                      })
+                          type: 'error',
+                          title: 'Failed to read notice!',
+                          description: err.response.data.msg
+                        })
                       : toast({
-                        type: 'error',
-                        title: 'Failed to read notice!',
-                        description: err.response.statusText
-                      })
+                          type: 'error',
+                          title: 'Failed to read notice!',
+                          description: err.response.statusText
+                        })
                   } else {
                     toast({
                       type: 'error',
@@ -77,18 +81,21 @@ export const getNotice = (noticeId, expired = false, callback) => {
         }
       })
       .catch(err => {
+        dispatch({
+          type: FETCH_NOTICE_FAILURE
+        })
         if (err.response) {
           err.response.data
             ? toast({
-              type: 'error',
-              title: 'Failed to fetch notice!',
-              description: err.response.data.msg
-            })
+                type: 'error',
+                title: 'Failed to fetch notice!',
+                description: err.response.data.msg
+              })
             : toast({
-              type: 'error',
-              title: 'Failed to fetch notice!',
-              description: err.response.statusText
-            })
+                type: 'error',
+                title: 'Failed to fetch notice!',
+                description: err.response.statusText
+              })
         } else {
           toast({
             type: 'error',

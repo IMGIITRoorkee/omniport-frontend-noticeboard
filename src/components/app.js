@@ -147,7 +147,10 @@ class App extends React.PureComponent {
                       <NoticeListView {...props} history={history} />
                     )}
                   />
-                  <Route path='/noticeboard/notice' component={NoticeView} />
+                  <Route
+                    path='/noticeboard/notice/:noticeId'
+                    component={NoticeView}
+                  />
                 </div>
               </Scrollbars>
             </div>

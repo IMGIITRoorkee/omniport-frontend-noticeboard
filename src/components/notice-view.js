@@ -39,7 +39,7 @@ class NoticeView extends Component {
     clearTimeout(this.timeout)
   }
 
-  render() {
+  render () {
     const { notice, isFetchingNotice, noticeExists } = this.props
     return (
       <div>

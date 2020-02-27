@@ -350,6 +350,18 @@
   justify-content: space-between;
 }
 
+.back-wrapper {
+  display: flex !important;
+  justify-content: space-between !important;
+  padding-right: 0 !important;
+}
+
+.back-edit-button {
+  background-color: #2185d0 !important;
+  color: white !important;
+  border-radius: 0 !important;
+}
+
 @media only screen and (max-width: 768px) {
   .select-all-container {
     height: 100% !important;

@@ -1,6 +1,7 @@
 import {
-  GET_NOTICES,
-  REQUEST_NOTICES,
+  FETCH_NOTICES_SUCCESS,
+  FETCH_NOTICES_REQUEST,
+  FETCH_NOTICES_FAILURE,
   BOOKMARK_NOTICE,
   SELECT_ALL,
   TOGGLE_SELECT,
@@ -78,7 +79,7 @@ const allNotices = (state = initialState, action) => {
         ...state
       }
 
-    case GET_NOTICES:
+    case FETCH_NOTICES_SUCCESS:
       let newState = {
         ...state,
         searchKeyword: action.payload.searchKeyword,
@@ -97,7 +98,7 @@ const allNotices = (state = initialState, action) => {
 
       return newState
 
-    case REQUEST_NOTICES:
+    case FETCH_NOTICES_REQUEST:
       return {
         ...state,
         isFetchingNotices: true,
@@ -106,6 +107,11 @@ const allNotices = (state = initialState, action) => {
         searchKeyword: action.payload.searchKeyword
       }
 
+    case FETCH_NOTICES_FAILURE:
+      return {
+        ...state,
+        isFetchingNotices: false
+      }
     case BOOKMARK_NOTICE:
       let noticeIdList = action.payload.noticeIdList
 

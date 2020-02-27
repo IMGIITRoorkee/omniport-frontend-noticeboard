@@ -9,14 +9,16 @@ import tablist from '../css/notice.css'
 
 class TabList extends Component {
   render () {
-    const { narrowBookmark, expired } = this.props
-
+    const { narrowBookmark, expired, permission } = this.props
     return (
       <Container styleName='tablist.notice-container-width'>
         <Menu secondary styleName='tablist.top-bar'>
           {!narrowBookmark && !expired ? (
             <div styleName='tablist.width-100'>
-              <Route path='/noticeboard/notice' component={BackLink} />
+              <Route
+                path='/noticeboard/notice/:noticeId'
+                render={props => <BackLink {...props} editButton />}
+              />
               <Route exact path='/noticeboard/' component={DropdownView} />
             </div>
           ) : (
@@ -31,7 +33,8 @@ class TabList extends Component {
 const mapStateToProps = state => {
   return {
     narrowBookmark: state.allNotices.narrowBookmark,
-    expired: state.allNotices.expired
+    expired: state.allNotices.expired,
+    permission: state.permission.permission
   }
 }
 

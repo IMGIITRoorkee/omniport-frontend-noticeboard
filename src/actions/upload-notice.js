@@ -28,15 +28,15 @@ export const uploadNotice = (data, callback) => {
         if (err.response) {
           err.response.data
             ? toast({
-                type: 'error',
-                title: 'Failed to upload the notice!',
-                description: err.response.data.msg
-              })
+              type: 'error',
+              title: 'Failed to upload the notice!',
+              description: err.response.data.msg
+            })
             : toast({
-                type: 'error',
-                title: 'Failed to upload the notice!',
-                description: err.response.statusText
-              })
+              type: 'error',
+              title: 'Failed to upload the notice!',
+              description: err.response.statusText
+            })
         } else {
           toast({
             type: 'error',

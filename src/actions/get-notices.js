@@ -1,4 +1,8 @@
-import { GET_NOTICES, REQUEST_NOTICES } from '../constants/action-types'
+import {
+  FETCH_NOTICES_SUCCESS,
+  FETCH_NOTICES_REQUEST,
+  FETCH_NOTICES_FAILURE
+} from '../constants/action-types'
 import {
   urlImportantNotices,
   urlBookmarkedNotices,
@@ -12,7 +16,7 @@ import { toast } from 'react-semantic-toasts'
 
 function requestNotices (page, searchKeyword) {
   return {
-    type: REQUEST_NOTICES,
+    type: FETCH_NOTICES_REQUEST,
     payload: {
       page: page,
       searchKeyword: searchKeyword
@@ -38,7 +42,7 @@ function receiveNotices (
   }
 
   return {
-    type: GET_NOTICES,
+    type: FETCH_NOTICES_SUCCESS,
     payload: {
       narrowBookmark: narrowBookmark,
       expired: expired,
@@ -107,6 +111,9 @@ export const getNotices = (
         )
       )
       .catch(err => {
+        dispatch({
+          type: FETCH_NOTICES_FAILURE
+        })
         if (err.response) {
           err.response.data
             ? toast({

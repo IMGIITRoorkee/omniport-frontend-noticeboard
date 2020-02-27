@@ -138,7 +138,7 @@ class NoticeModal extends Component {
       isPublic,
       isSendEmailRole
     } = this.state
-    const { uploadNotice, editNotice, modalType, id } = this.props
+    const { uploadNotice, editNotice, modalType, id, fetchNotice } = this.props
 
     if (title.trim() === '') {
       this.setState({
@@ -179,10 +179,10 @@ class NoticeModal extends Component {
     }
 
     modalType === 'edit'
-      ? editNotice(id, data, this.successCallback)
+      ? editNotice(id, data, this.successCallback, fetchNotice)
       : uploadNotice(data, this.successCallback)
   }
-  successCallback = () => {
+  successCallback = param => {
     const {
       narrowBookmark,
       bannerId,
@@ -192,18 +192,24 @@ class NoticeModal extends Component {
       searchKeyword,
       expired,
       showImp,
-      page
-    } = this.props
-    getNotices(
       page,
-      searchKeyword,
-      narrowBookmark,
-      expired,
-      bannerId,
-      mainCategorySlug,
-      dateRange,
-      showImp
-    )
+      getNotice
+    } = this.props
+
+    if (param) {
+      getNotice(param, false, () => {})
+    } else {
+      getNotices(
+        page,
+        searchKeyword,
+        narrowBookmark,
+        expired,
+        bannerId,
+        mainCategorySlug,
+        dateRange,
+        showImp
+      )
+    }
     this.setState(
       {
         title: '',
@@ -357,46 +363,65 @@ class NoticeModal extends Component {
               />
               <div styleName='upload.checkbox-parent'>
                 {showImpCheck ? (
-                  <Checkbox
-                    styleName='upload.notice-upload-checkbox'
-                    checked={isImportant}
-                    onChange={this.handleCheckChange}
-                    name='isImportant'
-                    label='Make the notice as IMPORTANT'
-                  />
-                ) : null}
-                <Checkbox
-                  styleName='upload.notice-send-email-checkbox'
-                  checked={isSendEmail}
-                  onChange={this.handleCheckChange}
-                  name='isSendEmail'
-                  label='Send Email'
-                  toggle
-                />
-                {isSendEmail ? (
-                  <div styleName='upload.email-role-radio'>
-                    <Radio
-                      styleName='upload.radio-buttons-margin'
-                      checked={isSendEmailRole === 'all'}
-                      onChange={() => this.handleEmailRoleChange('all')}
-                      name='email-role'
-                      label='All'
+                  <div>
+                    <Checkbox
+                      styleName='upload.notice-upload-checkbox'
+                      checked={isImportant}
+                      onChange={this.handleCheckChange}
+                      name='isImportant'
+                      label='Make the notice as IMPORTANT'
                     />
-                    <Radio
-                      styleName='upload.radio-buttons-margin'
-                      checked={isSendEmailRole === 'student'}
-                      onChange={() => this.handleEmailRoleChange('student')}
-                      name='email-role'
-                      label='Students'
-                    />
-                    <Radio
-                      styleName='upload.radio-buttons-margin'
-                      checked={isSendEmailRole === 'faculty'}
-                      onChange={() => this.handleEmailRoleChange('faculty')}
-                      name='email-role'
-                      label='Faculty'
+                    <Popup
+                      content='Marking this checkbox will allow you to target 
+                      email notifications to all students or all faculties or both.'
+                      inverted
+                      trigger={
+                        <Icon
+                          styleName='upload.notice-public-check-icon'
+                          name='help circle'
+                        />
+                      }
                     />
                   </div>
+                ) : null}
+                {isImportant ? (
+                  <>
+                    <Checkbox
+                      styleName='upload.notice-send-email-checkbox'
+                      checked={isSendEmail}
+                      onChange={this.handleCheckChange}
+                      name='isSendEmail'
+                      label='Send Email'
+                      toggle
+                    />
+                    {isSendEmail ? (
+                      <div styleName='upload.email-role-radio'>
+                        <Radio
+                          styleName='upload.radio-buttons-margin'
+                          checked={isSendEmailRole === 'all'}
+                          onChange={() => this.handleEmailRoleChange('all')}
+                          name='email-role'
+                          label='All'
+                        />
+                        <Radio
+                          styleName='upload.radio-buttons-margin'
+                          checked={isSendEmailRole === 'student'}
+                          onChange={() => this.handleEmailRoleChange('student')}
+                          name='email-role'
+                          label='Students'
+                        />
+                        <Radio
+                          styleName='upload.radio-buttons-margin'
+                          checked={isSendEmailRole === 'faculty'}
+                          onChange={() => this.handleEmailRoleChange('faculty')}
+                          name='email-role'
+                          label='Faculty'
+                        />
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                  </>
                 ) : (
                   <></>
                 )}
@@ -409,8 +434,8 @@ class NoticeModal extends Component {
                     label='Publish to website'
                   />
                   <Popup
-                    content='Checking this box will publish the notice to the website.
-                    Uncheck if you do not want this notice to be publically available on the website.'
+                    content='Marking this checkbox will publish the notice to the 
+                    main website if and only if the notice belongs to any department'
                     inverted
                     trigger={
                       <Icon
@@ -489,8 +514,8 @@ const mapDispatchToProps = dispatch => {
     uploadNotice: (data, callback) => {
       dispatch(uploadNotice(data, callback))
     },
-    editNotice: (id, data, callback) => {
-      dispatch(editNotice(id, data, callback))
+    editNotice: (id, data, callback, fetchNotice) => {
+      dispatch(editNotice(id, data, callback, fetchNotice))
     },
     getNotice: (noticeId, expired, callback) => {
       dispatch(getNotice(noticeId, expired, callback))

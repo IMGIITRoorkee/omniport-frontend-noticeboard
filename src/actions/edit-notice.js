@@ -7,7 +7,7 @@ import {
 } from '../constants/action-types'
 import { toast } from 'react-semantic-toasts'
 
-export const editNotice = (id, data, callback) => {
+export const editNotice = (id, data, callback, fetchNotice) => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -21,7 +21,7 @@ export const editNotice = (id, data, callback) => {
         dispatch({
           type: EDIT_NOTICE_SUCCESS
         })
-        callback()
+        callback(fetchNotice ? res.data.id : '')
       })
       .catch(err => {
         if (err.response) {

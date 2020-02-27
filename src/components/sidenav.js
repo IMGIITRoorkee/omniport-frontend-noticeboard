@@ -36,7 +36,7 @@ class SideNav extends Component {
     })
   }
 
-  narrowBookmarks(path) {
+  narrowBookmarks (path) {
     const { history, setPosition, hideImportant } = this.props
     setPosition('bookmark')
     hideImportant()
@@ -154,7 +154,7 @@ class SideNav extends Component {
     } else return []
   }
 
-  render() {
+  render () {
     const { filters, position } = this.props
     return (
       <Menu
