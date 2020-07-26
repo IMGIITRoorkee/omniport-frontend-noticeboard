@@ -1,34 +1,55 @@
-import { READ_NOTICE } from "../constants/action-types";
-import { urlWhoAmI, urlGetMaintainers, getCookie } from 'formula_one';
-import { urlStarRead } from "../urls";
+import { READ_NOTICE } from '../constants/action-types'
+import { getCookie } from 'formula_one'
+import { urlStarRead } from '../urls'
+import { toast } from 'react-semantic-toasts'
 
-
-function ReadNotice(notice_id_list, toggle) {
-
+function readNotice (noticeIdList, toggle) {
   return {
     type: READ_NOTICE,
     payload: {
-        notice_id_list: notice_id_list,
-        toggle: toggle
+      noticeIdList: noticeIdList,
+      toggle: toggle
     }
   }
 }
 
-export default function NoticeRead(notice_id_list, toggle) {
+export const noticeRead = (noticeIdList, toggle) => {
+  return dispatch => {
+    let headers = {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    }
+    let keyword = 'read'
 
-  return (dispatch) => {
-     let headers = {
-         'Content-Type': 'application/json',
-         'X-CSRFToken': getCookie('csrftoken')
-     };
-     let keyword = 'read';
-
-     let body = JSON.stringify({
-         keyword: keyword,
-         notices: notice_id_list
-     });
-     return fetch(urlStarRead(),
-           {method: 'post', headers: headers, body: body})
-         .then(response => dispatch(ReadNotice(notice_id_list, toggle)));
+    let body = JSON.stringify({
+      keyword: keyword,
+      notices: noticeIdList
+    })
+    return fetch(urlStarRead(), {
+      method: 'post',
+      headers: headers,
+      body: body
+    })
+      .then(response => dispatch(readNotice(noticeIdList, toggle)))
+      .catch(err => {
+        if (err.response) {
+          err.response.data
+            ? toast({
+                type: 'error',
+                title: 'Something went wrong!',
+                description: err.response.data.msg
+              })
+            : toast({
+                type: 'error',
+                title: 'Something went wrong!',
+                description: err.response.statusText
+              })
+        } else {
+          toast({
+            type: 'error',
+            title: 'Something went wrong!'
+          })
+        }
+      })
   }
 }

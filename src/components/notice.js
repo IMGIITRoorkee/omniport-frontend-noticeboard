@@ -1,94 +1,222 @@
-import React from 'react';
-import { Icon, Table } from 'semantic-ui-react';
-import { connect } from "react-redux";
-import NoticeBookmark from "../actions/bookmark";
-import moment from 'moment';
-import notice_css from "../css/notice.css";
-import { Link } from 'react-router-dom'
-import {initial_page} from "../constants/constants";
-import ToggleSelect from "../actions/toggle_select";
+import React, { Component } from 'react'
+import { Icon, Table } from 'semantic-ui-react'
+import { connect } from 'react-redux'
+import moment from 'moment'
+import { ifRole } from 'formula_one'
+import { deleteNotice, noticeBookmark, toggleSelect } from '../actions/index'
+import { INTIAL_PAGE } from '../constants/constants'
 
+import notice from '../css/notice.css'
+import { isMobile } from 'react-device-detect'
 
+class Notice extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      check: false
+    }
+  }
+
+  openNotice = e => {
+    const { id, history, expired } = this.props
+    let path
+    if (expired) {
+      path = '/noticeboard/notice/old/' + id
+    } else {
+      path = '/noticeboard/notice/' + id
+    }
+    history.push({
+      pathname: path,
+      state: { page: INTIAL_PAGE, expired: expired }
+    })
+  }
+
+  componentDidUpdate (prevProps) {
+    const { selectAllActive, id, selectedNotices } = this.props
+    if (selectAllActive !== prevProps.selectAllActive) {
+      this.setState({
+        check: selectAllActive && selectedNotices.includes(id)
+      })
+    }
+  }
+
+  bookmarkNotice = e => {
+    const { id, bookmark, noticeBookmark, expired } = this.props
+    if (!expired) {
+      noticeBookmark([id], !bookmark)
+    }
+  }
+
+  selectNotice = e => {
+    const { id, toggleSelect } = this.props
+    const { check } = this.state
+    this.setState(
+      {
+        check: !check
+      },
+      toggleSelect(id)
+    )
+  }
+
+  render () {
+    const {
+      date,
+      banner,
+      title,
+      read,
+      bookmark,
+      expired,
+      uploader,
+      user,
+      id,
+      editNotice,
+      deleteNotice,
+      important,
+      permission
+    } = this.props
+    const { check } = this.state
+    return (
+      <Table.Row
+        styleName={
+          read
+            ? 'notice.notice-row-read notice.notice-row'
+            : 'notice.notice-row-unread notice.notice-row'
+        }
+      >
+        {(user && ifRole(user.roles, 'Guest') === 'IS_ACTIVE') ||
+        expired ? null : (
+          <Table.Cell
+            styleName={'notice.cell-width-1 notice.cell-hover'}
+            onClick={this.selectNotice}
+            collapsing
+          >
+            <Icon
+              name={check ? 'square' : 'square outline'}
+              color={check ? 'blue' : 'grey'}
+            />
+          </Table.Cell>
+        )}
+
+        {(user && ifRole(user.roles, 'Guest') === 'IS_ACTIVE') ||
+        expired ? null : (
+          <Table.Cell
+            styleName={'notice.cell-width-1 notice.cell-hover'}
+            onClick={this.bookmarkNotice}
+          >
+            <Icon
+              name={bookmark ? 'bookmark' : 'bookmark outline'}
+              color='yellow'
+            />
+          </Table.Cell>
+        )}
+        {!isMobile ? (
+          <Table.Cell
+            collapsing
+            onClick={this.openNotice}
+            styleName='notice.cell-width-4 notice.cell-hover'
+          >
+            {banner.name}
+          </Table.Cell>
+        ) : (
+          <></>
+        )}
+        <Table.Cell
+          collapsing
+          onClick={this.openNotice}
+          styleName='notice.cell-hover'
+        >
+          <span styleName='notice.tag-margin-right'>
+            {important ? (
+              <Icon name='tag' color='blue' />
+            ) : (
+              <Icon name={null} />
+            )}
+          </span>
+          {title}
+        </Table.Cell>
+        {!isMobile ? (
+          <Table.Cell
+            onClick={this.openNotice}
+            collapsing
+            styleName='notice.cell-width-3 notice.cell-hover'
+          >
+            {uploader.fullName}
+          </Table.Cell>
+        ) : (
+          <></>
+        )}
+        {!isMobile ? (
+          <Table.Cell
+            onClick={this.openNotice}
+            textAlign='center'
+            collapsing
+            styleName='notice.cell-width-2 notice.cell-hover'
+          >
+            {moment(date).format(
+              Date.now().year === moment(date).year() ? 'DD/MM/YY' : 'MMM Do'
+            )}
+          </Table.Cell>
+        ) : (
+          <></>
+        )}
+        {permission.length > 0 ? (
+          <>
+            {!expired ? (
+              <Table.Cell
+                onClick={
+                  uploader && uploader.id === user.id
+                    ? () => editNotice(id)
+                    : null
+                }
+                collapsing
+                textAlign='center'
+                styleName='notice.cell-width-1'
+              >
+                {uploader && uploader.id === user.id ? (
+                  <Icon name='pencil' styleName='notice.cell-hover' />
+                ) : null}
+              </Table.Cell>
+            ) : null}
+            <Table.Cell
+              onClick={
+                uploader && uploader.id === user.id
+                  ? () => deleteNotice(id, expired ? 'old' : 'new')
+                  : null
+              }
+              collapsing
+              textAlign='center'
+              styleName='notice.cell-width-1'
+            >
+              {uploader && uploader.id === user.id ? (
+                <Icon name='trash' styleName='notice.cell-hover' />
+              ) : null}
+            </Table.Cell>
+          </>
+        ) : null}
+      </Table.Row>
+    )
+  }
+}
 
 const mapStateToProps = state => {
-    return {
-        expired: state.GetNotices.expired,
-        select_all_active: state.GetNotices.select_all_active
-    };
-};
+  return {
+    expired: state.allNotices.expired,
+    selectAllActive: state.allNotices.selectAllActive,
+    selectedNotices: state.allNotices.selectedNotices,
+    user: state.user.user,
+    permission: state.permission.permission
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
-    NoticeBookmark: (notice_id_list, bookmark) => {
-        dispatch(NoticeBookmark(notice_id_list, bookmark));
+    noticeBookmark: (noticeIdList, bookmark) => {
+      dispatch(noticeBookmark(noticeIdList, bookmark))
     },
-    ToggleSelect: (notice_id, is_selected) => {
-        dispatch(ToggleSelect(notice_id, is_selected));
+    toggleSelect: noticeId => {
+      dispatch(toggleSelect(noticeId))
     }
   }
-};
+}
 
-const Notice = ({id, date, banner, title, is_selected, select_all_active, ToggleSelect,
-                    history, read, bookmark, NoticeBookmark, expired}) => {
-
-    const OpenNotice = (e) => {
-        let path;
-        if (expired) {
-            path = '/noticeboard/notice/old/'+id;
-        } else {
-            path = '/noticeboard/notice/'+id;
-        }
-        history.push({pathname: path, state: {page: initial_page, expired: expired}});
-    };
-
-    const bookmarkNotice = (e) => {
-        bookmark = !bookmark;
-        if (!expired) {
-            NoticeBookmark([id], bookmark);
-        }
-    };
-
-    const selectNotice = (e) => {
-        is_selected = !is_selected;
-        ToggleSelect(id, is_selected);
-    };
-
-    return (
-        <Table.Row styleName={read ? 'notice_css.notice-row-read notice_css.notice-row': 'notice_css.notice-row-unread notice_css.notice-row'}>
-            <Table.Cell styleName={expired ? 'notice_css.cell-width-1':
-                                             'notice_css.cell-width-1 notice_css.cell-hover'}
-                        onClick={selectNotice}>
-                {expired ? (
-                    <Icon name='square outline'/>
-                ) : (
-                    <Icon name={is_selected ? 'square': 'square outline'}
-                          color={is_selected ? 'blue': 'grey'}
-                    />
-                )}
-            </Table.Cell>
-            <Table.Cell styleName={expired ? 'notice_css.cell-width-1':
-                                             'notice_css.cell-width-1 notice_css.cell-hover'}
-                        onClick={bookmarkNotice}>
-                {expired ? (
-                    <Icon name='bookmark outline'/>
-                ) : (
-                    <Icon name={bookmark ? 'bookmark': 'bookmark outline'} color='yellow'/>
-                )}
-            </Table.Cell>
-            <Table.Cell collapsing onClick={OpenNotice} styleName='notice_css.cell-width-3 notice_css.cell-hover'>
-                {banner.name}
-            </Table.Cell>
-            <Table.Cell collapsing onClick={OpenNotice} styleName='notice_css.cell-hover'>
-                {title}
-            </Table.Cell>
-            <Table.Cell onClick={OpenNotice} styleName='notice_css.cell-width-2 notice_css.cell-date notice_css.cell-hover'>
-                {moment(date).format("MMM Do")}
-            </Table.Cell>
-            <Table.Cell onClick={OpenNotice} styleName='notice_css.cell-width-2 notice_css.cell-hover'>
-                {moment(date).format("LT")}
-            </Table.Cell>
-        </Table.Row>
-    )
-};
-
-export default connect(mapStateToProps, mapDispatchToProps) (Notice);
+export default connect(mapStateToProps, mapDispatchToProps)(Notice)

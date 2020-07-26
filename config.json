@@ -1,8 +1,9 @@
 {
-    "nomenclature": {
-        "name": "noticeboard",
-        "verboseName": "Noticeboard"
-    },
-    "baseUrl": "/noticeboard",
-    "source": "noticeboard/src/index"
+  "nomenclature": {
+    "name": "noticeboard",
+    "verboseName": "Noticeboard"
+  },
+  "baseUrl": "/noticeboard",
+  "source": "noticeboard/src/index",
+  "apiKey": "o0l5yisg0820x4d4q8amvmsex6u9ct3t8kvnodq057hhgyyz"
 }
