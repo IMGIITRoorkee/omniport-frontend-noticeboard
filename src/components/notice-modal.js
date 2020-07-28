@@ -361,6 +361,32 @@ class NoticeModal extends Component {
                 mountedNode={modalRef}
                 content={editorContent}
               />
+	      <div styleName='upload.checkbox-parent'>
+		      <h4>Notify:</h4>
+		      <div styleName='upload.email-role-radio'>
+			<Radio
+			  styleName='upload.radio-buttons-margin'
+			  checked={isSendEmailRole === 'all'}
+			  onChange={() => this.handleEmailRoleChange('all')}
+			  name='email-role'
+			  label='All'
+			/>
+			<Radio
+			  styleName='upload.radio-buttons-margin'
+			  checked={isSendEmailRole === 'student'}
+			  onChange={() => this.handleEmailRoleChange('student')}
+			  name='email-role'
+			  label='Students'
+			/>
+			<Radio
+			  styleName='upload.radio-buttons-margin'
+			  checked={isSendEmailRole === 'faculty'}
+			  onChange={() => this.handleEmailRoleChange('faculty')}
+			  name='email-role'
+			  label='Faculty'
+			/>
+		      </div>
+	      </div>
               <div styleName='upload.checkbox-parent'>
                 {showImpCheck ? (
                   <div>
@@ -384,47 +410,6 @@ class NoticeModal extends Component {
                     />
                   </div>
                 ) : null}
-                {isImportant ? (
-                  <>
-                    <Checkbox
-                      styleName='upload.notice-send-email-checkbox'
-                      checked={isSendEmail}
-                      onChange={this.handleCheckChange}
-                      name='isSendEmail'
-                      label='Send Email'
-                      toggle
-                    />
-                    {isSendEmail ? (
-                      <div styleName='upload.email-role-radio'>
-                        <Radio
-                          styleName='upload.radio-buttons-margin'
-                          checked={isSendEmailRole === 'all'}
-                          onChange={() => this.handleEmailRoleChange('all')}
-                          name='email-role'
-                          label='All'
-                        />
-                        <Radio
-                          styleName='upload.radio-buttons-margin'
-                          checked={isSendEmailRole === 'student'}
-                          onChange={() => this.handleEmailRoleChange('student')}
-                          name='email-role'
-                          label='Students'
-                        />
-                        <Radio
-                          styleName='upload.radio-buttons-margin'
-                          checked={isSendEmailRole === 'faculty'}
-                          onChange={() => this.handleEmailRoleChange('faculty')}
-                          name='email-role'
-                          label='Faculty'
-                        />
-                      </div>
-                    ) : (
-                      <></>
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
                 <div>
                   <Checkbox
                     styleName='upload.notice-send-email-checkbox'
