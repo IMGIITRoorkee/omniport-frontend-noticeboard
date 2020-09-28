@@ -101,6 +101,11 @@
   word-wrap: break-word;
 }
 
+.notice-content img {
+  max-width: 100%;
+  height: auto;
+}
+
 .notice-view-no-notice {
   border: 1px solid #e5e5e5;
   border-radius: 0.28571429rem;
