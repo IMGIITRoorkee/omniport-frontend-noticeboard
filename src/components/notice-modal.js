@@ -39,9 +39,9 @@ class NoticeModal extends Component {
       bannerError: false,
       editorError: false,
       showImpCheck: false,
-      isSendEmail: true,
+      isSendNotification: true,
       finalImportant: false,
-      isSendEmailRole: 'all'
+      sendNotificationToRole: ''
     }
     this.modalRef = React.createRef()
   }
@@ -53,9 +53,9 @@ class NoticeModal extends Component {
     }
   }
 
-  handleEmailRoleChange = str => {
+  handleNotificationRoleChange = str => {
     this.setState({
-      isSendEmailRole: str
+      sendNotificationToRole: str
     })
   }
 
@@ -81,7 +81,7 @@ class NoticeModal extends Component {
       finalImportant: tmpNotice.isImportant,
       endDate: tmpNotice.expiryDate,
       showImpCheck: tempCheck,
-      isSendEmail: tmpNotice.sendEmail,
+      isSendNotification: tmpNotice.isSendNotification,
       isPublic: tmpNotice.isPublic
     })
   }
@@ -134,9 +134,9 @@ class NoticeModal extends Component {
       editorContent,
       endDate,
       isImportant,
-      isSendEmail,
+      isSendNotification,
       isPublic,
-      isSendEmailRole
+      sendNotificationToRole
     } = this.state
     const { uploadNotice, editNotice, modalType, id, fetchNotice } = this.props
 
@@ -173,9 +173,9 @@ class NoticeModal extends Component {
       banner: checkedState.id,
       expiryDate: endDate,
       isImportant: isImportant,
-      sendEmail: isSendEmail,
+      isSendNotification: isSendNotification,
       isPublic: isPublic,
-      isSendEmailRole: isSendEmailRole
+      sendNotificationToRole: sendNotificationToRole
     }
 
     modalType === 'edit'
@@ -232,9 +232,9 @@ class NoticeModal extends Component {
       bannerError,
       showImpCheck,
       editorContent,
-      isSendEmail,
+      isSendNotification,
       isPublic,
-      isSendEmailRole
+      sendNotificationToRole
     } = this.state
     const {
       isUploading,
@@ -369,7 +369,7 @@ class NoticeModal extends Component {
                       checked={isImportant}
                       onChange={this.handleCheckChange}
                       name='isImportant'
-                      label='Make the notice as IMPORTANT'
+                      label='Mark the notice as IMPORTANT'
                     />
                     <Popup
                       content='Marking this checkbox will allow you to target 
@@ -387,34 +387,34 @@ class NoticeModal extends Component {
                 {isImportant ? (
                   <>
                     <Checkbox
-                      styleName='upload.notice-send-email-checkbox'
-                      checked={isSendEmail}
+                      styleName='upload.notice-send-notification-checkbox'
+                      checked={isSendNotification}
                       onChange={this.handleCheckChange}
-                      name='isSendEmail'
-                      label='Send Email'
+                      name='isSendNotification'
+                      label='Send Notification'
                       toggle
                     />
-                    {isSendEmail ? (
-                      <div styleName='upload.email-role-radio'>
+                    {isSendNotification ? (
+                      <div styleName='upload.notification-role-radio'>
                         <Radio
                           styleName='upload.radio-buttons-margin'
-                          checked={isSendEmailRole === 'all'}
-                          onChange={() => this.handleEmailRoleChange('all')}
-                          name='email-role'
+                          checked={sendNotificationToRole === 'all'}
+                          onChange={() => this.handleNotificationRoleChange('all')}
+                          name='notification-role'
                           label='All'
                         />
                         <Radio
                           styleName='upload.radio-buttons-margin'
-                          checked={isSendEmailRole === 'student'}
-                          onChange={() => this.handleEmailRoleChange('student')}
-                          name='email-role'
+                          checked={sendNotificationToRole === 'student'}
+                          onChange={() => this.handleNotificationRoleChange('student')}
+                          name='notification-role'
                           label='Students'
                         />
                         <Radio
                           styleName='upload.radio-buttons-margin'
-                          checked={isSendEmailRole === 'faculty'}
-                          onChange={() => this.handleEmailRoleChange('faculty')}
-                          name='email-role'
+                          checked={sendNotificationToRole === 'faculty'}
+                          onChange={() => this.handleNotificationRoleChange('faculty')}
+                          name='notification-role'
                           label='Faculty'
                         />
                       </div>
@@ -427,7 +427,7 @@ class NoticeModal extends Component {
                 )}
                 <div>
                   <Checkbox
-                    styleName='upload.notice-send-email-checkbox'
+                    styleName='upload.notice-send-notification-checkbox'
                     checked={isPublic}
                     onChange={this.handleCheckChange}
                     name='isPublic'

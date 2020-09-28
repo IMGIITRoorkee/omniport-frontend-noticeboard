@@ -23,7 +23,7 @@
   margin: 0.5rem 0;
   font-weight: 900;
 }
-.notice-send-email-checkbox {
+.notice-send-notification-checkbox {
   margin: 0.5rem 0rem;
 }
 .margin-above {
@@ -56,7 +56,7 @@
   flex-direction: column;
   margin: 1rem 0;
 }
-.email-role-radio {
+.notification-role-radio {
   margin: 1rem 0;
 }
 .notice-public-check-icon {
