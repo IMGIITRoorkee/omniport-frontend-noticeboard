@@ -113,7 +113,8 @@ class Notice extends Component {
           <Table.Cell
             collapsing
             onClick={this.openNotice}
-            styleName='notice.cell-width-4 notice.cell-hover'
+            styleName='notice.cell-width-2 notice.cell-hover'
+            title={banner.name}
           >
             {banner.name}
           </Table.Cell>
@@ -123,7 +124,8 @@ class Notice extends Component {
         <Table.Cell
           collapsing
           onClick={this.openNotice}
-          styleName='notice.cell-hover'
+          styleName='notice.cell-hover notice.cell-width-4'
+          title={title}
         >
           <span styleName='notice.tag-margin-right'>
             {important ? (
@@ -138,7 +140,8 @@ class Notice extends Component {
           <Table.Cell
             onClick={this.openNotice}
             collapsing
-            styleName='notice.cell-width-3 notice.cell-hover'
+            styleName='notice.cell-width-2 notice.cell-hover'
+            title={uploader.fullName}
           >
             {uploader.fullName}
           </Table.Cell>
