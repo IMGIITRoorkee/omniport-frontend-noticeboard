@@ -431,11 +431,11 @@ class NoticeModal extends Component {
                     checked={isPublic}
                     onChange={this.handleCheckChange}
                     name='isPublic'
-                    label='Publish to website'
+                    label='Mark the notice as Public'
                   />
                   <Popup
-                    content='Marking this checkbox will publish the notice to the 
-                    main website if and only if the notice belongs to any department'
+                    content='Marking this checkbox will make the notice public and will publish it to the 
+                    main website if the notice is uploaded by any department'
                     inverted
                     trigger={
                       <Icon
