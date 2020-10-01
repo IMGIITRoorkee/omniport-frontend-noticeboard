@@ -122,10 +122,10 @@ class Notice extends Component {
             {banner.name}
           </Table.Cell>
         ) : (
-          <></>
+          null
         )}
         <Table.Cell
-          width={10}
+          width={ isMobile ? 7 : 10 }
           collapsing
           onClick={this.openNotice}
           styleName='notice.cell-width-4 notice.cell-hover'
@@ -149,23 +149,19 @@ class Notice extends Component {
             {uploader.fullName}
           </Table.Cell>
         ) : (
-          <></>
+          null
         )}
-        {!isMobile ? (
-          <Table.Cell
-            width={4}
-            onClick={this.openNotice}
-            textAlign='center'
-            collapsing
-            styleName='notice.cell-width-2 notice.cell-hover'
-          >
-            {moment(date).format(
-              Date.now().year === moment(date).year() ? 'DD/MM/YY' : 'MMM Do'
-            )}
-          </Table.Cell>
-        ) : (
-          <></>
-        )}
+        <Table.Cell
+          width={ isMobile ? 3 : 4 }
+          onClick={this.openNotice}
+          textAlign='center'
+          collapsing
+          styleName='notice.cell-width-2 notice.cell-hover'
+        >
+          {moment(date).format(
+            Date.now().year === moment(date).year() ? 'DD/MM/YY' : 'MMM Do'
+          )}
+        </Table.Cell>
         {permission.length > 0 ? (
           <>
             {!expired ? (
