@@ -86,6 +86,7 @@ class Notice extends Component {
         {(user && ifRole(user.roles, 'Guest') === 'IS_ACTIVE') ||
         expired ? null : (
           <Table.Cell
+            width={1}
             styleName={'notice.cell-width-1 notice.cell-hover'}
             onClick={this.selectNotice}
             collapsing
@@ -100,6 +101,7 @@ class Notice extends Component {
         {(user && ifRole(user.roles, 'Guest') === 'IS_ACTIVE') ||
         expired ? null : (
           <Table.Cell
+            width={1}
             styleName={'notice.cell-width-1 notice.cell-hover'}
             onClick={this.bookmarkNotice}
           >
@@ -111,6 +113,7 @@ class Notice extends Component {
         )}
         {!isMobile ? (
           <Table.Cell
+            width={4}
             collapsing
             onClick={this.openNotice}
             styleName='notice.cell-width-2 notice.cell-hover'
@@ -119,20 +122,19 @@ class Notice extends Component {
             {banner.name}
           </Table.Cell>
         ) : (
-          <></>
+          null
         )}
         <Table.Cell
+          width={ isMobile ? 7 : 10 }
           collapsing
           onClick={this.openNotice}
-          styleName='notice.cell-hover notice.cell-width-4'
+          styleName='notice.cell-width-4 notice.cell-hover'
           title={title}
         >
           <span styleName='notice.tag-margin-right'>
             {important ? (
               <Icon name='tag' color='blue' />
-            ) : (
-              <Icon name={null} />
-            )}
+            ) : null}
           </span>
           {title}
         </Table.Cell>
@@ -141,27 +143,25 @@ class Notice extends Component {
             onClick={this.openNotice}
             collapsing
             styleName='notice.cell-width-2 notice.cell-hover'
+            width={2}
             title={uploader.fullName}
           >
             {uploader.fullName}
           </Table.Cell>
         ) : (
-          <></>
+          null
         )}
-        {!isMobile ? (
-          <Table.Cell
-            onClick={this.openNotice}
-            textAlign='center'
-            collapsing
-            styleName='notice.cell-width-2 notice.cell-hover'
-          >
-            {moment(date).format(
-              Date.now().year === moment(date).year() ? 'DD/MM/YY' : 'MMM Do'
-            )}
-          </Table.Cell>
-        ) : (
-          <></>
-        )}
+        <Table.Cell
+          width={ isMobile ? 3 : 4 }
+          onClick={this.openNotice}
+          textAlign='center'
+          collapsing
+          styleName='notice.cell-width-2 notice.cell-hover'
+        >
+          {moment(date).format(
+            Date.now().year === moment(date).year() ? 'DD/MM/YY' : 'MMM Do'
+          )}
+        </Table.Cell>
         {permission.length > 0 ? (
           <>
             {!expired ? (
@@ -174,6 +174,7 @@ class Notice extends Component {
                 collapsing
                 textAlign='center'
                 styleName='notice.cell-width-1'
+                width={1}
               >
                 {uploader && uploader.id === user.id ? (
                   <Icon name='pencil' styleName='notice.cell-hover' />
@@ -189,6 +190,7 @@ class Notice extends Component {
               collapsing
               textAlign='center'
               styleName='notice.cell-width-1'
+              width={1}
             >
               {uploader && uploader.id === user.id ? (
                 <Icon name='trash' styleName='notice.cell-hover' />

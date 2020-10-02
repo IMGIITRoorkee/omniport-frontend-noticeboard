@@ -240,32 +240,29 @@
 }
 
 .cell-width-1 {
-  width: 0.205% !important;
   color: #999999;
   overflow: visible !important;
   padding-left: 1.25% !important;
 }
 
 .cell-width-2 {
-  width: 0.6% !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   color: #878787;
+  text-align: left !important;
 }
 
 .cell-width-3 {
-  width: 0.9% !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-align: center;
+  text-align: left !important;
   color: #878787;
 }
 
 .cell-width-4 {
-  max-width: 2.5rem !important;
-  text-align: center;
+  text-align: left !important;
   white-space: nowrap;
   box-sizing: content-box;
   overflow: hidden;
@@ -399,11 +396,5 @@
   .search-menu-item {
     padding: 0 !important;
     margin: 0.5rem 0 !important;
-  }
-}
-
-@media only screen and (max-width: 1000px) {
-  .cell-width-1 {
-    width: 0.14% !important;
   }
 }
