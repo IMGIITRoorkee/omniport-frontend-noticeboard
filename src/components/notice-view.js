@@ -5,7 +5,8 @@ import {
   Segment,
   Header,
   Loader,
-  Popup
+  Popup,
+  Button
 } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -39,8 +40,14 @@ class NoticeView extends Component {
     clearTimeout(this.timeout)
   }
 
+  download = () => {
+    const element = document.createElement('a')
+    element.href = this.props.pdfPath
+    element.download = ''
+    element.click()
+  }
   render () {
-    const { notice, isFetchingNotice, noticeExists } = this.props
+    const { notice, isFetchingNotice, noticeExists, pdfPath } = this.props
     return (
       <div>
         {!isFetchingNotice ? (
@@ -79,6 +86,7 @@ class NoticeView extends Component {
                       'MMMM Do YYYY, h:mm:ss a'
                     )}
                   </p>
+                  {pdfPath ? <Button onClick={this.download}>Download PDF</Button> : null}
                 </Segment>
 
                 <Divider fitted />
@@ -121,7 +129,8 @@ const mapStateToProps = state => {
     notice: state.notice.notice,
     noticeExists: state.notice.noticeExists,
     isFetchingNotice: state.notice.isFetchingNotice,
-    noticeId: state.notice.noticeId
+    noticeId: state.notice.noticeId,
+    pdfPath: state.notice.pdfPath
   }
 }
 

@@ -1,14 +1,16 @@
 import {
   FETCH_NOTICE_FAILURE,
   FETCH_NOTICE_SUCCESS,
-  FETCH_NOTICE_REQUEST
+  FETCH_NOTICE_REQUEST,
+  PDF_PATH
 } from '../constants/action-types'
 
 const initialState = {
   isFetchingNotice: false,
   notice: '',
   noticeExists: null,
-  noticeId: ''
+  noticeId: '',
+  pdfPath: ''
 }
 
 const notice = (state = initialState, action) => {
@@ -24,12 +26,18 @@ const notice = (state = initialState, action) => {
         ...state,
         isFetchingNotice: false,
         notice: action.payload.notice,
-        noticeExists: action.payload.noticeExists
+        noticeExists: action.payload.noticeExists,
+        pdfPath: action.payload.notice.pdfPath
       }
     case FETCH_NOTICE_FAILURE:
       return {
         ...state,
         isFetchingNotice: false
+      }
+    case PDF_PATH:
+      return {
+        ...state,
+        pdfPath: action.payload.pdfPath
       }
     default:
       return state
