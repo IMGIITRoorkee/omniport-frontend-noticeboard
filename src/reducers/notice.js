@@ -2,7 +2,7 @@ import {
   FETCH_NOTICE_FAILURE,
   FETCH_NOTICE_SUCCESS,
   FETCH_NOTICE_REQUEST,
-  PDF_PATH
+  MEDIA_PATH
 } from '../constants/action-types'
 
 const initialState = {
@@ -10,7 +10,7 @@ const initialState = {
   notice: '',
   noticeExists: null,
   noticeId: '',
-  pdfPath: ''
+  mediaPath: ''
 }
 
 const notice = (state = initialState, action) => {
@@ -27,17 +27,17 @@ const notice = (state = initialState, action) => {
         isFetchingNotice: false,
         notice: action.payload.notice,
         noticeExists: action.payload.noticeExists,
-        pdfPath: action.payload.notice.pdfPath
+        mediaPath: action.payload.notice.mediaPath
       }
     case FETCH_NOTICE_FAILURE:
       return {
         ...state,
         isFetchingNotice: false
       }
-    case PDF_PATH:
+    case MEDIA_PATH:
       return {
         ...state,
-        pdfPath: action.payload.pdfPath
+        mediaPath: action.payload.mediaPath
       }
     default:
       return state

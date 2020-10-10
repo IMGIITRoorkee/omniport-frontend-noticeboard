@@ -42,12 +42,12 @@ class NoticeView extends Component {
 
   download = () => {
     const element = document.createElement('a')
-    element.href = this.props.pdfPath
+    element.href = this.props.mediaPath
     element.download = ''
     element.click()
   }
   render () {
-    const { notice, isFetchingNotice, noticeExists, pdfPath } = this.props
+    const { notice, isFetchingNotice, noticeExists, mediaPath } = this.props
     return (
       <div>
         {!isFetchingNotice ? (
@@ -86,7 +86,7 @@ class NoticeView extends Component {
                       'MMMM Do YYYY, h:mm:ss a'
                     )}
                   </p>
-                  {pdfPath ? <Button onClick={this.download}>Download PDF</Button> : null}
+                  {mediaPath ? <Button onClick={this.download}>Download PDF</Button> : null}
                 </Segment>
 
                 <Divider fitted />
@@ -130,7 +130,7 @@ const mapStateToProps = state => {
     noticeExists: state.notice.noticeExists,
     isFetchingNotice: state.notice.isFetchingNotice,
     noticeId: state.notice.noticeId,
-    pdfPath: state.notice.pdfPath
+    mediaPath: state.notice.mediaPath
   }
 }
 

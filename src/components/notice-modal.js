@@ -138,7 +138,7 @@ class NoticeModal extends Component {
       isPublic,
       sendNotificationToRole
     } = this.state
-    const { uploadNotice, editNotice, modalType, id, fetchNotice, pdfPath } = this.props
+    const { uploadNotice, editNotice, modalType, id, fetchNotice, mediaPath } = this.props
 
     if (title.trim() === '') {
       this.setState({
@@ -176,7 +176,7 @@ class NoticeModal extends Component {
       isSendNotification: isSendNotification,
       isPublic: isPublic,
       sendNotificationToRole: sendNotificationToRole,
-      pdfPath: pdfPath
+      mediaPath: mediaPath
     }
 
     modalType === 'edit'
@@ -484,7 +484,7 @@ const mapStateToProps = state => {
     permission: state.permission.permission,
     normalPer: state.permission.normalPer,
     notice: state.notice,
-    pdfPath: state.notice.pdfPath,
+    mediaPath: state.notice.mediaPath,
   }
 }
 

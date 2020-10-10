@@ -2,7 +2,7 @@ import axios from 'axios'
 import { getCookie } from 'formula_one'
 import { urlCopyMedia } from '../urls'
 import { toast } from 'react-semantic-toasts'
-import { PDF_PATH } from '../constants/action-types'
+import { MEDIA_PATH } from '../constants/action-types'
 
 export const copyMedia = (data, callback) => {
   let headers = {
@@ -13,15 +13,15 @@ export const copyMedia = (data, callback) => {
     .post(urlCopyMedia(), data, { headers: headers })
     .then(res => {
       dispatch({
-        type: PDF_PATH,
+        type: MEDIA_PATH,
         payload: {
-          pdfPath: res.data && res.data.pdfPath 
+          mediaPath: res.data && res.data.mediaPath 
         }
       })
       callback({
         success: true,
         path: res.data && res.data.path,
-        pdfPath: res.data && res.data.pdfPath
+        mediaPath: res.data && res.data.mediaPath
       })
     })
     .catch(err => {

@@ -17,7 +17,7 @@ class UploadNoticeEditor extends Component {
       isConfirm: false,
       error: false,
       newPath: '',
-      pdfPath:'',
+      mediaPath:'',
       isConfirmLoading: false
     }
   }
@@ -92,7 +92,7 @@ class UploadNoticeEditor extends Component {
           isConfirmModal: false,
           isConfirm: true,
           newPath: data.path,
-          pdfPath: data.pdfPath,
+          mediaPath: data.mediaPath,
           isConfirmLoading: false
         },
         () => {
