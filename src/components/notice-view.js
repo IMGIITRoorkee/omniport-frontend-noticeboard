@@ -6,7 +6,6 @@ import {
   Header,
   Loader,
   Popup,
-  Button
 } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -40,12 +39,6 @@ class NoticeView extends Component {
     clearTimeout(this.timeout)
   }
 
-  download = () => {
-    const element = document.createElement('a')
-    element.href = this.props.mediaPath
-    element.download = ''
-    element.click()
-  }
   render () {
     const { notice, isFetchingNotice, noticeExists, mediaPath } = this.props
     return (
@@ -86,7 +79,6 @@ class NoticeView extends Component {
                       'MMMM Do YYYY, h:mm:ss a'
                     )}
                   </p>
-                  {mediaPath ? <Button onClick={this.download}>Download PDF</Button> : null}
                 </Segment>
 
                 <Divider fitted />
