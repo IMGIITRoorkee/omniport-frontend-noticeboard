@@ -120,11 +120,11 @@ export default class UploadNoticeEditor extends Component {
             content_style: 'img { max-width: 100%; height:auto}',
             plugins: [
               'advlist autolink lists link image charmap print preview anchor',
-              'searchreplace visualblocks code fullscreen',
+              'searchreplace textcolor visualblocks code fullscreen',
               'insertdatetime media imagetools table paste code help wordcount'
             ],
             toolbar:
-              'undo redo | formatselect | image | bold italic backcolor | \
+              'undo redo | formatselect | image | forecolor backcolor | bold italic | \
               alignleft aligncenter alignright alignjustify | \
               bullist numlist outdent indent |removeformat | help',
             file_picker_callback: (callback, value, meta) => {
