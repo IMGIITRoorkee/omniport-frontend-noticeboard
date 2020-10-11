@@ -112,7 +112,7 @@ class NoticeModal extends Component {
   handleEditorChange = e => {
     let content = e.target.getContent()
     if(this.props.mediaPath) {
-      let element = '<a href=' + this.props.mediaPath + ' target="_blank" style="color:red;">Download PDF</a>'
+      let element = '<a href=' + this.props.mediaPath + ' target="_blank" style="color:red;">View this file</a>'
       if(content!=='' && content!==null) {
           content="<p>" + content + element + "</p>"
       }
