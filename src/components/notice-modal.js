@@ -441,8 +441,8 @@ class NoticeModal extends Component {
                     label='Mark the notice as Public'
                   />
                   <Popup
-                    content='Marking this checkbox will make the notice public and will publish it to the 
-                    main website if the notice is uploaded by any department'
+                    content='Publish the notice to the notice board section of the department page
+                             automatically (only applicable for departments)'
                     inverted
                     trigger={
                       <Icon
