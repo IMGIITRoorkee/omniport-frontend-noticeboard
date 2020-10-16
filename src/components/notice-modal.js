@@ -114,7 +114,7 @@ class NoticeModal extends Component {
     if(this.props.mediaPath) {
       let element = '<a href=' + this.props.mediaPath + ' target="_blank" style="color:red;">View this file</a>'
       if(content!=='' && content!==null) {
-          content="<p style='text-align: center;'>" + content + "<b>" + element + "</b>" + "</p>"
+          content="<p style='text-align: center;'>" + content + "<b style='position:relative;left:calc(50% - 10ch);'>" + element + "</b>" + "</p>"
       }
     }
     this.setState({
