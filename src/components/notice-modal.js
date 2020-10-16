@@ -111,6 +111,12 @@ class NoticeModal extends Component {
   }
   handleEditorChange = e => {
     let content = e.target.getContent()
+    if(this.props.mediaPath) {
+      let element = '<a href=' + this.props.mediaPath + ' target="_blank" style="color:red;">View this file</a>'
+      if(content!=='' && content!==null) {
+          content="<p style='text-align: center;'>" + content + "<b style='position:relative;left:calc(50% - 10ch);'>" + element + "</b>" + "</p>"
+      }
+    }
     this.setState({
       editorContent: content,
       editorError: content === '' ? true : false
@@ -138,7 +144,7 @@ class NoticeModal extends Component {
       isPublic,
       sendNotificationToRole
     } = this.state
-    const { uploadNotice, editNotice, modalType, id, fetchNotice } = this.props
+    const { uploadNotice, editNotice, modalType, id, fetchNotice, mediaPath } = this.props
 
     if (title.trim() === '') {
       this.setState({
@@ -175,7 +181,8 @@ class NoticeModal extends Component {
       isImportant: isImportant,
       isSendNotification: isSendNotification,
       isPublic: isPublic,
-      sendNotificationToRole: sendNotificationToRole
+      sendNotificationToRole: sendNotificationToRole,
+      mediaPath: mediaPath
     }
 
     modalType === 'edit'
@@ -242,7 +249,7 @@ class NoticeModal extends Component {
       modalType,
       modalRef,
       notice,
-      modal
+      modal,
     } = this.props
     const { isFetchingNotice } = notice
 
@@ -482,7 +489,8 @@ const mapStateToProps = state => {
     isUploading: state.allNotices.isUploading,
     permission: state.permission.permission,
     normalPer: state.permission.normalPer,
-    notice: state.notice
+    notice: state.notice,
+    mediaPath: state.notice.mediaPath,
   }
 }
 

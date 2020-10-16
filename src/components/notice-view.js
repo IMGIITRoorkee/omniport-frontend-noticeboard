@@ -5,7 +5,7 @@ import {
   Segment,
   Header,
   Loader,
-  Popup
+  Popup,
 } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -40,7 +40,7 @@ class NoticeView extends Component {
   }
 
   render () {
-    const { notice, isFetchingNotice, noticeExists } = this.props
+    const { notice, isFetchingNotice, noticeExists, mediaPath } = this.props
     return (
       <div>
         {!isFetchingNotice ? (
@@ -121,7 +121,8 @@ const mapStateToProps = state => {
     notice: state.notice.notice,
     noticeExists: state.notice.noticeExists,
     isFetchingNotice: state.notice.isFetchingNotice,
-    noticeId: state.notice.noticeId
+    noticeId: state.notice.noticeId,
+    mediaPath: state.notice.mediaPath
   }
 }
 

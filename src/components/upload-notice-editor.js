@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Modal, Button, Message } from 'semantic-ui-react'
 import { Editor } from '@tinymce/tinymce-react'
 import { urlFileManager } from '../urls'
@@ -7,7 +8,7 @@ import config from '../../config.json'
 
 import editor from '../css/upload-notice-editor.css'
 
-export default class UploadNoticeEditor extends Component {
+class UploadNoticeEditor extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -16,6 +17,7 @@ export default class UploadNoticeEditor extends Component {
       isConfirm: false,
       error: false,
       newPath: '',
+      mediaPath:'',
       isConfirmLoading: false
     }
   }
@@ -81,7 +83,7 @@ export default class UploadNoticeEditor extends Component {
     this.setState({
       isConfirmLoading: true
     })
-    copyMedia({ path: path }, this.callback)
+    this.props.copyMedia({ path: path }, this.callback)
   }
   callback = data => {
     if (data.success) {
@@ -90,6 +92,7 @@ export default class UploadNoticeEditor extends Component {
           isConfirmModal: false,
           isConfirm: true,
           newPath: data.path,
+          mediaPath: data.mediaPath,
           isConfirmLoading: false
         },
         () => {
@@ -170,3 +173,13 @@ export default class UploadNoticeEditor extends Component {
     )
   }
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    copyMedia: (path, callback) => {
+      dispatch(copyMedia(path, callback))
+    }
+  }
+}
+
+export default connect(null, mapDispatchToProps)(UploadNoticeEditor)
