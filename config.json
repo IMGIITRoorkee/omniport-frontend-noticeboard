@@ -1,8 +1,8 @@
 {
     "nomenclature": {
-        "name": "[[app_name]]",
-        "verboseName": "[[app_display_name]]"
+        "name": "noticeboard",
+        "verboseName": "Noticeboard"
     },
-    "baseUrl": "/[[app_name]]",
-    "source": "[[app_name]]/src/index"
+    "baseUrl": "/noticeboard",
+    "source": "noticeboard/src/index"
 }
