@@ -10,8 +10,12 @@ import {
   Container, 
   Sidebar, 
   Button,
-  Menu 
+  Menu,
+  Form,
+  Input,
+  Icon
 } from 'semantic-ui-react'
+import { DatesRangeInput } from 'semantic-ui-calendar-react'
 
 import SideNav from './sidenav'
 
@@ -23,6 +27,7 @@ import app from '../css/notice.css'
 import notice from '../css/notice.css'
 import dropdown from '../css/notice.css'
 import tablist from '../css/notice.css'
+import NoticeList from './notice/NoticeList'
 
 class App extends Component {
   state = { 
@@ -110,11 +115,96 @@ class App extends Component {
                             />
                           </div>
                         </div>
+                        <Menu.Menu position='left' styleName='dropdown.flex-wrap'>
+                          <Menu.Item styleName='dropdown.date-bar'>
+                            {/* {!dateFilterActive ? ( */}
+                            <Form
+                              // onSubmit={this.handleDateFilterSubmit} 
+                              autoComplete='off'
+                            >
+                              <DatesRangeInput
+                                styleName='dropdown.input-bar'
+                                name='datesRange'
+                                placeholder='Date: From - To'
+                                closable={true}
+                                closeOnMouseLeave={true}
+                                value={"2020-10-07 - 2020-10-08"}
+                                dateFormat='YYYY-MM-DD'
+                              // onChange={this.handleDateFilterChange}
+                              />
+                            </Form>
+                            {/* ) : ( */}
+                            {/* <Form onSubmit={this.handleDateFilterSubmit} autoComplete='off'>
+                              <DatesRangeInput
+                                styleName='dropdown.input-bar'
+                                name='datesRange'
+                                placeholder='Date: From - To'
+                                closable={true}
+                                icon={
+                                  <Icon
+                                    name='delete'
+                                    link
+                                    onClick={this.handleDateDelete}
+                                  />
+                                }
+                                closeOnMouseLeave={true}
+                                value={datesRange}
+                                dateFormat='YYYY-MM-DD'
+                                onChange={this.handleDateFilterChange}
+                              />
+                            </Form>
+                          )} */}
+                          </Menu.Item>
+                          <Menu.Item styleName='dropdown.search-menu-item'>
+                        {/* {!searchDone ? ( */}
+                          <Form onSubmit={this.handleSearchSubmit}>
+                            <Input
+                              styleName='dropdown.input-bar dropdown.search-bar'
+                              onChange={this.handleSearchChange}
+                              type='text'
+                              icon={
+                                <Icon
+                                  name='search'
+                                  link
+                                  onClick={this.handleSearchSubmit}
+                                />
+                              }
+                              // value={value}
+                            />
+                          </Form>
+                        {/* ) : (
+                            <Form onSubmit={this.handleSearchSubmit}>
+                              <Input
+                                styleName='dropdown.input-bar dropdown.search-bar'
+                                type='text'
+                                onChange={this.handleSearchChange}
+                                icon={
+                                  <Icon
+                                    name='delete'
+                                    link
+                                    onClick={this.handleSearchDelete}
+                                  />
+                                }
+                                value={value}
+                              />
+                            </Form>
+                          )} */}
+                      </Menu.Item>
+                        <Menu.Item
+                          position='right'
+                          styleName='dropdown.upload-item-padding'
+                        >
+                          {/* <UploadNotice /> */}
+                        </Menu.Item>
+                        </Menu.Menu>
                       </div>
                     </div>
+                    
                   </Menu>
                 </Container>
+                <NoticeList />
               </div>
+              
             </Scrollbars>
             {/* <Switch>
               <Route
