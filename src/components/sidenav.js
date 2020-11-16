@@ -44,7 +44,7 @@ class SideNav extends Component {
                         All Notices
                     </Menu.Item>
                 </Link>
-                <Link to={`${match.path}important`}>
+                <Link to={`${match.path}important/`}>
                     <Menu.Item
                         name='Important'
                         id='important'
@@ -63,7 +63,7 @@ class SideNav extends Component {
 
                 <Divider styleName='sidenav.sidenav-divider' />
 
-                <Link to={`${match.path}bookmark`}>
+                <Link to={`${match.path}bookmark/`}>
                     <Menu.Item
                         name='Bookmark'
                         id='bookmark'
@@ -81,7 +81,7 @@ class SideNav extends Component {
 
                 <Divider styleName='sidenav.sidenav-divider' />
 
-                <Link to={`${match.path}expired`}>
+                <Link to={`${match.path}expired/`}>
                     <Menu.Item
                         name='Expired'
                         id='expired'

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { isMobile } from 'react-device-detect'
 import { Scrollbars } from 'react-custom-scrollbars'
 
-import { Route, Switch, withRouter } from 'react-router-dom'
+import { Route, Switch, withRouter, Link } from 'react-router-dom'
 
 import { 
   Segment, 
@@ -18,6 +18,8 @@ import {
 import { DatesRangeInput } from 'semantic-ui-calendar-react'
 
 import SideNav from './sidenav'
+import NoticeList from './notice/NoticeList'
+import { getNotices } from '../actions/getNotices'
 
 import { AppHeader, AppFooter, AppMain, getTheme } from 'formula_one'
 
@@ -27,11 +29,20 @@ import app from '../css/notice.css'
 import notice from '../css/notice.css'
 import dropdown from '../css/notice.css'
 import tablist from '../css/notice.css'
-import NoticeList from './notice/NoticeList'
 
 class App extends Component {
   state = { 
     sidenavOpen: false,
+  }
+
+  componentDidMount() {
+    const query = new URLSearchParams(this.props.location.search)
+    this.page = query.get('page')
+    if(!this.page){
+      this.page = 1
+    }
+    console.log(this.page)
+    this.props.getNotices(this.page)
   }
 
   toggleSidenav = () => {
@@ -41,22 +52,13 @@ class App extends Component {
   }
 
   render() {
-    const { history } = this.props
+    const { history, location, notices } = this.props
     const { sidenavOpen } = this.state
 
-    const creators = [
-      {
-        name: 'Dhruv Bhanushali',
-        role: 'Mentor',
-        link: 'https://dhruvkb.github.io/'
-      },
-      {
-        name: 'Praduman Goyal',
-        role: 'Frontend developer',
-        link: 'https://pradumangoyal.github.io'
-      }
-    ]
+    const creators = []
     const { match } = this.props
+
+    console.log(notices)
     return (
       <div styleName='main.app'>
         <AppHeader
@@ -106,13 +108,15 @@ class App extends Component {
                             </h4>
                           </div>
                           <div styleName='dropdown.important-sub-right'>
-                            <Button
-                              basic
-                              color='blue'
-                              content='Show All'
-                              styleName='dropdown.important-button'
-                              // onClick={this.handleImportant}
-                            />
+                            <Link to={`${match.path}important/`}>
+                              <Button
+                                basic
+                                color='blue'
+                                content='Show All'
+                                styleName='dropdown.important-button'
+                                // onClick={this.handleImportant}
+                              />
+                            </Link>
                           </div>
                         </div>
                         <Menu.Menu position='left' styleName='dropdown.flex-wrap'>
@@ -130,7 +134,7 @@ class App extends Component {
                                 closeOnMouseLeave={true}
                                 value={"2020-10-07 - 2020-10-08"}
                                 dateFormat='YYYY-MM-DD'
-                              // onChange={this.handleDateFilterChange}
+                                // onChange={this.handleDateFilterChange}
                               />
                             </Form>
                             {/* ) : ( */}
@@ -202,7 +206,7 @@ class App extends Component {
                     
                   </Menu>
                 </Container>
-                <NoticeList />
+                <NoticeList notices={notices} page={this.page} location={location} />
               </div>
               
             </Scrollbars>
@@ -221,7 +225,23 @@ class App extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    notices: state.notices.notices,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getNotices: () => {
+      dispatch(
+        getNotices(1)
+      )
+    }
+  }
+}
+
 export default withRouter(connect(
-  null,
-  null
+  mapStateToProps,
+  mapDispatchToProps
 )(App))

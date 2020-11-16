@@ -11,9 +11,7 @@ import notice from '../../css/notice.css'
 class NoticeCell extends Component {
     render() {
         const check = null
-        const read = null
-        const bookmark = null
-        const important = null
+        const { date, banner, title, read, important, bookmark, uploader } = this.props
         return (
             <Table.Row
                 styleName={
@@ -50,10 +48,9 @@ class NoticeCell extends Component {
                             collapsing
                             // onClick={this.openNotice}
                             styleName='notice.cell-width-2 notice.cell-hover'
-                            // title={banner.name}
-                            title={'Mahatma Gandhi central library'}
+                            title={banner.name}
                         >
-                            {/* {banner.name} */}Mahatma Gandhi central library
+                            {banner.name}
                         </Table.Cell>
                     )
                     :
@@ -64,15 +61,14 @@ class NoticeCell extends Component {
                     collapsing
                     // onClick={this.openNotice}
                     styleName='notice.cell-width-4 notice.cell-hover'
-                    // title={title}
-                    title={'Title'}
+                    title={title}
                 >
                     <span styleName='notice.tag-margin-right'>
                         {important ? (
                             <Icon name='tag' color='blue' />
                         ) : null}
                     </span>
-                    {/* {title} */}Title
+                    {title}
                 </Table.Cell>
                 {!isMobile ? 
                     (
@@ -81,10 +77,9 @@ class NoticeCell extends Component {
                             collapsing
                             styleName='notice.cell-width-2 notice.cell-hover'
                             width={2}
-                            // title={uploader.fullName}
-                            title={'My name'}
+                            title={uploader.fullName}
                         >
-                            {/* {uploader.fullName} */}My name
+                            {uploader.fullName}
                         </Table.Cell>
                     ) 
                     : 
@@ -99,8 +94,8 @@ class NoticeCell extends Component {
                     collapsing
                     styleName='notice.cell-width-2 notice.cell-hover'
                 >
-                    {moment('2020-10-28T16:13:11.610166+05:30').format(
-                        Date.now().year === moment("2020-10-28T16:13:11.610166+05:30").year() ? 'DD/MM/YY' : 'MMM Do'
+                    {moment(date).format(
+                        Date.now().year === moment(date).year() ? 'DD/MM/YY' : 'MMM Do'
                     )}
                 </Table.Cell>
                 <Table.Cell
