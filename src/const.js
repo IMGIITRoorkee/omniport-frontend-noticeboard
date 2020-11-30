@@ -1,0 +1,1 @@
+export const no_of_notices = 10
