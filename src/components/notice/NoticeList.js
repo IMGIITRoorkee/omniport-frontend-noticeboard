@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { isMobile } from 'react-device-detect'
 
 import { Container, Menu, Button, Icon, Segment, Table, Pagination } from 'semantic-ui-react'
 
-import { Route, withRouter, useHistory } from 'react-router-dom'
+import { Route, withRouter, useHistory, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import NoticeCell from './NoticeCell'
+import { baseNavUrl } from '../../urls'
 
 import notice from '../../css/notice.css'
 import noticesReducer from '../../reducers/noticesReducer'
@@ -16,25 +16,13 @@ class NoticeList extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            mark: false,
-            totalPages: null
+            mark: false
         }
-    }
-
-    componentDidMount() {
-        console.log(this.props.notices)
-        console.log(Object.keys(this.props.notices).length)
-        this.totalPages = Math.ceil(this.props.notices.count / 10)
-        if (this.totalPages === 0) {
-            // The total pages can't be 0 in Pagination component
-            this.totalPages = 1
-        }
-        console.log(this.totalPages)
     }
 
     handlePaginationChange = (e, data) => {
         console.log(data)
-        this.props.history.push(`${this.props.location.pathname}?page=${e}`)
+        this.props.history.push(`${this.props.location.pathname}?page=${data.activePage}`)
     }
 
     changeMark = () => {
@@ -44,7 +32,7 @@ class NoticeList extends Component {
     }
 
     render() {
-        const { notices } = this.props
+        const { notices, pages, activePage, history } = this.props
         return (
             <>
                 <div styleName='notice.notice-list'>
@@ -148,12 +136,10 @@ class NoticeList extends Component {
                                                 important={noticeInfo.isImportant}
                                                 bookmark={noticeInfo.starred}
                                                 uploader={noticeInfo.uploader}
+                                                history={history}
                                             />
                                         )
                                     })}
-
-                                    {/* <NoticeCell />
-                                <NoticeCell /> */}
                                 </Table.Body>
                             </Table>
                         </Container>
@@ -163,11 +149,11 @@ class NoticeList extends Component {
                 <Container styleName='notice.pagination-box notice.notice-container-width'>
                     <Pagination
                         styleName='notice.pagination'
-                        totalPages={this.totalPages}
+                        totalPages={pages}
                         firstItem={null}
-                        activePage={1}
+                        // activePage={1}
                         onPageChange={this.handlePaginationChange}
-                        defaultActivePage={1}
+                        defaultActivePage={activePage?activePage:1}
                         lastItem={null}
                     />
                 </Container>
