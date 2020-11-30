@@ -4,6 +4,7 @@ import { Dropdown, Menu, Divider, Icon, Image } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 
 import sidenav from '../css/sidenav.css'
+import { baseNavUrl } from '../urls'
 
 class SideNav extends Component {
     state = {
@@ -29,7 +30,7 @@ class SideNav extends Component {
                 styleName='sidenav.sidenav-menu'
                 color={'blue'}
             >
-                <Link to={`${match.path}`}>
+                <Link to={baseNavUrl('/')}>
                     <Menu.Item
                         name='All Notices'
                         id='home'
@@ -44,7 +45,7 @@ class SideNav extends Component {
                         All Notices
                     </Menu.Item>
                 </Link>
-                <Link to={`${match.path}important/`}>
+                <Link to={baseNavUrl('/important/')}>
                     <Menu.Item
                         name='Important'
                         id='important'
@@ -63,7 +64,7 @@ class SideNav extends Component {
 
                 <Divider styleName='sidenav.sidenav-divider' />
 
-                <Link to={`${match.path}bookmark/`}>
+                <Link to={baseNavUrl('/bookmark/')}>
                     <Menu.Item
                         name='Bookmark'
                         id='bookmark'
@@ -81,7 +82,7 @@ class SideNav extends Component {
 
                 <Divider styleName='sidenav.sidenav-divider' />
 
-                <Link to={`${match.path}expired/`}>
+                <Link to={baseNavUrl('/expired/')}>
                     <Menu.Item
                         name='Expired'
                         id='expired'
