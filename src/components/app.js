@@ -15,11 +15,14 @@ import {
   Input,
   Icon
 } from 'semantic-ui-react'
-import { DatesRangeInput } from 'semantic-ui-calendar-react'
+
 
 import SideNav from './sidenav'
 import NoticeList from './notice/NoticeList'
+import NoticeView from './notice/NoticeView'
+import TabList from './TabList'
 import { getNotices } from '../actions/getNotices'
+import { baseNavUrl } from '../urls'
 
 import { AppHeader, AppFooter, AppMain, getTheme } from 'formula_one'
 
@@ -27,8 +30,7 @@ import sidenav from '../css/sidenav.css'
 import main from 'formula_one/src/css/app.css'
 import app from '../css/notice.css'
 import notice from '../css/notice.css'
-import dropdown from '../css/notice.css'
-import tablist from '../css/notice.css'
+
 
 class App extends Component {
   state = { 
@@ -43,6 +45,18 @@ class App extends Component {
     }
     console.log(this.page)
     this.props.getNotices(this.page)
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.location.search !== prevProps.location.search) {
+      const query = new URLSearchParams(this.props.location.search)
+      this.page = query.get('page')
+      if (!this.page) {
+        this.page = 1
+      }
+      console.log(this.page)
+      this.props.getNotices(this.page)
+    }
   }
 
   toggleSidenav = () => {
@@ -87,136 +101,22 @@ class App extends Component {
               )}
             <Scrollbars autoHide>
               <div styleName='app.notice-container'>
-                <Container styleName='tablist.notice-container-width'>
-                  <Menu secondary styleName='tablist.top-bar'>
-                    <div styleName='tablist.width-100'>
-                      <div>
-                        <div styleName='dropdown.important-main-box dropdown.flex dropdown.flex-row'>
-                          <div styleName='dropdown.important-sub-left dropdown.flex dropdown.flex-column'>
-                            <h4>
-                              Important notices
-                            {/* {importantUnreadCount > 0 ? (
-                                <Label
-                                  styleName='dropdown.unread-label'
-                                  size='small'
-                                  color='red'
-                                  horizontal
-                                >
-                                  {importantUnreadCount} unread
-                                </Label>
-                              ) : null} */}
-                            </h4>
-                          </div>
-                          <div styleName='dropdown.important-sub-right'>
-                            <Link to={`${match.path}important/`}>
-                              <Button
-                                basic
-                                color='blue'
-                                content='Show All'
-                                styleName='dropdown.important-button'
-                                // onClick={this.handleImportant}
-                              />
-                            </Link>
-                          </div>
-                        </div>
-                        <Menu.Menu position='left' styleName='dropdown.flex-wrap'>
-                          <Menu.Item styleName='dropdown.date-bar'>
-                            {/* {!dateFilterActive ? ( */}
-                            <Form
-                              // onSubmit={this.handleDateFilterSubmit} 
-                              autoComplete='off'
-                            >
-                              <DatesRangeInput
-                                styleName='dropdown.input-bar'
-                                name='datesRange'
-                                placeholder='Date: From - To'
-                                closable={true}
-                                closeOnMouseLeave={true}
-                                value={"2020-10-07 - 2020-10-08"}
-                                dateFormat='YYYY-MM-DD'
-                                // onChange={this.handleDateFilterChange}
-                              />
-                            </Form>
-                            {/* ) : ( */}
-                            {/* <Form onSubmit={this.handleDateFilterSubmit} autoComplete='off'>
-                              <DatesRangeInput
-                                styleName='dropdown.input-bar'
-                                name='datesRange'
-                                placeholder='Date: From - To'
-                                closable={true}
-                                icon={
-                                  <Icon
-                                    name='delete'
-                                    link
-                                    onClick={this.handleDateDelete}
-                                  />
-                                }
-                                closeOnMouseLeave={true}
-                                value={datesRange}
-                                dateFormat='YYYY-MM-DD'
-                                onChange={this.handleDateFilterChange}
-                              />
-                            </Form>
-                          )} */}
-                          </Menu.Item>
-                          <Menu.Item styleName='dropdown.search-menu-item'>
-                        {/* {!searchDone ? ( */}
-                          <Form onSubmit={this.handleSearchSubmit}>
-                            <Input
-                              styleName='dropdown.input-bar dropdown.search-bar'
-                              onChange={this.handleSearchChange}
-                              type='text'
-                              icon={
-                                <Icon
-                                  name='search'
-                                  link
-                                  onClick={this.handleSearchSubmit}
-                                />
-                              }
-                              // value={value}
-                            />
-                          </Form>
-                        {/* ) : (
-                            <Form onSubmit={this.handleSearchSubmit}>
-                              <Input
-                                styleName='dropdown.input-bar dropdown.search-bar'
-                                type='text'
-                                onChange={this.handleSearchChange}
-                                icon={
-                                  <Icon
-                                    name='delete'
-                                    link
-                                    onClick={this.handleSearchDelete}
-                                  />
-                                }
-                                value={value}
-                              />
-                            </Form>
-                          )} */}
-                      </Menu.Item>
-                        <Menu.Item
-                          position='right'
-                          styleName='dropdown.upload-item-padding'
-                        >
-                          {/* <UploadNotice /> */}
-                        </Menu.Item>
-                        </Menu.Menu>
-                      </div>
-                    </div>
-                    
-                  </Menu>
-                </Container>
-                <NoticeList notices={notices} page={this.page} location={location} />
+                <TabList />
+                <Switch>
+                  <Route
+                    path='/noticeboard/notice/:noticeId'
+                    component={NoticeView}
+                  />
+                  <Route
+                    exact
+                    path='/noticeboard'
+                    render={() => (
+                      <NoticeList notices={notices} pages={this.props.totalPages} activePage={this.page} location={location} />
+                    )}
+                  />
+                </Switch>
               </div>
-              
             </Scrollbars>
-            {/* <Switch>
-              <Route
-                exact
-                path={`${match.path}`}
-                component={}
-              />
-            </Switch> */}
           </div>
         </AppMain>
         <AppFooter creators={creators} />
@@ -228,14 +128,15 @@ class App extends Component {
 const mapStateToProps = state => {
   return {
     notices: state.notices.notices,
+    totalPages: state.notices.totalPages
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getNotices: () => {
+    getNotices: (page) => {
       dispatch(
-        getNotices(1)
+        getNotices(page)
       )
     }
   }
