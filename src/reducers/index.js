@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux'
-import exampleReducer from './exampleReducer'
 import noticesReducer from './noticesReducer'
+import filtersReducer from './filtersReducer'
+import whoAmI from './whoAmI'
 
 const rootReducers = combineReducers({
-  exampleReducer,
-  notices: noticesReducer
+  notices: noticesReducer,
+  user: whoAmI,
+  filters: filtersReducer,
 })
 
 export default rootReducers
