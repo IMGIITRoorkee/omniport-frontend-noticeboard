@@ -6,14 +6,7 @@ import { Scrollbars } from 'react-custom-scrollbars'
 import { Route, Switch, withRouter, Link } from 'react-router-dom'
 
 import { 
-  Segment, 
-  Container, 
-  Sidebar, 
-  Button,
-  Menu,
-  Form,
-  Input,
-  Icon
+  Sidebar
 } from 'semantic-ui-react'
 
 
@@ -22,14 +15,15 @@ import NoticeList from './notice/NoticeList'
 import NoticeView from './notice/NoticeView'
 import TabList from './TabList'
 import { getNotices } from '../actions/getNotices'
-import { baseNavUrl } from '../urls'
+import { getFilters } from '../actions/getFilters'
 
-import { AppHeader, AppFooter, AppMain, getTheme } from 'formula_one'
+import { AppHeader, AppFooter, AppMain } from 'formula_one'
+
+import { setUser } from '../actions/setUser'
 
 import sidenav from '../css/sidenav.css'
 import main from 'formula_one/src/css/app.css'
 import app from '../css/notice.css'
-import notice from '../css/notice.css'
 
 
 class App extends Component {
@@ -37,26 +31,19 @@ class App extends Component {
     sidenavOpen: false,
   }
 
-  componentDidMount() {
+  setPage = () => {
     const query = new URLSearchParams(this.props.location.search)
     this.page = query.get('page')
-    if(!this.page){
+    if (!this.page) {
       this.page = 1
     }
-    console.log(this.page)
     this.props.getNotices(this.page)
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.location.search !== prevProps.location.search) {
-      const query = new URLSearchParams(this.props.location.search)
-      this.page = query.get('page')
-      if (!this.page) {
-        this.page = 1
-      }
-      console.log(this.page)
-      this.props.getNotices(this.page)
-    }
+  componentDidMount() {
+    const { setUser, getFilters } = this.props
+    setUser()
+    getFilters()
   }
 
   toggleSidenav = () => {
@@ -66,13 +53,11 @@ class App extends Component {
   }
 
   render() {
-    const { history, location, notices } = this.props
+    const { history, location, user, filters, match } = this.props
     const { sidenavOpen } = this.state
 
     const creators = []
-    const { match } = this.props
-
-    console.log(notices)
+    
     return (
       <div styleName='main.app'>
         <AppHeader
@@ -93,7 +78,7 @@ class App extends Component {
                   styleName='sidenav.app-sidebar-wrapper'
                   visible={sidenavOpen}
                 >
-                  <SideNav match={match} history={history} />
+                  {filters?<SideNav match={match} history={history} filters={filters} />:null}
                 </Sidebar>
               </div>
             ) : (
@@ -104,14 +89,22 @@ class App extends Component {
                 <TabList />
                 <Switch>
                   <Route
+                    path='/noticeboard/notice/old/:noticeId'
+                    render={(match) => (
+                      user?<NoticeView expired={true} match={match} user={user} />:null
+                    )}
+                  />
+                  <Route
                     path='/noticeboard/notice/:noticeId'
-                    component={NoticeView}
+                    render={(match) => (
+                      user?<NoticeView expired={false} match={match} user={user} />:null
+                    )}
                   />
                   <Route
                     exact
                     path='/noticeboard'
                     render={() => (
-                      <NoticeList notices={notices} pages={this.props.totalPages} activePage={this.page} location={location} />
+                      <NoticeList pages={this.props.totalPages} location={location} />
                     )}
                   />
                 </Switch>
@@ -127,8 +120,9 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    notices: state.notices.notices,
-    totalPages: state.notices.totalPages
+    totalPages: state.notices.totalPages,
+    user: state.user.user,
+    filters: state.filters.filters
   }
 }
 
@@ -137,6 +131,16 @@ const mapDispatchToProps = dispatch => {
     getNotices: (page) => {
       dispatch(
         getNotices(page)
+      )
+    },
+    setUser: () => {
+      dispatch(
+        setUser()
+      )
+    },
+    getFilters: () => {
+      dispatch(
+        getFilters()
       )
     }
   }
