@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Container, Menu, Button, Icon, Form, Input } from 'semantic-ui-react'
+import { Container, Menu, Button, Icon, Form, Input, Label } from 'semantic-ui-react'
 import { DatesRangeInput } from 'semantic-ui-calendar-react'
 
 import { withRouter, Link } from 'react-router-dom'
@@ -17,26 +17,24 @@ class TabList extends Component {
         back: false,
     }
 
-    componentDidMount() {
-        const url = this.props.location.pathname.split('/')
-        if (url[2] && (url[2] == "important" || url[2] == "expired" || url[2] == "bookmark" )){
+    switchBackButton = (location) => {
+        const url = location.pathname.split('/')
+        if (url[2] && (url[2] == "important" || url[2] == "expired" || url[2] == "bookmark" || url[2] == "notice")) {
             this.setState({
                 back: true
             })
         }
+        else {
+            this.setState({
+                back: false
+            })
+        }
+    }
+
+    componentDidMount() {
+        this.switchBackButton(this.props.history.location)
         this.unlisten = this.props.history.listen((location) => {
-            const url = location.pathname.split('/')
-            console.log(url[2])
-            if (url[2] && (url[2] == "important" || url[2] == "expired" || url[2] == "bookmark")) {
-                this.setState({
-                    back: true
-                })
-            }
-            else {
-                this.setState({
-                    back: false
-                })
-            }
+            this.switchBackButton(location)
         });
     }
     componentWillUnmount() {
@@ -45,6 +43,8 @@ class TabList extends Component {
 
     render() {
         const { back } = this.state
+        const { importantUnreadCount } = this.props
+        
         return (
             <Container styleName='tablist.notice-container-width'>
                 <Menu secondary styleName='tablist.top-bar'>
@@ -57,16 +57,16 @@ class TabList extends Component {
                                     <div styleName='dropdown.important-sub-left dropdown.flex dropdown.flex-column'>
                                         <h4>
                                             Important notices
-                                {/* {importantUnreadCount > 0 ? (
-                                    <Label
-                                    styleName='dropdown.unread-label'
-                                    size='small'
-                                    color='red'
-                                    horizontal
-                                    >
-                                    {importantUnreadCount} unread
-                                    </Label>
-                                ) : null} */}
+                                                {importantUnreadCount > 0 ? (
+                                                    <Label
+                                                    styleName='dropdown.unread-label'
+                                                    size='small'
+                                                    color='red'
+                                                    horizontal
+                                                    >
+                                                    {importantUnreadCount} unread
+                                                    </Label>
+                                                ) : null}
                                         </h4>
                                     </div>
                                     <div styleName='dropdown.important-sub-right'>
@@ -172,4 +172,10 @@ class TabList extends Component {
     }
 }
 
-export default withRouter(connect(null, null)(TabList))
+const mapStateToProps = state => {
+    return {
+        importantUnreadCount: state.notices.importantUnreadCount
+    }
+}
+
+export default withRouter(connect(mapStateToProps, null)(TabList))
