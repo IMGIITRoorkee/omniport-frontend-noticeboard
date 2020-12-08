@@ -17,10 +17,97 @@ class SideNav extends Component {
             position: e.target.id
         })
     }
+
+    renderInnerDropdownItems = items => {
+        const all = false
+        const { subPosition } = this.props
+        if (items.length) {
+            return items.map((item, index) => (
+                <Dropdown.Item
+                    key={index}
+                    active={subPosition === item.name}
+                    // onClick={() =>
+                    //     this.filterNotices(
+                    //         item.id,
+                    //         all,
+                    //         '/noticeboard/',
+                    //         item.parentCategory.name,
+                    //         item.name
+                    //     )
+                    // }
+                >
+                    {item.name}
+                </Dropdown.Item>
+            ))
+        } else {
+            return (
+                <Dropdown.Item key={1} disabled>
+                    No results
+                </Dropdown.Item>
+            )
+        }
+    }
+
+    renderInnerDropdownAll = item => {
+        const { subPosition } = this.props
+        if (item.banner.length) {
+            const all = true
+            return (
+                <Dropdown.Item
+                    key={0}
+                    active={subPosition === item.name}
+                    // onClick={() =>
+                    //     this.filterNotices(
+                    //         item.slug,
+                    //         all,
+                    //         '/noticeboard/',
+                    //         item.name,
+                    //         item.name
+                    //     )
+                    // }
+                >
+                    All {item.name}
+                </Dropdown.Item>
+            )
+        }
+    }
+
+    renderOuterDropdownItems = items => {
+        const { position } = this.props
+        if (items.length > 0) {
+            return items.map((item, index) => (
+                <Dropdown
+                    styleName={
+                        position === item.name
+                            ? 'sidenav.dropdown-sidenav-space-between-active'
+                            : 'sidenav.dropdown-sidenav-space-between'
+                    }
+                    item
+                    trigger={
+                        <span styleName='sidenav.dropdown-item-span'>
+                            {item.meta && item.meta.icon && item.meta.icon.staticPath ? (
+                                <Image src={`/static${item.meta.icon.staticPath}`} />
+                            ) : null}
+                            {item.name}
+                        </span>
+                    }
+                    key={index}
+                    scrolling={true}
+                >
+                    <Dropdown.Menu>
+                        {this.renderInnerDropdownAll(item)}
+                        {item.banner.length ? <Dropdown.Divider /> : <div></div>}
+                        {this.renderInnerDropdownItems(item.banner)}
+                    </Dropdown.Menu>
+                </Dropdown>
+            ))
+        } else return []
+    }
     
     render() {
         const { position, dropPosition } = this.state
-        const { match } = this.props
+        const { filters } = this.props
+        console.log(filters)
         return (
             <Menu
                 secondary
@@ -60,7 +147,8 @@ class SideNav extends Component {
                         Important Notices
                     </Menu.Item>
                 </Link>
-                {/* {this.renderOuterDropdownItems(filters)} */}
+
+                {filters?this.renderOuterDropdownItems(filters):null}
 
                 <Divider styleName='sidenav.sidenav-divider' />
 
