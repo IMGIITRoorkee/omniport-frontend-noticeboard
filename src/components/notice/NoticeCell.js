@@ -3,21 +3,40 @@ import { Container, Menu, Table, Icon } from 'semantic-ui-react'
 import { Route, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { isMobile } from 'react-device-detect'
+import { ifRole } from 'formula_one'
 
 import moment from 'moment'
 
-import notice from '../../css/notice.css'
 import { baseNavUrl } from '../../urls'
+import { noticeBookmark } from '../../actions/bookmark'
+
+import notice from '../../css/notice.css'
+
 
 class NoticeCell extends Component {
 
     openNotice = () => {
-        this.props.history.push(baseNavUrl('/notice/'+this.props.id))
+        const { id, history, expired } = this.props
+        let path
+        if (expired) {
+            path = '/notice/old/' + id
+        } else {
+            path = '/notice/' + id
+        }
+        history.push(baseNavUrl(path))
+    }
+
+    bookmarkNotice = () => {
+        const { id, bookmark, noticeBookmark, expired } = this.props
+        if (!expired) {
+            noticeBookmark([id], !bookmark)
+        }
     }
 
     render() {
         const check = null
-        const { date, banner, title, read, important, bookmark, uploader } = this.props
+        const { date, banner, title, read, important, bookmark, uploader, user, expired } = this.props
+        
         return (
             <Table.Row
                 styleName={
@@ -26,27 +45,32 @@ class NoticeCell extends Component {
                         : 'notice.notice-row-unread notice.notice-row'
                 }
             >
-                <Table.Cell
-                    width={1}
-                    styleName={'notice.cell-width-1 notice.cell-hover'}
-                    // onClick={this.selectNotice}
-                    collapsing
-                >
-                    <Icon
-                        name={check ? 'square' : 'square outline'}
-                        color={check ? 'blue' : 'grey'}
-                    />
-                </Table.Cell>
-                <Table.Cell
-                    width={1}
-                    styleName={'notice.cell-width-1 notice.cell-hover'}
-                    // onClick={this.bookmarkNotice}
-                >
-                    <Icon
-                        name={bookmark ? 'bookmark' : 'bookmark outline'}
-                        color='yellow'
-                    />
-                </Table.Cell>
+                {(user && ifRole(user.roles, 'Guest') === 'IS_ACTIVE') ||
+                expired ? null : (
+                    <>
+                        <Table.Cell
+                            width={1}
+                            styleName={'notice.cell-width-1 notice.cell-hover'}
+                            // onClick={this.selectNotice}
+                            collapsing
+                        >
+                            <Icon
+                                name={check ? 'square' : 'square outline'}
+                                color={check ? 'blue' : 'grey'}
+                            />
+                        </Table.Cell>
+                        <Table.Cell
+                            width={1}
+                            styleName={'notice.cell-width-1 notice.cell-hover'}
+                            onClick={this.bookmarkNotice}
+                        >
+                            <Icon
+                                name={bookmark ? 'bookmark' : 'bookmark outline'}
+                                color='yellow'
+                            />
+                        </Table.Cell>
+                    </>
+                )}
                 {!isMobile?
                     (
                         <Table.Cell
@@ -127,4 +151,18 @@ class NoticeCell extends Component {
     }
 }
 
-export default withRouter(connect(null, null)(NoticeCell))
+const mapStateToProps = state => {
+    return {
+        user: state.user.user
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        noticeBookmark: (id, bookmark) => {
+            dispatch(noticeBookmark(id, bookmark))
+        }
+    }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NoticeCell))
