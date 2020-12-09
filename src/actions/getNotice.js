@@ -25,7 +25,7 @@ function receiveNotice(noticeData, noticeExists) {
 
 export const getNotice = (noticeId, expired = false, callback = () => {null} ) => (dispatch, getState) => {
     // console.log(getState())
-    let roles = getState().user.user.roles
+    let roles = getState().user && getState().user.user ? getState().user.user.roles : 'Guest'
     dispatch(requestNotice(noticeId))
     return fetch(noticeUrl(noticeId, expired))
         .then(response => response.json())
