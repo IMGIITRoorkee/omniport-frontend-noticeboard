@@ -1,8 +1,12 @@
 {
-    "nomenclature": {
-        "name": "noticeboard",
-        "verboseName": "Noticeboard"
-    },
-    "baseUrl": "/noticeboard",
-    "source": "noticeboard/src/index"
+  "nomenclature": {
+    "name": "noticeboard",
+    "verboseName": "Noticeboard"
+  },
+  "baseUrl": "/noticeboard",
+  "source": "noticeboard/src/index",
+  "public": {
+    "source": "noticeboard/src/public",
+    "baseUrl": "/noticeboard"
+  }
 }
