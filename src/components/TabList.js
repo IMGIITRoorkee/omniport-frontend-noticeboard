@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import { Container, Menu, Button, Icon, Form, Input, Label } from 'semantic-ui-react'
 import { DatesRangeInput } from 'semantic-ui-calendar-react'
+import { dateFormatMatch } from '../utils'
 
 import { withRouter, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -15,6 +16,31 @@ import dropdown from '../css/notice.css'
 class TabList extends Component {
     state = {
         back: false,
+        value: '',
+        ownUpdate: false,
+        datesRange: '',
+        ownUpdateDate: false,
+        dateRangeActive: false
+    }
+
+    static getDerivedStateFromProps(nextProps, state) {
+        let newState = {}
+        if(!state.ownUpdate) {
+            newState = {
+                ...newState,
+                value: nextProps.searchKeyword
+            }
+        }
+        if(!state.ownUpdateDate) {
+            if(nextProps.date) {
+                newState = {
+                    ...newState,
+                    datesRange: nextProps.date.start+'-'+nextProps.date.end,
+                    dateRangeActive: true
+                }
+            }
+        }
+        return newState
     }
 
     switchBackButton = (location) => {
@@ -37,13 +63,107 @@ class TabList extends Component {
             this.switchBackButton(location)
         });
     }
+
     componentWillUnmount() {
         this.unlisten();
     }
 
+    handleDateFilterSubmit = (value) => {
+        const { searchKeyword, page, history } = this.props
+        let dateRange, dateRangeActive
+        dateRange = dateFormatMatch(value)
+        if (dateRange) {
+            dateRangeActive = true
+        } else {
+            dateRangeActive = false
+        }
+        if(dateRangeActive){
+            if (searchKeyword) {
+                history.push(`${location.pathname}?page=${page}&search=${searchKeyword}&date=${dateRange.start+'/'+dateRange.end}`)
+            }
+            else {
+                history.push(`${location.pathname}?page=${page}&date=${dateRange. start + '/' + dateRange.end}`)
+            }
+        }
+    }
+
+    handleDateFilterChange = (event, { name, value }) => {
+        if (this.state.hasOwnProperty(name)) {
+            let dateRange, dateRangeActive
+            dateRange = dateFormatMatch(value)
+            let flag = false
+            if (dateRange || value === '') {
+                flag = true
+            }
+
+            if (value === '') {
+                dateRangeActive = false
+            } else {
+                dateRangeActive = true
+            }
+            this.setState({
+                [name]: value,
+                ownUpdateDate: true,
+                dateRangeActive: dateRangeActive
+            })
+            if (flag) {
+                this.handleDateFilterSubmit(value)
+            }
+        }
+    }
+
+    handleDateDelete = () => {
+        const { page, searchKeyword, history } = this.props
+        this.setState({ 
+            dateRangeActive: false, 
+            datesRange: '',
+            ownUpdateDate: true
+        })
+        if (searchKeyword) {
+            history.push(`${location.pathname}?page=${page}&search=${searchKeyword}`)
+        }
+        else {
+            history.push(`${location.pathname}?page=${page}`)
+        }
+    }
+
+    handleSearchChange = event => {
+        this.setState({ 
+            value: event.target.value,
+            ownUpdate: true 
+        })
+    }
+
+    handleSearchSubmit = () => {
+        const { page, date, history, location } = this.props
+        let { value } = this.state
+        value = encodeURIComponent(value)
+        if (date) {
+            history.push(`${location.pathname}?page=${page}&date=${date}&search=${value}`)
+        }
+        else {
+            history.push(`${location.pathname}?page=${page}&search=${value}`)
+        }
+    }
+
+    handleSearchDelete = () => {
+        this.setState({
+            value: '',
+            ownUpdate: true 
+        })
+        const { page, date, history, location } = this.props
+        if (date) {
+            history.push(`${location.pathname}?page=${page}&date=${date}`)
+        }
+        else {
+            history.push(`${location.pathname}?page=${page}`)
+        }
+    }
+
     render() {
-        const { back } = this.state
-        const { importantUnreadCount } = this.props
+        const { back, value, datesRange, dateRangeActive } = this.state
+        const { importantUnreadCount, searchKeyword } = this.props
+        const dateCheck = dateFormatMatch(datesRange)
         
         return (
             <Container styleName='tablist.notice-container-width'>
@@ -83,78 +203,81 @@ class TabList extends Component {
                                 </div>
                                 <Menu.Menu position='left' styleName='dropdown.flex-wrap'>
                                     <Menu.Item styleName='dropdown.date-bar'>
-                                        {/* {!dateFilterActive ? ( */}
-                                        <Form
-                                            // onSubmit={this.handleDateFilterSubmit} 
-                                            autoComplete='off'
-                                        >
-                                            <DatesRangeInput
-                                                styleName='dropdown.input-bar'
-                                                name='datesRange'
-                                                placeholder='Date: From - To'
-                                                closable={true}
-                                                closeOnMouseLeave={true}
-                                                value={"2020-10-07 - 2020-10-08"}
-                                                dateFormat='YYYY-MM-DD'
-                                            // onChange={this.handleDateFilterChange}
-                                            />
-                                        </Form>
-                                        {/* ) : ( */}
-                                        {/* <Form onSubmit={this.handleDateFilterSubmit} autoComplete='off'>
-                                <DatesRangeInput
-                                    styleName='dropdown.input-bar'
-                                    name='datesRange'
-                                    placeholder='Date: From - To'
-                                    closable={true}
-                                    icon={
-                                    <Icon
-                                        name='delete'
-                                        link
-                                        onClick={this.handleDateDelete}
-                                    />
-                                    }
-                                    closeOnMouseLeave={true}
-                                    value={datesRange}
-                                    dateFormat='YYYY-MM-DD'
-                                    onChange={this.handleDateFilterChange}
-                                />
-                                </Form>
-                            )} */}
+                                        {!dateRangeActive ? (
+                                            <Form
+                                                onSubmit={this.handleDateFilterSubmit} 
+                                                autoComplete='off'
+                                            >
+                                                <DatesRangeInput
+                                                    styleName='dropdown.input-bar'
+                                                    name='datesRange'
+                                                    placeholder='Date: From - To'
+                                                    closable={true}
+                                                    closeOnMouseLeave={true}
+                                                    value={datesRange}
+                                                    dateFormat='YYYY-MM-DD'
+                                                    onChange={this.handleDateFilterChange}
+                                                />
+                                            </Form>
+                                        ) : (
+                                            <Form 
+                                                onSubmit={this.handleDateFilterSubmit} 
+                                                autoComplete='off'
+                                            >
+                                                <DatesRangeInput
+                                                    styleName='dropdown.input-bar'
+                                                    name='datesRange'
+                                                    placeholder='Date: From - To'
+                                                    closable={true}
+                                                    icon={
+                                                    <Icon
+                                                        name='delete'
+                                                        link
+                                                        onClick={this.handleDateDelete}
+                                                    />
+                                                    }
+                                                    closeOnMouseLeave={true}
+                                                    value={datesRange}
+                                                    dateFormat='YYYY-MM-DD'
+                                                    onChange={this.handleDateFilterChange}
+                                                />
+                                            </Form>
+                                        )}
                                     </Menu.Item>
                                     <Menu.Item styleName='dropdown.search-menu-item'>
-                                        {/* {!searchDone ? ( */}
-                                        <Form onSubmit={this.handleSearchSubmit}>
-                                            <Input
-                                                styleName='dropdown.input-bar dropdown.search-bar'
-                                                // onChange={this.handleSearchChange}
-                                                type='text'
-                                                icon={
+                                        {!searchKeyword ? (
+                                            <Form onSubmit={this.handleSearchSubmit}>
+                                                <Input
+                                                    styleName='dropdown.input-bar dropdown.search-bar'
+                                                    onChange={this.handleSearchChange}
+                                                    type='text'
+                                                    icon={
+                                                        <Icon
+                                                            name='search'
+                                                            link
+                                                            onClick={this.handleSearchSubmit}
+                                                        />
+                                                    }
+                                                    value={value}
+                                                />
+                                            </Form>
+                                        ) : (
+                                            <Form onSubmit={this.handleSearchSubmit}>
+                                                <Input
+                                                    styleName='dropdown.input-bar dropdown.search-bar'
+                                                    type='text'
+                                                    onChange={this.handleSearchChange}
+                                                    icon={
                                                     <Icon
-                                                        name='search'
+                                                        name='delete'
                                                         link
-                                                    // onClick={this.handleSearchSubmit}
+                                                        onClick={this.handleSearchDelete}
                                                     />
-                                                }
-                                            // value={value}
-                                            />
-                                        </Form>
-                                        {/* ) : (
-                                <Form onSubmit={this.handleSearchSubmit}>
-                                <Input
-                                    styleName='dropdown.input-bar dropdown.search-bar'
-                                    type='text'
-                                    onChange={this.handleSearchChange}
-                                    icon={
-                                    <Icon
-                                        name='delete'
-                                        link
-                                        onClick={this.handleSearchDelete}
-                                    />
-                                    }
-                                    value={value}
-                                />
-                                </Form>
-                            )} */}
+                                                    }
+                                                    value={value}
+                                                />
+                                            </Form>
+                                        )} 
                                     </Menu.Item>
                                     <Menu.Item
                                         position='right'
@@ -174,7 +297,10 @@ class TabList extends Component {
 
 const mapStateToProps = state => {
     return {
-        importantUnreadCount: state.notices.importantUnreadCount
+        importantUnreadCount: state.notices.importantUnreadCount,
+        searchKeyword: state.notices.searchKeyword,
+        page: state.notices.page,
+        date: state.notices.dateRange
     }
 }
 

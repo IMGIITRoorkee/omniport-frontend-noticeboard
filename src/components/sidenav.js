@@ -107,7 +107,7 @@ class SideNav extends Component {
     render() {
         const { position, dropPosition } = this.state
         const { filters } = this.props
-        console.log(filters)
+        
         return (
             <Menu
                 secondary

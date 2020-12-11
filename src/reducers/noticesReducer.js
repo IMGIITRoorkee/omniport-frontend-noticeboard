@@ -5,9 +5,8 @@ const initialState = {
     notices: [],
     showImp: false,
     searchKeyword: null,
-    isLoaded: false,
-    expired: false,
     narrowBookmark: false,
+    expired: false,
     bannerId: null,
     dateRange: null,
     selectAllActive: false,
@@ -15,7 +14,8 @@ const initialState = {
     mainCategorySlug: false,
     isUploading: false,
     isFetchingNotice: true,
-    noticeExists: false
+    noticeExists: false,
+    page: 1
 }
 
 const noticesReducer = (state = initialState, action) => {
@@ -90,6 +90,34 @@ const noticesReducer = (state = initialState, action) => {
             return { 
                 ...state,
                 notices
+            }
+        case 'SELECT_NOTICE':
+            return {
+                ...state,
+                selectedNotices: Object.assign([], action.payload.selectedNotices),
+                selectAllActive: action.payload.selectAllActive
+            }
+        case 'READ_NOTICE':
+            noticeIdList = action.payload.noticeIdList
+            let noticesChanged = Object.assign([], state.notices)
+
+            for (let index = 0; index < noticeIdList.length; index++) {
+                for (let i = 0; i < noticesChanged.length; i++) {
+                    if (noticesChanged[i].id === noticeIdList[index]) {
+                        noticesChanged[i].read = action.payload.toggle
+                    }
+                }
+            }
+            return { 
+                ...state,
+                notices: noticesChanged
+            }
+        case 'SET_FILTERS':
+            return {
+                ...state,
+                page: action.payload.page,
+                dateRange: action.payload.date,
+                searchKeyword: action.payload.searchKeyword
             }
         default:
             return state;

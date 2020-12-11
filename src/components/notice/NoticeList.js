@@ -7,7 +7,10 @@ import { connect } from 'react-redux'
 
 import NoticeCell from './NoticeCell'
 import { getNotices } from '../../actions/getNotices'
-import { baseNavUrl } from '../../urls'
+import { toggleAllNotices } from '../../actions/selectNotices'
+import { noticeBookmark } from '../../actions/bookmark'
+import { noticeRead } from '../../actions/readNotices'
+import { setFilters } from '../../actions/setFilters'
 
 import notice from '../../css/notice.css'
 
@@ -16,27 +19,33 @@ class NoticeList extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            mark: false,
             expired: null
         }
     }
 
     setPage = () => {
-        const url = this.props.location.pathname.split('/')
+        const { location, getNotices, setFilters } = this.props
+        const url = location.pathname.split('/')
         if(url[2] && url[2] == 'expired')
         {
             this.setState({
                 expired: true
             })
         }
-        const query = new URLSearchParams(this.props.location.search)
-        this.page = query.get('page')
+        const query = new URLSearchParams(location.search)
+        const page = query.get('page')
         const date = query.get('date')
-        console.log(date)
-        if (!this.page) {
-            this.page = 1
+        let dateRange, dateFilter
+        if(date){
+            dateRange = date.split('/')
+            dateFilter = {
+                start: dateRange[0],
+                end: dateRange[1]
+            }
         }
-        this.props.getNotices(this.page)
+        const searchKeyword = query.get('search')
+        setFilters(page, dateFilter, searchKeyword)
+        getNotices()
     }
 
     componentDidMount() {
@@ -59,8 +68,24 @@ class NoticeList extends Component {
         })
     }
 
+    toggleSelectAll = () => {
+        this.props.toggleAllNotices()
+    }
+    
+    changeBookmark = (toggle) => {
+        const { selectedNotices, noticeBookmark, toggleAllNotices } = this.props
+        noticeBookmark(selectedNotices, toggle)
+        toggleAllNotices()
+    }
+
+    readNotices = () => {
+        const { noticeRead, selectedNotices, toggleAllNotices } = this.props
+        noticeRead(selectedNotices)
+        toggleAllNotices()
+    }
+
     render() {
-        const { pages, history, isFetchingNotices, notices } = this.props
+        const { pages, history, isFetchingNotices, notices, selectAllActive, page } = this.props
         const { expired } = this.state
         
         return (
@@ -74,13 +99,13 @@ class NoticeList extends Component {
                     </Container>
                     <React.Fragment>
                         <Container styleName='notice.select-all-container notice.notice-container-width'>
-                            {this.state.mark ?
+                            {selectAllActive ?
                                 (
                                     <div>
                                         <Button
                                             icon
                                             styleName='notice.select-all-button-activated notice.select-all-button notice.tab-button'
-                                            onClick={this.changeMark}
+                                            onClick={this.toggleSelectAll}
                                         >
                                             <Icon name='square' color='blue'></Icon>
                                         </Button>
@@ -89,7 +114,7 @@ class NoticeList extends Component {
                                                 basic
                                                 styleName='notice.tab-button'
                                                 icon
-                                            // onClick={this.read}
+                                                onClick={this.readNotices}
                                             >
                                                 <Icon
                                                     name='envelope open outline'
@@ -102,7 +127,7 @@ class NoticeList extends Component {
                                                 basic
                                                 styleName='notice.tab-button'
                                                 icon
-                                            // onClick={this.bookmark}
+                                                onClick={() => this.changeBookmark(true)}
                                             >
                                                 <Icon
                                                     name='bookmark'
@@ -115,7 +140,7 @@ class NoticeList extends Component {
                                                 basic
                                                 styleName='notice.tab-button'
                                                 icon
-                                            // onClick={this.removeBookmark}
+                                                onClick={() => this.changeBookmark(false)}
                                             >
                                                 <Icon
                                                     name='bookmark outline'
@@ -133,7 +158,7 @@ class NoticeList extends Component {
                                         <Button
                                             icon
                                             styleName='notice.select-all-button-not-activated  notice.select-all-button'
-                                            onClick={this.changeMark}
+                                            onClick={this.toggleSelectAll}
                                         >
                                             <Icon name='square outline'> </Icon>
                                         </Button>
@@ -192,7 +217,7 @@ class NoticeList extends Component {
                         styleName='notice.pagination'
                         totalPages={pages}
                         firstItem={null}
-                        activePage={this.page ? this.page : 1}
+                        activePage={page}
                         onPageChange={this.handlePaginationChange}
                         // defaultActivePage={this.page?this.page:1}
                         lastItem={null}
@@ -206,7 +231,10 @@ class NoticeList extends Component {
 const mapStateToProps = state => {
     return {
         isFetchingNotices: state.notices.isFetchingNotices,
-        notices: state.notices.notices
+        notices: state.notices.notices,
+        selectAllActive: state.notices.selectAllActive,
+        selectedNotices: state.notices.selectedNotices,
+        page: state.notices.page
     }
 }
 
@@ -216,6 +244,20 @@ const mapDispatchToProps = dispatch => {
             dispatch(
                 getNotices(page)
             )
+        },
+        toggleAllNotices: () => {
+            dispatch(
+                toggleAllNotices()
+            )
+        },
+        noticeBookmark: (id, toggle) => {
+            dispatch(noticeBookmark(id, toggle))
+        },
+        noticeRead: (list) => {
+            dispatch(noticeRead(list))
+        },
+        setFilters: (page, date, searchKeyword) => {
+            dispatch(setFilters(page, date, searchKeyword))
         }
     }
 }
