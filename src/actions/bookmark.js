@@ -54,7 +54,6 @@ export const noticeBookmark = (noticeIdList, toggle) => {
                     : 'Delete bookmark failed!'
               })
         } else {
-          console.log(err)
           toast({
             type: 'error',
             title:
@@ -66,3 +65,6 @@ export const noticeBookmark = (noticeIdList, toggle) => {
       })
   }
 }
+
+
+
