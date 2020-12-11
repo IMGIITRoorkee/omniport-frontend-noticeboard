@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Container, Menu, Table, Icon } from 'semantic-ui-react'
-import { Route, withRouter } from 'react-router-dom'
+import { Table, Icon } from 'semantic-ui-react'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { isMobile } from 'react-device-detect'
 import { ifRole } from 'formula_one'
@@ -9,6 +9,7 @@ import moment from 'moment'
 
 import { baseNavUrl } from '../../urls'
 import { noticeBookmark } from '../../actions/bookmark'
+import { selectNotice } from '../../actions/selectNotices'
 
 import notice from '../../css/notice.css'
 
@@ -33,10 +34,15 @@ class NoticeCell extends Component {
         }
     }
 
+    selectNotice = () => {
+        const { selectNotice, id } = this.props
+        selectNotice(id)
+    }
+
     render() {
-        const check = null
-        const { date, banner, title, read, important, bookmark, uploader, user, expired } = this.props
-        
+        const { date, banner, title, read, important, bookmark, uploader, user, expired, id, selectedNotices } = this.props
+        const check = selectedNotices.includes(id)
+
         return (
             <Table.Row
                 styleName={
@@ -51,7 +57,7 @@ class NoticeCell extends Component {
                         <Table.Cell
                             width={1}
                             styleName={'notice.cell-width-1 notice.cell-hover'}
-                            // onClick={this.selectNotice}
+                            onClick={this.selectNotice}
                             collapsing
                         >
                             <Icon
@@ -153,7 +159,8 @@ class NoticeCell extends Component {
 
 const mapStateToProps = state => {
     return {
-        user: state.user.user
+        user: state.user.user,
+        selectedNotices: state.notices.selectedNotices
     }
 }
 
@@ -161,6 +168,9 @@ const mapDispatchToProps = dispatch => {
     return {
         noticeBookmark: (id, bookmark) => {
             dispatch(noticeBookmark(id, bookmark))
+        },
+        selectNotice: (id) => {
+            dispatch(selectNotice(id))
         }
     }
 }
