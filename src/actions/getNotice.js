@@ -24,7 +24,6 @@ function receiveNotice(noticeData, noticeExists) {
 }
 
 export const getNotice = (noticeId, expired = false, callback = () => {null} ) => (dispatch, getState) => {
-    // console.log(getState())
     let roles = getState().user.user.roles
     dispatch(requestNotice(noticeId))
     return fetch(noticeUrl(noticeId, expired))
@@ -74,7 +73,6 @@ export const getNotice = (noticeId, expired = false, callback = () => {null} ) =
             }
         })
         .catch(err => {
-            console.log(err)
             dispatch({
                 type: "FETCH_NOTICE_FAILURE"
             })
