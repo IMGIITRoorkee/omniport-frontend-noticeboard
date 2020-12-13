@@ -39,6 +39,13 @@ class TabList extends Component {
                     dateRangeActive: true
                 }
             }
+            else {
+                newState = {
+                    ...newState,
+                    datesRange: '',
+                    dateRangeActive: false
+                }
+            }
         }
         return newState
     }
@@ -47,7 +54,12 @@ class TabList extends Component {
         const url = location.pathname.split('/')
         if (url[2] && (url[2] == "important" || url[2] == "expired" || url[2] == "bookmark" || url[2] == "notice")) {
             this.setState({
-                back: true
+                back: true,
+                value: '',
+                ownUpdate: false,
+                datesRange: '',
+                ownUpdateDate: false,
+                dateRangeActive: false
             })
         }
         else {
@@ -58,7 +70,8 @@ class TabList extends Component {
     }
 
     componentDidMount() {
-        this.switchBackButton(this.props.history.location)
+        const { location } = this.props.history
+        this.switchBackButton(location)
         this.unlisten = this.props.history.listen((location) => {
             this.switchBackButton(location)
         });
@@ -77,13 +90,12 @@ class TabList extends Component {
         } else {
             dateRangeActive = false
         }
-        if(dateRangeActive){
+        if (dateRangeActive) {
+            let url = `${location.pathname}?page=${page}&date=${dateRange.start + '/' + dateRange.end}`
             if (searchKeyword) {
-                history.push(`${location.pathname}?page=${page}&search=${searchKeyword}&date=${dateRange.start+'/'+dateRange.end}`)
+                url += `&search=${searchKeyword}`
             }
-            else {
-                history.push(`${location.pathname}?page=${page}&date=${dateRange. start + '/' + dateRange.end}`)
-            }
+            history.push(url)
         }
     }
 
@@ -119,12 +131,11 @@ class TabList extends Component {
             datesRange: '',
             ownUpdateDate: true
         })
+        let url = `${location.pathname}?page=${page}`
         if (searchKeyword) {
-            history.push(`${location.pathname}?page=${page}&search=${searchKeyword}`)
+            url += `&search=${searchKeyword}`
         }
-        else {
-            history.push(`${location.pathname}?page=${page}`)
-        }
+        history.push(url)
     }
 
     handleSearchChange = event => {
@@ -138,12 +149,11 @@ class TabList extends Component {
         const { page, date, history, location } = this.props
         let { value } = this.state
         value = encodeURIComponent(value)
+        let url = `${location.pathname}?page=${page}&search=${value}`
         if (date) {
-            history.push(`${location.pathname}?page=${page}&date=${date}&search=${value}`)
+            url += `&date=${date.start + '/' + date.end}`
         }
-        else {
-            history.push(`${location.pathname}?page=${page}&search=${value}`)
-        }
+        history.push(url)
     }
 
     handleSearchDelete = () => {
@@ -152,18 +162,16 @@ class TabList extends Component {
             ownUpdate: true 
         })
         const { page, date, history, location } = this.props
+        let url = `${location.pathname}?page=${page}`
         if (date) {
-            history.push(`${location.pathname}?page=${page}&date=${date}`)
+            url += `&date=${date.start + '/' + date.end}`
         }
-        else {
-            history.push(`${location.pathname}?page=${page}`)
-        }
+        history.push(url)
     }
 
     render() {
         const { back, value, datesRange, dateRangeActive } = this.state
         const { importantUnreadCount, searchKeyword } = this.props
-        const dateCheck = dateFormatMatch(datesRange)
         
         return (
             <Container styleName='tablist.notice-container-width'>
@@ -196,7 +204,6 @@ class TabList extends Component {
                                                 color='blue'
                                                 content='Show All'
                                                 styleName='dropdown.important-button'
-                                            // onClick={this.handleImportant}
                                             />
                                         </Link>
                                     </div>
