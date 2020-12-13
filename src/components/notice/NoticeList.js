@@ -4,6 +4,7 @@ import { Container, Button, Icon, Segment, Table, Pagination, Loader } from 'sem
 
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import moment from 'moment'
 
 import NoticeCell from './NoticeCell'
 import { getNotices } from '../../actions/getNotices'
@@ -11,26 +12,37 @@ import { toggleAllNotices } from '../../actions/selectNotices'
 import { noticeBookmark } from '../../actions/bookmark'
 import { noticeRead } from '../../actions/readNotices'
 import { setFilters } from '../../actions/setFilters'
+import { setPosition } from '../../actions/setPosition'
+import { iconName, headingName } from '../../utils'
 
 import notice from '../../css/notice.css'
+import filters from '../../../../noticeboard-old/src/reducers/filters'
 
 
 class NoticeList extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            expired: null
-        }
-    }
 
-    setPage = () => {
-        const { location, getNotices, setFilters } = this.props
+    setNoticeFilters = () => {
+        const { getNotices, setFilters, setPosition } = this.props
         const url = location.pathname.split('/')
-        if(url[2] && url[2] == 'expired')
-        {
-            this.setState({
-                expired: true
-            })
+        let [showImp, expired, narrowBookmark, mainCategorySlug, bannerId, position, subPosition] = [false, false,false, false, null, 'home', null]
+        if(url[2]) {
+            position = url[2]
+            if(url[2]=='important'){
+                showImp = true
+            }
+            else if(url[2]=='expired'){
+                expired = true
+            }
+            else if(url[2]=='bookmark'){
+                narrowBookmark = true
+            }
+            else if(url[2]!=''){
+                bannerId = url[2]
+                subPosition = url[2]
+                if(isNaN(url[2])){
+                    mainCategorySlug = true
+                }
+            }
         }
         const query = new URLSearchParams(location.search)
         const page = query.get('page')
@@ -44,22 +56,32 @@ class NoticeList extends Component {
             }
         }
         const searchKeyword = query.get('search')
-        setFilters(page, dateFilter, searchKeyword)
+        setPosition(position)
+        setFilters(page, dateFilter, searchKeyword, showImp, expired, narrowBookmark, mainCategorySlug, bannerId)
         getNotices()
     }
 
     componentDidMount() {
-        this.setPage()
+        this.setNoticeFilters()
+        this.unlisten = this.props.history.listen((location) => {
+            this.setNoticeFilters()
+        });
+        
     }
+
+    componentWillUnmount() {
+        this.unlisten();
+    }   
 
     componentDidUpdate(prevProps) {
         if (this.props.location.search !== prevProps.location.search) {
-            this.setPage()
+            this.setNoticeFilters()
         }
     }
 
     handlePaginationChange = (e, data) => {
-        this.props.history.push(`${this.props.location.pathname}?page=${data.activePage}`)
+        const { pathname } = this.props.location
+        this.props.history.push(`${pathname}?page=${data.activePage}`)
     }
 
     changeMark = () => {
@@ -85,95 +107,126 @@ class NoticeList extends Component {
     }
 
     render() {
-        const { pages, history, isFetchingNotices, notices, selectAllActive, page } = this.props
-        const { expired } = this.state
+        const { 
+            pages, 
+            history, 
+            isFetchingNotices, 
+            notices, 
+            selectAllActive, 
+            page, 
+            expired, 
+            bannerId, 
+            dateRange, 
+            filters,
+            position 
+        } = this.props
+        let bannerName, dateDisplay
+        if (bannerId && filters.length > 0) {
+            for (let index = 0; index < filters.length; index++) {
+                for (let j = 0; j < filters[index].banner.length; j++) {
+                    if (bannerId == filters[index].banner[j].id) {
+                        bannerName = filters[index].banner[j].name
+                    }
+                }
+            }
+        } else {
+            bannerName = null
+        }
+        if (dateRange) {
+            dateDisplay =
+                moment(dateRange.start).format('MMM Do') +
+                ' to ' +
+                moment(dateRange.end).format('MMM Do')
+        }
         
         return (
             <>
                 <div styleName='notice.notice-list'>
                     <Container styleName='notice.notice-container-width'>
                         <div styleName='notice.notice-type-heading'>
-                            <Icon name={"bars"} color='blue' />
-                            <span>{"All Notices"}</span>
+                            <Icon name={iconName(position)} color='blue' />
+                            <span>{headingName(position)}</span>
                         </div>
                     </Container>
                     <React.Fragment>
-                        <Container styleName='notice.select-all-container notice.notice-container-width'>
-                            {selectAllActive ?
-                                (
-                                    <div>
-                                        <Button
-                                            icon
-                                            styleName='notice.select-all-button-activated notice.select-all-button notice.tab-button'
-                                            onClick={this.toggleSelectAll}
-                                        >
-                                            <Icon name='square' color='blue'></Icon>
-                                        </Button>
-                                        <Segment styleName='notice.select-all-list notice.select-all-activated-list'>
+                        {notices && notices.length?
+                            <Container styleName='notice.select-all-container notice.notice-container-width'>
+                                {selectAllActive ?
+                                    (
+                                        <div>
                                             <Button
-                                                basic
-                                                styleName='notice.tab-button'
                                                 icon
-                                                onClick={this.readNotices}
+                                                styleName='notice.select-all-button-activated notice.select-all-button notice.tab-button'
+                                                onClick={this.toggleSelectAll}
                                             >
-                                                <Icon
-                                                    name='envelope open outline'
-                                                    color='blue'
-                                                    styleName='notice.buttons-select-all'
-                                                ></Icon>
-                                                Mark as Read
+                                                <Icon name='square' color='blue'></Icon>
                                             </Button>
+                                            <Segment styleName='notice.select-all-list notice.select-all-activated-list'>
+                                                <Button
+                                                    basic
+                                                    styleName='notice.tab-button'
+                                                    icon
+                                                    onClick={this.readNotices}
+                                                >
+                                                    <Icon
+                                                        name='envelope open outline'
+                                                        color='blue'
+                                                        styleName='notice.buttons-select-all'
+                                                    ></Icon>
+                                                    Mark as Read
+                                                </Button>
+                                                <Button
+                                                    basic
+                                                    styleName='notice.tab-button'
+                                                    icon
+                                                    onClick={() => this.changeBookmark(true)}
+                                                >
+                                                    <Icon
+                                                        name='bookmark'
+                                                        color='blue'
+                                                        styleName='notice.buttons-select-all'
+                                                    ></Icon>
+                                                    Bookmark
+                                                </Button>
+                                                <Button
+                                                    basic
+                                                    styleName='notice.tab-button'
+                                                    icon
+                                                    onClick={() => this.changeBookmark(false)}
+                                                >
+                                                    <Icon
+                                                        name='bookmark outline'
+                                                        color='blue'
+                                                        styleName='notice.buttons-select-all'
+                                                    ></Icon>
+                                                    Remove Bookmark
+                                                </Button>
+                                            </Segment>
+                                        </div>
+                                    )
+                                    :
+                                    (
+                                        <div styleName='notice.table-row'>
                                             <Button
-                                                basic
-                                                styleName='notice.tab-button'
                                                 icon
-                                                onClick={() => this.changeBookmark(true)}
+                                                styleName='notice.select-all-button-not-activated  notice.select-all-button'
+                                                onClick={this.toggleSelectAll}
                                             >
-                                                <Icon
-                                                    name='bookmark'
-                                                    color='blue'
-                                                    styleName='notice.buttons-select-all'
-                                                ></Icon>
-                                                Bookmark
+                                                <Icon name='square outline'> </Icon>
                                             </Button>
-                                            <Button
-                                                basic
-                                                styleName='notice.tab-button'
-                                                icon
-                                                onClick={() => this.changeBookmark(false)}
-                                            >
-                                                <Icon
-                                                    name='bookmark outline'
-                                                    color='blue'
-                                                    styleName='notice.buttons-select-all'
-                                                ></Icon>
-                                                Remove Bookmark
-                                            </Button>
-                                        </Segment>
-                                    </div>
-                                )
-                                :
-                                (
-                                    <div styleName='notice.table-row'>
-                                        <Button
-                                            icon
-                                            styleName='notice.select-all-button-not-activated  notice.select-all-button'
-                                            onClick={this.toggleSelectAll}
-                                        >
-                                            <Icon name='square outline'> </Icon>
-                                        </Button>
-                                        <Segment styleName='notice.select-all-list notice.display-filters'>
-                                            <div styleName='notice.filter-block'>
-                                                {/* {bannerName || dateDisplay ? 'Filters:' : null}
-                                            {bannerName ? ` ${bannerName}` : null}
-                                            {bannerName && dateDisplay ? '; ' : null}
-                                            {dateDisplay ? ` ${dateDisplay}` : null} */}
-                                            </div>
-                                        </Segment>
-                                    </div>
-                                )
-                            }
-                        </Container>
+                                            <Segment styleName='notice.select-all-list notice.display-filters'>
+                                                <div styleName='notice.filter-block'>
+                                                    {bannerName || dateDisplay ? 'Filters:' : null}
+                                                    {bannerName ? ` ${bannerName}` : null}
+                                                    {bannerName && dateDisplay ? '; ' : null}
+                                                    {dateDisplay ? ` ${dateDisplay}` : null}
+                                                </div>
+                                            </Segment>
+                                        </div>
+                                    )
+                                }
+                            </Container>
+                        : null}
                     </React.Fragment>
                     {isFetchingNotices?
                         (
@@ -184,29 +237,41 @@ class NoticeList extends Component {
                         :
                         (
                             <div>
-                                <Container styleName='notice.notice-list-view notice.notice-container-width'>
-                                    <Table basic celled singleLine compact unstackable selectable styleName='notice.table'>
-                                        <Table.Body>
-                                            {notices && notices.map(noticeInfo => {
-                                                return (
-                                                    <NoticeCell
-                                                        key={noticeInfo.id}
-                                                        id={noticeInfo.id}
-                                                        date={noticeInfo.datetimeModified}
-                                                        banner={noticeInfo.banner}
-                                                        title={noticeInfo.title}
-                                                        read={noticeInfo.read}
-                                                        important={noticeInfo.isImportant}
-                                                        bookmark={noticeInfo.starred}
-                                                        uploader={noticeInfo.uploader}
-                                                        history={history}
-                                                        expired={expired}
-                                                    />
-                                                )
-                                            })}
-                                        </Table.Body>
-                                    </Table>
-                                </Container>
+                                {notices && notices.length?
+                                    (
+                                        <Container styleName='notice.notice-list-view notice.notice-container-width'>
+                                            <Table basic celled singleLine compact unstackable selectable styleName='notice.table'>
+                                                <Table.Body>
+                                                    {notices && notices.map(noticeInfo => {
+                                                        return (
+                                                            <NoticeCell
+                                                                key={noticeInfo.id}
+                                                                id={noticeInfo.id}
+                                                                date={noticeInfo.datetimeModified}
+                                                                banner={noticeInfo.banner}
+                                                                title={noticeInfo.title}
+                                                                read={noticeInfo.read}
+                                                                important={noticeInfo.isImportant}
+                                                                bookmark={noticeInfo.starred}
+                                                                uploader={noticeInfo.uploader}
+                                                                history={history}
+                                                                expired={expired}
+                                                            />
+                                                        )
+                                                    })}
+                                                </Table.Body>
+                                            </Table>
+                                        </Container>
+                                    )
+                                    :
+                                    (
+                                        <Container styleName='notice.notice-list-view notice.notice-container-width'>
+                                            <div styleName='notice.notice-list-no-notice'>
+                                                <h1 styleName='no-results-found'> No results found </h1>
+                                            </div>
+                                        </Container>
+                                    )   
+                                }             
                             </div>
                         )
                     }
@@ -234,7 +299,11 @@ const mapStateToProps = state => {
         notices: state.notices.notices,
         selectAllActive: state.notices.selectAllActive,
         selectedNotices: state.notices.selectedNotices,
-        page: state.notices.page
+        page: state.notices.page,
+        bannerId: state.notices.bannerId,
+        dateRange: state.notices.dateRange,
+        filters: state.filters.filters,
+        position: state.position.position
     }
 }
 
@@ -256,8 +325,11 @@ const mapDispatchToProps = dispatch => {
         noticeRead: (list) => {
             dispatch(noticeRead(list))
         },
-        setFilters: (page, date, searchKeyword) => {
-            dispatch(setFilters(page, date, searchKeyword))
+        setFilters: (page, dateFilter, searchKeyword, showImp, expired, narrowBookmark, mainCategorySlug, bannerId) => {
+            dispatch(setFilters(page, dateFilter, searchKeyword, showImp, expired, narrowBookmark, mainCategorySlug, bannerId))
+        },
+        setPosition: (position) => {
+            dispatch(setPosition(position))
         }
     }
 }

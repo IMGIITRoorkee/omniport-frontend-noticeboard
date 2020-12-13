@@ -1,4 +1,4 @@
-export const setFilters = (page, date, searchKeyword) => (dispatch) => {
+export const setFilters = (page, date, searchKeyword, showImp, expired, narrowBookmark, mainCategorySlug, bannerId) => (dispatch) => {
     if(!page){
         page = 1
     }
@@ -7,7 +7,12 @@ export const setFilters = (page, date, searchKeyword) => (dispatch) => {
         payload: {
             page,
             date,
-            searchKeyword
+            searchKeyword,
+            showImp, 
+            expired, 
+            narrowBookmark, 
+            mainCategorySlug, 
+            bannerId
         }
     })
 }

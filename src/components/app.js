@@ -102,7 +102,7 @@ class App extends Component {
                   />
                   <Route
                     exact
-                    path='/noticeboard'
+                    path='/*'
                     render={() => (
                       <NoticeList pages={this.props.totalPages} location={location} />
                     )}

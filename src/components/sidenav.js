@@ -1,40 +1,32 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { Dropdown, Menu, Divider, Icon, Image } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 
+import { bannerUrl } from '../urls'
+
 import sidenav from '../css/sidenav.css'
-import { baseNavUrl } from '../urls'
 
 class SideNav extends Component {
-    state = {
-        position: null,
-        dropPosition: null
+
+    filterNotices = (bannerId, searchKeyword = null, dateFilter = null) => {
+        const { history } = this.props
+        history.push(bannerUrl(bannerId, searchKeyword, dateFilter))
     }
 
-    changePosition = (e) => {
-        this.setState({
-            position: e.target.id
-        })
+    linkUrl = (link, searchKeyword = null, dateFilter = null) => {
+        history.push(bannerUrl(link, searchKeyword, dateFilter))
     }
 
     renderInnerDropdownItems = items => {
-        const all = false
-        const { subPosition } = this.props
+        const { position, searchKeyword, dateFilter } = this.props
         if (items.length) {
             return items.map((item, index) => (
                 <Dropdown.Item
                     key={index}
-                    active={subPosition === item.name}
-                    // onClick={() =>
-                    //     this.filterNotices(
-                    //         item.id,
-                    //         all,
-                    //         '/noticeboard/',
-                    //         item.parentCategory.name,
-                    //         item.name
-                    //     )
-                    // }
+                    active={position == item.id}
+                    onClick={() =>
+                        this.filterNotices(item.id, searchKeyword, dateFilter)
+                    }
                 >
                     {item.name}
                 </Dropdown.Item>
@@ -49,22 +41,15 @@ class SideNav extends Component {
     }
 
     renderInnerDropdownAll = item => {
-        const { subPosition } = this.props
+        const { position, searchKeyword, dateFilter } = this.props
         if (item.banner.length) {
-            const all = true
             return (
                 <Dropdown.Item
                     key={0}
-                    active={subPosition === item.name}
-                    // onClick={() =>
-                    //     this.filterNotices(
-                    //         item.slug,
-                    //         all,
-                    //         '/noticeboard/',
-                    //         item.name,
-                    //         item.name
-                    //     )
-                    // }
+                    active={position === item.slug}
+                    onClick={() =>
+                        this.filterNotices(item.slug, searchKeyword, dateFilter)
+                    }
                 >
                     All {item.name}
                 </Dropdown.Item>
@@ -72,13 +57,12 @@ class SideNav extends Component {
         }
     }
 
-    renderOuterDropdownItems = items => {
-        const { position } = this.props
+    renderOuterDropdownItems = (items, outerPosition) => {
         if (items.length > 0) {
             return items.map((item, index) => (
                 <Dropdown
                     styleName={
-                        position === item.name
+                        outerPosition === item.slug
                             ? 'sidenav.dropdown-sidenav-space-between-active'
                             : 'sidenav.dropdown-sidenav-space-between'
                     }
@@ -105,9 +89,27 @@ class SideNav extends Component {
     }
     
     render() {
-        const { position, dropPosition } = this.state
-        const { filters } = this.props
-        
+        const { filters, searchKeyword, dateFilter, position } = this.props
+        const { filterNotices } = this
+        let outerPosition
+        if(filters){
+            for(let i = 0; i<filters.length; i++) {
+                if(position == filters[i].slug){
+                    outerPosition = filters[i].slug
+                    break
+                }
+                for(let j=0; j<filters[i].banner.length; j++){
+                    if(position == filters[i].banner[j].id){
+                        outerPosition = filters[i].slug
+                        break
+                    }
+                }
+                if(outerPosition){
+                    break
+                }
+            }
+        }
+
         return (
             <Menu
                 secondary
@@ -117,74 +119,66 @@ class SideNav extends Component {
                 styleName='sidenav.sidenav-menu'
                 color={'blue'}
             >
-                <Link to={baseNavUrl('/')}>
-                    <Menu.Item
-                        name='All Notices'
-                        id='home'
-                        styleName={
-                            position === 'home'
-                                ? 'sidenav.sidenav-active-item'
-                                : 'sidenav.sidenav-items'
-                        }
-                        onClick={this.changePosition}
-                    >
-                        <Icon styleName='sidenav.sidenav-icon-styling' name='home' />
-                        All Notices
-                    </Menu.Item>
-                </Link>
-                <Link to={baseNavUrl('/important/')}>
-                    <Menu.Item
-                        name='Important'
-                        id='important'
-                        styleName={
-                            position === 'important'
-                                ? 'sidenav.sidenav-active-item'
-                                : 'sidenav.sidenav-items'
-                        }
-                        onClick={this.changePosition}
-                    >
-                        <Icon styleName='sidenav.sidenav-icon-styling' name='tag' />
-                        Important Notices
-                    </Menu.Item>
-                </Link>
+                <Menu.Item
+                    name='All Notices'
+                    id='home'
+                    styleName={
+                        position === 'home'
+                            ? 'sidenav.sidenav-active-item'
+                            : 'sidenav.sidenav-items'
+                    }
+                    onClick={() => filterNotices(null, searchKeyword, dateFilter)}
+                >
+                    <Icon styleName='sidenav.sidenav-icon-styling' name='home' />
+                    All Notices
+                </Menu.Item>
+                <Menu.Item
+                    name='Important'
+                    id='important'
+                    styleName={
+                        position === 'important'
+                            ? 'sidenav.sidenav-active-item'
+                            : 'sidenav.sidenav-items'
+                    }
+                    onClick={() => filterNotices('important')}
+                >
+                    <Icon styleName='sidenav.sidenav-icon-styling' name='tag' />
+                    Important Notices
+                </Menu.Item>
 
-                {filters?this.renderOuterDropdownItems(filters):null}
+                {filters?this.renderOuterDropdownItems(filters, outerPosition):null}
 
                 <Divider styleName='sidenav.sidenav-divider' />
 
-                <Link to={baseNavUrl('/bookmark/')}>
-                    <Menu.Item
-                        name='Bookmark'
-                        id='bookmark'
-                        styleName={
-                            position === 'bookmark'
-                                ? 'sidenav.sidenav-active-item'
-                                : 'sidenav.sidenav-items'
-                        }
-                        onClick={this.changePosition}
-                    >
-                        <Icon styleName='sidenav.sidenav-icon-styling' name='bookmark' />
-                        Bookmarks
-                    </Menu.Item>
-                </Link>
+                <Menu.Item
+                    name='Bookmark'
+                    id='bookmark'
+                    styleName={
+                        position === 'bookmark'
+                            ? 'sidenav.sidenav-active-item'
+                            : 'sidenav.sidenav-items'
+                    }
+                    onClick={() => filterNotices('bookmark')}
+                >
+                    <Icon styleName='sidenav.sidenav-icon-styling' name='bookmark' />
+                    Bookmarks
+                </Menu.Item>
 
                 <Divider styleName='sidenav.sidenav-divider' />
 
-                <Link to={baseNavUrl('/expired/')}>
-                    <Menu.Item
-                        name='Expired'
-                        id='expired'
-                        styleName={
-                            position === 'expired'
-                                ? 'sidenav.sidenav-active-item'
-                                : 'sidenav.sidenav-items'
-                        }
-                        onClick={this.changePosition}
-                    >
-                        <Icon styleName='sidenav.sidenav-icon-styling' name='time' />
-                        Expired
-                    </Menu.Item>
-                </Link>
+                <Menu.Item
+                    name='Expired'
+                    id='expired'
+                    styleName={
+                        position === 'expired'
+                            ? 'sidenav.sidenav-active-item'
+                            : 'sidenav.sidenav-items'
+                    }
+                    onClick={() => filterNotices('expired')}
+                >
+                    <Icon styleName='sidenav.sidenav-icon-styling' name='time' />
+                    Expired
+                </Menu.Item>
 
                 <Divider styleName='sidenav.sidenav-divider' />
 
@@ -206,4 +200,13 @@ class SideNav extends Component {
     }
 }
 
-export default connect(null, null)(SideNav)
+const mapStateToProps = state => {
+    return {
+        filters: state.filters.filters,
+        searchKeyword: state.notices.searchKeyword,
+        dateFilter: state.notices.dateRange,
+        position: state.position.position
+    }
+}
+
+export default connect(mapStateToProps, null)(SideNav)

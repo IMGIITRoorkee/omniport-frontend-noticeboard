@@ -28,7 +28,7 @@ export function filterUrl(page, banner_id, search_keyword, main_category_slug) {
     } else {
         url = `${baseApiUrl()}filter/?banner=${banner_id}&page=${page}`
     }
-    return urlSearchGetParam(url, search_keyword)
+    return searchGetParamUrl(url, search_keyword)
 }
 
 export function dateFilterUrl(
@@ -86,4 +86,19 @@ export function bookmarkedNoticesUrl(page) {
 //Frontend
 export const baseNavUrl = forwardLink => {
     return `${config.baseUrl}${forwardLink}`
+}
+
+export const bannerUrl = (bannerId = null, searchKeyword = null, dateFilter = null) => {
+    let url = baseNavUrl('/')
+    if(bannerId) {
+        url += `${bannerId}/`
+    }
+    url += `?page=1`
+    if(dateFilter) {
+        url += `&date=${dateFilter.start+'/'+dateFilter.end}`
+    }
+    if(searchKeyword) {
+        url += `&search=${searchKeyword}`
+    }
+    return url
 }

@@ -117,7 +117,12 @@ const noticesReducer = (state = initialState, action) => {
                 ...state,
                 page: action.payload.page,
                 dateRange: action.payload.date,
-                searchKeyword: action.payload.searchKeyword
+                searchKeyword: action.payload.searchKeyword,
+                showImp: action.payload.showImp,
+                expired: action.payload.expired,
+                narrowBookmark: action.payload.narrowBookmark,
+                mainCategorySlug: action.payload.mainCategorySlug,
+                bannerId: action.payload.bannerId
             }
         default:
             return state;
