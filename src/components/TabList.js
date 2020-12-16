@@ -8,6 +8,7 @@ import { withRouter, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import BackLink from './BackLink'
+import UploadNotice from './upload/UploadNotice'
 import { baseNavUrl } from '../urls'
 
 import tablist from '../css/notice.css'
@@ -20,7 +21,9 @@ class TabList extends Component {
         ownUpdate: false,
         datesRange: '',
         ownUpdateDate: false,
-        dateRangeActive: false
+        dateRangeActive: false,
+        edit: false,
+        noticeId: null
     }
 
     static getDerivedStateFromProps(nextProps, state) {
@@ -53,13 +56,20 @@ class TabList extends Component {
     switchBackButton = (location) => {
         const url = location.pathname.split('/')
         if (url[2] && (url[2] == "important" || url[2] == "expired" || url[2] == "bookmark" || url[2] == "notice")) {
+            let [edit, noticeId] = [false, null]
+            if(url[2] == "notice") {
+                edit = true
+                noticeId = url[3]
+            }
             this.setState({
                 back: true,
                 value: '',
                 ownUpdate: false,
                 datesRange: '',
                 ownUpdateDate: false,
-                dateRangeActive: false
+                dateRangeActive: false,
+                edit,
+                noticeId
             })
         }
         else {
@@ -170,15 +180,15 @@ class TabList extends Component {
     }
 
     render() {
-        const { back, value, datesRange, dateRangeActive } = this.state
-        const { importantUnreadCount, searchKeyword } = this.props
+        const { back, value, datesRange, dateRangeActive, edit, noticeId } = this.state
+        const { importantUnreadCount, searchKeyword, permission } = this.props
         
         return (
             <Container styleName='tablist.notice-container-width'>
                 <Menu secondary styleName='tablist.top-bar'>
                     <div styleName='tablist.width-100'>
                         {back ? (
-                            <BackLink />
+                            <BackLink editButton={edit} noticeId={noticeId} />
                         ) : (
                             <div>
                                 <div styleName='dropdown.important-main-box dropdown.flex dropdown.flex-row'>
@@ -286,12 +296,17 @@ class TabList extends Component {
                                             </Form>
                                         )} 
                                     </Menu.Item>
-                                    <Menu.Item
-                                        position='right'
-                                        styleName='dropdown.upload-item-padding'
-                                    >
-                                        {/* <UploadNotice /> */}
-                                    </Menu.Item>
+                                    {permission.length > 0 ? 
+                                        (
+                                            <Menu.Item
+                                                position='right'
+                                                styleName='dropdown.upload-item-padding'
+                                            >
+                                                <UploadNotice />
+                                            </Menu.Item>
+                                        )
+                                        : null
+                                    }
                                 </Menu.Menu>
                             </div>
                         )}
@@ -307,7 +322,8 @@ const mapStateToProps = state => {
         importantUnreadCount: state.notices.importantUnreadCount,
         searchKeyword: state.notices.searchKeyword,
         page: state.notices.page,
-        date: state.notices.dateRange
+        date: state.notices.dateRange,
+        permission: state.permission.permission
     }
 }
 

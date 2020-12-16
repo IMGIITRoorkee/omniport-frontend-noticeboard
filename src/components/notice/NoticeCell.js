@@ -40,7 +40,22 @@ class NoticeCell extends Component {
     }
 
     render() {
-        const { date, banner, title, read, important, bookmark, uploader, user, expired, id, selectedNotices } = this.props
+        const { 
+            date, 
+            banner, 
+            title, 
+            read, 
+            important, 
+            bookmark, 
+            uploader, 
+            user, 
+            expired, 
+            id, 
+            selectedNotices, 
+            permission,
+            editNotice,
+            deleteNotice
+         } = this.props
         const check = selectedNotices.includes(id)
 
         return (
@@ -134,24 +149,46 @@ class NoticeCell extends Component {
                         Date.now().year === moment(date).year() ? 'DD/MM/YY' : 'MMM Do'
                     )}
                 </Table.Cell>
-                <Table.Cell
-                    // onClick={}
-                    collapsing
-                    textAlign='center'
-                    styleName='notice.cell-width-1'
-                    width={1}
-                >
-                    <Icon name='pencil' styleName='notice.cell-hover' />
-                </Table.Cell>
-                <Table.Cell
-                    // onClick={}
-                    collapsing
-                    textAlign='center'
-                    styleName='notice.cell-width-1'
-                    width={1}
-                >
-                    <Icon name='trash' styleName='notice.cell-hover' />
-                </Table.Cell>
+                {permission.length > 0 ? 
+                    (
+                        <>
+                            {!expired ? 
+                                (
+                                    <Table.Cell
+                                        onClick={
+                                            user && uploader && uploader.id === user.id
+                                                ? () => editNotice(id)
+                                                : null
+                                        }
+                                        collapsing
+                                        textAlign='center'
+                                        styleName='notice.cell-width-1'
+                                        width={1}
+                                    >
+                                        {user && uploader && uploader.id === user.id ? (
+                                            <Icon name='pencil' styleName='notice.cell-hover' />
+                                        ) : null}
+                                    </Table.Cell>
+                                ) : null
+                            }
+                            <Table.Cell
+                                onClick={
+                                    user && uploader && uploader.id === user.id
+                                        ? () => deleteNotice(id, expired ? 'old' : 'new')
+                                        : null
+                                }
+                                collapsing
+                                textAlign='center'
+                                styleName='notice.cell-width-1'
+                                width={1}
+                            >
+                                {user && uploader && uploader.id === user.id ? (
+                                    <Icon name='trash' styleName='notice.cell-hover' />
+                                ) : null}
+                            </Table.Cell>
+                        </>
+                    ) : null
+                }
             </Table.Row>
         )
     }
@@ -160,7 +197,8 @@ class NoticeCell extends Component {
 const mapStateToProps = state => {
     return {
         user: state.user.user,
-        selectedNotices: state.notices.selectedNotices
+        selectedNotices: state.notices.selectedNotices,
+        permission: state.permission.permission
     }
 }
 
@@ -171,7 +209,7 @@ const mapDispatchToProps = dispatch => {
         },
         selectNotice: (id) => {
             dispatch(selectNotice(id))
-        }
+        },
     }
 }
 

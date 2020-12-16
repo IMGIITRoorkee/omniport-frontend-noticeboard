@@ -24,7 +24,8 @@ class NoticeView extends Component {
     }
 
     componentDidMount() {
-        this.props.getNotice(this.props.match.params.noticeId, this.props.expired)
+        const { getNotice, match, expired } = this.props
+        getNotice(match.params.noticeId, expired)
     }
 
     static getDerivedStateFromProps(props) {

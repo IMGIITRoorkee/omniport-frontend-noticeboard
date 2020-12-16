@@ -124,6 +124,57 @@ const noticesReducer = (state = initialState, action) => {
                 mainCategorySlug: action.payload.mainCategorySlug,
                 bannerId: action.payload.bannerId
             }
+        case 'UPLOAD_NOTICE_FAILURE':
+            return {
+                ...state,
+                isUploading: false,
+                error: action.payload
+            }
+        case 'UPLOAD_NOTICE_SUCCESS':
+            return {
+                ...state,
+                isUploading: false
+            }
+        case 'UPLOAD_NOTICE_REQUEST':
+            return {
+                ...state,
+                isUploading: true
+            }
+
+        case 'EDIT_NOTICE_FAILURE':
+            return {
+                ...state,
+                isUploading: false,
+                error: action.payload
+            }
+        case 'EDIT_NOTICE_SUCCESS':
+            return {
+                ...state,
+                isUploading: false
+            }
+        case 'EDIT_NOTICE_REQUEST':
+            return {
+                ...state,
+                isUploading: true
+            }
+        case 'DELETE_NOTICE_SUCCESS':
+            let newNotices = state.notices.filter(
+                notice => notice.id !== action.payload.id
+            )
+            return {
+                ...state,
+                notices: newNotices
+            }
+
+        case 'DELETE_NOTICE_REQUEST':
+            return {
+                ...state
+            }
+
+        case 'DELETE_NOTICE_FAILURE':
+            return {
+                ...state
+            }
         default:
             return state;
     }

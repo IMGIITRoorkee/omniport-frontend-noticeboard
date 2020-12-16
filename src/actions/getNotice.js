@@ -23,7 +23,7 @@ function receiveNotice(noticeData, noticeExists) {
     }
 }
 
-export const getNotice = (noticeId, expired = false, callback = () => {null} ) => (dispatch, getState) => {
+export const getNotice = (noticeId, expired = false, callback = () => {null}) => (dispatch, getState) => {
     let roles = getState().user && getState().user.user ? getState().user.user.roles : 'Guest'
     dispatch(requestNotice(noticeId))
     return fetch(noticeUrl(noticeId, expired))

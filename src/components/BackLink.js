@@ -3,6 +3,8 @@ import { Button, Menu } from 'semantic-ui-react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
+import EditModal from './upload/NoticeModal'
+
 import backlink from '../css/notice.css'
 
 class BackLink extends Component {
@@ -14,9 +16,16 @@ class BackLink extends Component {
         this.modalRef = React.createRef()
     }
 
+    toggleEditModal = () => {
+        const { showEditModal } = this.state
+        this.setState({
+            showEditModal: !showEditModal
+        })
+    }
+
     render() {
         const { showEditModal } = this.state
-        // const { match, editButton, notice, user } = this.props
+        const { noticeId, editButton, notice, user } = this.props
 
         return (
             <Menu.Menu>
@@ -32,25 +41,31 @@ class BackLink extends Component {
                         ref={this.modalRef}
                     ></div>
 
-                    {/* {showEditModal ? (
-                        <EditModal
-                            id={match.params && match.params.noticeId}
-                            modalType='edit'
-                            modalRef={this.modalRef}
-                            handleModal={this.toggleEditModal}
-                            modal={showEditModal}
-                            fetchNotice={true}
-                        />
-                    ) : null} */}
-                    {/* {notice && notice.uploader.id == user.id && editButton ? ( */}
-                        <Button
-                            content='Edit'
-                            styleName='backlink.back-edit-button'
-                            // onClick={this.toggleEditModal}
-                        />
-                    {/* ) : (
+                    {showEditModal && noticeId ? 
+                        (
+                            <EditModal
+                                id={noticeId}
+                                modalType='edit'
+                                modalRef={this.modalRef}
+                                handleModal={this.toggleEditModal}
+                                modal={showEditModal}
+                                fetchNotice={true}
+                            />
+                        ) : null
+                    }
+                    {user && notice && notice.uploader.id == user.id && editButton ? 
+                        (
+                            <Button
+                                content='Edit'
+                                styleName='backlink.back-edit-button'
+                                onClick={this.toggleEditModal}
+                            />
+                        ) 
+                        : 
+                        (
                             <></>
-                        )} */}
+                        )
+                    }
                 </Menu.Item>
             </Menu.Menu>
         )
@@ -59,16 +74,11 @@ class BackLink extends Component {
 
 const mapStateToProps = state => {
     return {
-        
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        
+        notice: state.notices.notice,
+        user: state.user.user
     }
 }
 
 export default withRouter(
-    connect(mapStateToProps, mapDispatchToProps)(BackLink)
+    connect(mapStateToProps)(BackLink)
 )

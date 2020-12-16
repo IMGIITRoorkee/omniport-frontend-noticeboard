@@ -82,6 +82,22 @@ export function bookmarkedNoticesUrl(page) {
     return `${baseApiUrl()}star_filter_view/?page=${page}`
 }
 
+export function uploadNoticeUrl() {
+    return `${baseApiUrl()}new/`
+}
+
+export function noticeIdUrl(id, type = 'new') {
+    return `${baseApiUrl()}${type}/${id}/`
+}
+
+export function permissionsUrl() {
+    return `${baseApiUrl()}permissions/`
+}
+
+export function copyMediaUrl() {
+    return `${baseApiUrl()}copy_media/`
+}
+
 
 //Frontend
 export const baseNavUrl = forwardLink => {
@@ -101,4 +117,8 @@ export const bannerUrl = (bannerId = null, searchKeyword = null, dateFilter = nu
         url += `&search=${searchKeyword}`
     }
     return url
+}
+
+export function fileManagerUrl() {
+    return `/file-manager`
 }

@@ -22,11 +22,11 @@ export const selectNotice = (id) => (dispatch, getState) => {
     })
 }
 
-export const toggleAllNotices = () => (dispatch, getState) => {
+export const toggleAllNotices = (deSelect = 0) => (dispatch, getState) => {
     let selectedNotices = getState().notices.selectedNotices
     const notices = getState().notices.notices
     let selectAllActive = getState().notices.selectAllActive
-    if (selectAllActive) {
+    if (selectAllActive || deSelect === 1) {
         selectedNotices = []
         selectAllActive = false
     }
