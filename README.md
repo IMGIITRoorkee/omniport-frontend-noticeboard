@@ -1,3 +1,3 @@
-# [[app_display_name]]
+# omniport-frontend-noticeboard
 
-> Omniport app frontend
+This app is made for Omniport.
