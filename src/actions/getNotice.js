@@ -24,7 +24,7 @@ function receiveNotice(noticeData, noticeExists) {
 }
 
 export const getNotice = (noticeId, expired = false, callback = () => {null}) => (dispatch, getState) => {
-    let roles = getState().user && getState().user.user ? getState().user.user.roles : 'Guest'
+    let roles = getState().user && getState().user.user ? getState().user.user.roles : ['Guest']
     dispatch(requestNotice(noticeId))
     return fetch(noticeUrl(noticeId, expired))
         .then(response => response.json())
@@ -47,6 +47,7 @@ export const getNotice = (noticeId, expired = false, callback = () => {null}) =>
                             })
                             .catch(err => {
                                 if (err.response) {
+                                    console.log(err)
                                     err.response.data
                                         ? toast({
                                             type: 'error',
@@ -89,6 +90,7 @@ export const getNotice = (noticeId, expired = false, callback = () => {null}) =>
                         description: err.response.statusText
                     })
             } else {
+                console.log(err)
                 toast({
                     type: 'error',
                     title: 'Failed to fetch notice!'
