@@ -27,7 +27,6 @@ import { deleteNotice } from '../../actions/deleteNotice'
 import { iconName, headingName } from '../../utils'
 
 import notice from '../../css/notice.css'
-import filters from '../../../../noticeboard-old/src/reducers/filters'
 
 
 class NoticeList extends Component {

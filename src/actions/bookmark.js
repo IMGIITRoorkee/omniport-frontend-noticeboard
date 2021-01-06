@@ -1,6 +1,7 @@
 import { getCookie } from 'formula_one'
 import { starReadUrl } from '../urls'
 import { toast } from 'react-semantic-toasts'
+import { star_keyword, unstar_keyword } from '../const'
 
 function bookmarkNotice (noticeIdList, toggle) {
   return {
@@ -21,9 +22,9 @@ export const noticeBookmark = (noticeIdList, toggle) => {
     let keyword
 
     if (toggle) {
-      keyword = 'star'
+      keyword = star_keyword
     } else {
-      keyword = 'unstar'
+      keyword = unstar_keyword
     }
 
     let body = JSON.stringify({
@@ -42,14 +43,14 @@ export const noticeBookmark = (noticeIdList, toggle) => {
             ? toast({
                 type: 'error',
                 title:
-                  keyword === 'star'
+                  keyword === star_keyword
                     ? 'Unable to bookmark!'
                     : 'Delete bookmark failed!'
               })
             : toast({
                 type: 'error',
                 title:
-                  keyword === 'star'
+                  keyword === star_keyword
                     ? 'Unable to bookmark!'
                     : 'Delete bookmark failed!'
               })
@@ -57,7 +58,7 @@ export const noticeBookmark = (noticeIdList, toggle) => {
           toast({
             type: 'error',
             title:
-              keyword === 'star'
+              keyword === star_keyword
                 ? 'Unable to bookmark!'
                 : 'Delete bookmark failed!'
           })
