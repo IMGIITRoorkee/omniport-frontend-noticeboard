@@ -12,7 +12,7 @@ import {
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import moment from 'moment'
-
+ 
 import { getNotice } from '../../actions/getNotice'
 
 import noticeView from '../../css/notice.css'
@@ -66,7 +66,7 @@ class NoticeView extends Component {
                         {noticeExists ? (
                             <Segment.Group>
                                 <Segment as='h5' styleName='noticeView.top-segment'>
-                                    <span>Subject: {notice.title}</span>
+                                    <span styleName = 'noticeView.top-segment-subject'>Subject: {notice.title}</span>
                                     <span>{notice.banner.name}</span>
                                 </Segment>
                                 <Segment>

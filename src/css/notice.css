@@ -88,6 +88,7 @@
 }
 
 .notice-box-header {
+  overflow-wrap: break-word;
   margin-bottom: 30px !important;
   text-align: center;
 }
@@ -362,6 +363,11 @@
 .top-segment {
   display: flex;
   justify-content: space-between;
+}
+
+.top-segment-subject {
+  word-break: break-all;
+  margin-right: 2%;
 }
 
 .back-wrapper {
