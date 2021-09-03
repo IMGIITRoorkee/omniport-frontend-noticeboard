@@ -25,6 +25,7 @@ import { setFilters } from '../../actions/setFilters'
 import { setPosition } from '../../actions/setPosition'
 import { deleteNotice } from '../../actions/deleteNotice'
 import { iconName, headingName } from '../../utils'
+import { ifRole } from 'formula_one'
 
 import notice from '../../css/notice.css'
 
@@ -100,17 +101,24 @@ class NoticeList extends Component {
         this.unlisten();
     }   
 
-    componentDidUpdate(prevProps) {
-        const { toggleAllNotices, location } = this.props
-        if (location.search !== prevProps.location.search) {
-            toggleAllNotices(1)
-            this.setNoticeFilters()
-        }
-    }
+    // componentDidUpdate(prevProps) {
+    //     const { toggleAllNotices, location } = this.props
+    //     if (location.search !== prevProps.location.search) {
+    //         console.log(location.search)
+    //         console.log(prevProps.location.search)
+    //         toggleAllNotices(1)
+    //         this.setNoticeFilters()
+    //     }
+    // }
 
     handlePaginationChange = (e, data) => {
-        const { pathname } = this.props.location
-        this.props.history.push(`${pathname}?page=${data.activePage}`)
+        const { date, history, location, searchKeyword } = this.props
+        const { pathname } = location
+        const { activePage } = data
+        let url = `${pathname}?page=${activePage}`
+        if(date) url += `&date=${date.start + '/' + date.end}`
+        if(searchKeyword) url += `&search=${searchKeyword}`
+        history.push(url)
     }
 
     changeMark = () => {
@@ -179,7 +187,8 @@ class NoticeList extends Component {
             bannerId, 
             dateRange, 
             filters,
-            position 
+            position ,
+            user
         } = this.props
         let bannerName, dateDisplay
         if (bannerId && filters.length > 0) {
@@ -209,7 +218,7 @@ class NoticeList extends Component {
                     </div>
                 </Container>
                 <React.Fragment>
-                    {notices && notices.length ?
+                    {notices && notices.length && !((user && ifRole(user.roles, 'Guest') === 'IS_ACTIVE') || expired ) ?
                         <Container styleName='notice.select-all-container notice.notice-container-width'>
                             {selectAllActive ?
                                 (
@@ -405,7 +414,9 @@ const mapStateToProps = state => {
         position: state.position.position,
         expired: state.notices.expired,
         user: state.user.user,
-        isFetchingUser: state.user.isFetchingUser
+        isFetchingUser: state.user.isFetchingUser,
+        searchKeyword: state.notices.searchKeyword,
+        date: state.notices.dateRange
     }
 }
 
