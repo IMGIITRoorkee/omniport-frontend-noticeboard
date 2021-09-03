@@ -12,6 +12,7 @@ import {
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import DOMPurify from 'dompurify';
  
 import { getNotice } from '../../actions/getNotice'
 
@@ -110,7 +111,7 @@ class NoticeView extends Component {
                                     </Header>
                                     <div
                                         styleName='noticeView.notice-content'
-                                        dangerouslySetInnerHTML={{ __html: notice.content }}
+                                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(notice.content) }}
                                     />
                                 </Container>
                             </Segment.Group>
