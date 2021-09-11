@@ -23,6 +23,12 @@ class BackLink extends Component {
         })
     }
 
+    handleOnClick = () => {
+        if(document.referrer!="") {
+            this.props.history.goBack()
+        } 
+    }
+
     render() {
         const { showEditModal } = this.state
         const { noticeId, editButton, notice, user } = this.props
@@ -32,7 +38,7 @@ class BackLink extends Component {
                 <Menu.Item styleName='backlink.back-button backlink.back-wrapper'>
                     <Button
                         styleName='backlink.menu-button-border backlink.tab-button'
-                        onClick={this.props.history.goBack}
+                        onClick={this.handleOnClick}
                         icon='arrow left'
                         content='Back'
                     />
