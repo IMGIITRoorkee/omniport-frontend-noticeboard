@@ -184,7 +184,7 @@ class SideNav extends Component {
 
                 <Menu.Item name='Link to old notices' styleName='sidenav.sidenav-items'>
                     <a
-                        href='https://channeli.in/#notices'
+                        href='http://people.iitr.ernet.in/#notices'
                         target='_blank'
                         rel='noopener noreferrer'
                     >
