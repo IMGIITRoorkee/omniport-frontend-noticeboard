@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import EditModal from './upload/NoticeModal'
+import { baseNavUrl } from '../urls'
 
 import backlink from '../css/notice.css'
 
@@ -24,9 +25,14 @@ class BackLink extends Component {
     }
 
     handleOnClick = () => {
+        const { history } = this.props
         if(document.referrer!="") {
-            this.props.history.goBack()
+            history.goBack()
         } 
+        else {
+            let url = baseNavUrl('/')
+            history.push(url)
+        }
     }
 
     render() {
