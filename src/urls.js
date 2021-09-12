@@ -120,5 +120,5 @@ export const bannerUrl = (bannerId = null, searchKeyword = null, dateFilter = nu
 }
 
 export function fileManagerUrl() {
-    return `/file-manager`
+    return `/file-manager/default/?mode=integration`
 }
