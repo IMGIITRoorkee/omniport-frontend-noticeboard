@@ -26,13 +26,15 @@ class BackLink extends Component {
 
     handleOnClick = () => {
         const { history } = this.props
-        if(document.referrer!="") {
-            history.goBack()
-        } 
-        else {
-            let url = baseNavUrl('/')
-            history.push(url)
-        }
+        history.goBack()
+        // let url = baseNavUrl('/')
+        // if(document.referrer!="") {
+        //     history.goBack()
+        // } 
+        // else {
+        //     let url = baseNavUrl('/')
+        //     history.push(url)
+        // }
     }
 
     render() {
