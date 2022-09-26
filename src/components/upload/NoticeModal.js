@@ -260,6 +260,7 @@ class NoticeModal extends Component {
                     onClose={() => this.handleModal(false)}
                     size='large'
                     closeIcon
+		    closeOnDimmerClick={false}
                 >
                     <Modal.Header>
                         {modalType === 'edit' ? 'Edit Notice' : 'Create Notice'}
