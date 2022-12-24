@@ -1,8 +1,9 @@
 .notice-container {
   width: 100% !important;
-  position: absolute !important;
   background: rgba(14, 110, 184, 0.04) !important;
   min-height: 100% !important;
+  padding-top: 1px;
+  padding-bottom: 1px;
 }
 
 .notice-container-width {
@@ -99,6 +100,7 @@
 }
 
 .notice-content {
+  overflow-wrap: break-word;
   word-wrap: break-word;
 }
 
