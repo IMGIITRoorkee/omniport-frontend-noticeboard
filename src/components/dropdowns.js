@@ -83,16 +83,12 @@ class DropdownView extends Component {
           dateFilterActive: dateRangeActive,
           datesRange: value
         })
-        history.push({
-          pathname: '/noticeboard/',
-          state: {
-            page: INTIAL_PAGE,
-            searchKeyword: searchKeyword,
-            bannerId: bannerId,
-            mainCategorySlug: mainCategorySlug,
-            dateRange: dateRange
-          }
-        })
+        let url = '/noticeboard/?page=' + INTIAL_PAGE
+        if (searchKeyword) url += '&search=' + encodeURIComponent(searchKeyword)
+        if (bannerId) url += '&bannerId=' + encodeURIComponent(bannerId)
+        if (mainCategorySlug) url += '&mainCategorySlug=' + encodeURIComponent(mainCategorySlug)
+        if (dateRange) url += '&dateRange=' + encodeURIComponent(dateRange.start + ',' + dateRange.end)
+        history.push(url)
       }
     }
   }
@@ -114,51 +110,34 @@ class DropdownView extends Component {
       datesRange: datesRange
     })
 
-    history.push({
-      pathname: '/noticeboard/',
-      state: {
-        page: INTIAL_PAGE,
-        searchKeyword: searchKeyword,
-        bannerId: bannerId,
-        mainCategorySlug: mainCategorySlug,
-        dateRange: dateRange
-      }
-    })
+    let url = '/noticeboard/?page=' + INTIAL_PAGE
+    if (searchKeyword) url += '&search=' + encodeURIComponent(searchKeyword)
+    if (bannerId) url += '&bannerId=' + encodeURIComponent(bannerId)
+    if (mainCategorySlug) url += '&mainCategorySlug=' + encodeURIComponent(mainCategorySlug)
+    if (dateRange) url += '&dateRange=' + encodeURIComponent(dateRange.start + ',' + dateRange.end)
+    history.push(url)
   }
 
   handleDateDelete = () => {
     const { searchKeyword, bannerId, mainCategorySlug, history } = this.props
     this.setState({ dateFilterActive: false, datesRange: '' })
-    history.push({
-      pathname: '/noticeboard/',
-      state: {
-        page: INTIAL_PAGE,
-        searchKeyword: searchKeyword,
-        bannerId: bannerId,
-        mainCategorySlug: mainCategorySlug,
-        dateRange: ''
-      }
-    })
+    let url = '/noticeboard/?page=' + INTIAL_PAGE
+    if (searchKeyword) url += '&search=' + encodeURIComponent(searchKeyword)
+    if (bannerId) url += '&bannerId=' + encodeURIComponent(bannerId)
+    if (mainCategorySlug) url += '&mainCategorySlug=' + encodeURIComponent(mainCategorySlug)
+    history.push(url)
   }
 
   expiredNotices = path => {
-    this.props.history.push({
-      pathname: path,
-      state: { page: INTIAL_PAGE, expired: true }
-    })
+    this.props.history.push(path + '?page=' + INTIAL_PAGE + '&expired=true')
   }
 
   filterNotices = (bannerId, path) => {
     const { searchKeyword, history } = this.props
-    history.push({
-      pathname: path,
-      state: {
-        page: INTIAL_PAGE,
-        searchKeyword: searchKeyword,
-        dateRange: dateRange,
-        bannerId: bannerId
-      }
-    })
+    let url = path + '?page=' + INTIAL_PAGE
+    if (searchKeyword) url += '&search=' + encodeURIComponent(searchKeyword)
+    url += '&bannerId=' + encodeURIComponent(bannerId)
+    history.push(url)
   }
 
   renderInnerDropdownItems = items => {
@@ -202,18 +181,15 @@ class DropdownView extends Component {
     } = this.props
 
     this.setState({ searchDone: false, value: '' })
-    history.push({
-      pathname: '/noticeboard/',
-      state: {
-        page: INTIAL_PAGE,
-        searchKeyword: '',
-        narrowBookmark: false,
-        bannerId: bannerId,
-        mainCategorySlug: mainCategorySlug,
-        dateRange: dateRange,
-        expired: expired
-      }
-    })
+    
+    // Build URL with query parameters
+    let url = '/noticeboard/?page=' + INTIAL_PAGE
+    if (bannerId) url += '&bannerId=' + encodeURIComponent(bannerId)
+    if (mainCategorySlug) url += '&mainCategorySlug=' + encodeURIComponent(mainCategorySlug)
+    if (dateRange) url += '&dateRange=' + encodeURIComponent(dateRange.start + ',' + dateRange.end)
+    if (expired) url += '&expired=true'
+    
+    history.push(url)
   }
 
   handleSearchSubmit = () => {
@@ -235,33 +211,22 @@ class DropdownView extends Component {
     }
 
     this.setState({ searchDone: searchDone })
-    history.push({
-      pathname: '/noticeboard/',
-      state: {
-        page: INTIAL_PAGE,
-        searchKeyword: value,
-        narrowBookmark: false,
-        bannerId: bannerId,
-        mainCategorySlug: mainCategorySlug,
-        dateRange: dateRange,
-        expired: expired
-      }
-    })
+    
+    // Build URL with query parameters instead of state
+    let url = '/noticeboard/?page=' + INTIAL_PAGE
+    if (value) url += '&search=' + encodeURIComponent(value)
+    if (bannerId) url += '&bannerId=' + encodeURIComponent(bannerId)
+    if (mainCategorySlug) url += '&mainCategorySlug=' + encodeURIComponent(mainCategorySlug)
+    if (dateRange) url += '&dateRange=' + encodeURIComponent(dateRange.start + ',' + dateRange.end)
+    if (expired) url += '&expired=true'
+    
+    history.push(url)
   }
   handleImportant = () => {
     const { history, setPosition, showImportant } = this.props
     setPosition('important')
     showImportant()
-    history.push({
-      pathname: '/noticeboard/',
-      state: {
-        page: INTIAL_PAGE,
-        searchKeyword: '',
-        narrowBookmark: false,
-        expired: false,
-        showImp: true
-      }
-    })
+    history.push('/noticeboard/?page=' + INTIAL_PAGE + '&showImp=true')
   }
 
   render() {

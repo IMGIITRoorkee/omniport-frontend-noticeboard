@@ -67,19 +67,33 @@ class App extends React.PureComponent {
 
     // on page change
     history.listen(location => {
+      const params = new URLSearchParams(location.search)
+      const page = parseInt(params.get('page')) || INTIAL_PAGE
+      const searchKeyword = params.get('search')
+      const bannerId = params.get('bannerId')
+      const mainCategorySlug = params.get('mainCategorySlug')
+      const dateRangeStr = params.get('dateRange')
+      const expired = params.get('expired') === 'true'
+      
       if (location.pathname.startsWith('/noticeboard/notice/')) {
-        let id = getIdFromNoticeUrl(location.pathname, location.state.expired)
-        getNotice(id, location.state.expired, () => {})
+        let id = getIdFromNoticeUrl(location.pathname, expired)
+        getNotice(id, expired, () => {})
       } else {
+        let dateRange = null
+        if (dateRangeStr) {
+          const [start, end] = dateRangeStr.split(',')
+          dateRange = { start, end }
+        }
+        
         getNotices(
-          location.state.page,
-          location.state.searchKeyword,
-          location.state.narrowBookmark,
-          location.state.expired,
-          location.state.bannerId,
-          location.state.mainCategorySlug,
-          location.state.dateRange,
-          location.state.showImp
+          page,
+          searchKeyword,
+          false,  // narrowBookmark
+          expired,
+          bannerId,
+          mainCategorySlug,
+          dateRange,
+          false  // showImp
         )
       }
     })

@@ -16,7 +16,7 @@ export function urlAddImportant(url) {
 
 export function urlSearchGetParam(url, search_keyword) {
   if (search_keyword) {
-    url += `&keyword=${search_keyword}`
+    url += `&keyword=${encodeURIComponent(search_keyword)}`
   }
   return url
 }
