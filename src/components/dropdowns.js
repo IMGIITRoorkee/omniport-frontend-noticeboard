@@ -20,6 +20,54 @@ import { setPosition } from '../actions'
 
 import dropdown from '../css/notice.css'
 
+const buildNoticeboardUrl = ({
+  page = INTIAL_PAGE,
+  searchKeyword,
+  bannerId,
+  mainCategorySlug,
+  dateRange,
+  expired,
+  showImp,
+  bookmark
+} = {}) => {
+  const params = new URLSearchParams()
+
+  if (page) {
+    params.set('page', page)
+  }
+
+  if (searchKeyword) {
+    params.set('search', searchKeyword)
+  }
+
+  if (bannerId) {
+    params.set('bannerId', bannerId)
+  }
+
+  if (mainCategorySlug) {
+    params.set('mainCategorySlug', mainCategorySlug)
+  }
+
+  if (dateRange && dateRange.start && dateRange.end) {
+    params.set('dateRange', `${dateRange.start},${dateRange.end}`)
+  }
+
+  if (expired) {
+    params.set('expired', 'true')
+  }
+
+  if (showImp) {
+    params.set('showImp', 'true')
+  }
+
+  if (bookmark) {
+    params.set('bookmark', 'true')
+  }
+
+  const queryString = params.toString()
+  return queryString ? `/noticeboard/?${queryString}` : '/noticeboard/'
+}
+
 class DropdownView extends Component {
   constructor(props) {
     super(props)
@@ -51,16 +99,42 @@ class DropdownView extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { notices } = this.props
+    const { notices, importantUnreadCount, searchKeyword, dateRange } = this.props
+
+    // Update unread count when notices change
     if (prevProps.notices !== notices) {
       this.setState({
-        importantUnreadCount: this.props.importantUnreadCount
+        importantUnreadCount: importantUnreadCount
+      })
+    }
+
+    // Keep search input in sync with Redux (e.g. on refresh or deep link)
+    if (prevProps.searchKeyword !== searchKeyword) {
+      this.setState({
+        value: searchKeyword || '',
+        searchDone: !!searchKeyword
+      })
+    }
+
+    // Keep date range input in sync with Redux
+    if (prevProps.dateRange !== dateRange) {
+      let dateRangeTemp = ''
+      let dateFilterActive = false
+
+      if (dateRange) {
+        dateRangeTemp = dateRange.start + ' - ' + dateRange.end
+        dateFilterActive = true
+      }
+
+      this.setState({
+        datesRange: dateRangeTemp,
+        dateFilterActive: dateFilterActive
       })
     }
   }
 
   handleDateFilterChange = (event, { name, value }) => {
-    const { searchKeyword, bannerId, mainCategorySlug, history } = this.props
+    const { searchKeyword, bannerId, mainCategorySlug, history, expired } = this.props
     if (this.state.hasOwnProperty(name)) {
       this.setState({ [name]: value })
 
@@ -83,18 +157,21 @@ class DropdownView extends Component {
           dateFilterActive: dateRangeActive,
           datesRange: value
         })
-        let url = '/noticeboard/?page=' + INTIAL_PAGE
-        if (searchKeyword) url += '&search=' + encodeURIComponent(searchKeyword)
-        if (bannerId) url += '&bannerId=' + encodeURIComponent(bannerId)
-        if (mainCategorySlug) url += '&mainCategorySlug=' + encodeURIComponent(mainCategorySlug)
-        if (dateRange) url += '&dateRange=' + encodeURIComponent(dateRange.start + ',' + dateRange.end)
+        const url = buildNoticeboardUrl({
+          page: INTIAL_PAGE,
+          searchKeyword,
+          bannerId,
+          mainCategorySlug,
+          dateRange,
+          expired
+        })
         history.push(url)
       }
     }
   }
 
   handleDateFilterSubmit = () => {
-    const { searchKeyword, bannerId, mainCategorySlug, history } = this.props
+    const { searchKeyword, bannerId, mainCategorySlug, history, expired } = this.props
     const { datesRange } = this.state
 
     let dateRange, dateRangeActive
@@ -110,33 +187,47 @@ class DropdownView extends Component {
       datesRange: datesRange
     })
 
-    let url = '/noticeboard/?page=' + INTIAL_PAGE
-    if (searchKeyword) url += '&search=' + encodeURIComponent(searchKeyword)
-    if (bannerId) url += '&bannerId=' + encodeURIComponent(bannerId)
-    if (mainCategorySlug) url += '&mainCategorySlug=' + encodeURIComponent(mainCategorySlug)
-    if (dateRange) url += '&dateRange=' + encodeURIComponent(dateRange.start + ',' + dateRange.end)
+    const url = buildNoticeboardUrl({
+      page: INTIAL_PAGE,
+      searchKeyword,
+      bannerId,
+      mainCategorySlug,
+      dateRange,
+      expired
+    })
     history.push(url)
   }
 
   handleDateDelete = () => {
-    const { searchKeyword, bannerId, mainCategorySlug, history } = this.props
+    const { searchKeyword, bannerId, mainCategorySlug, history, expired } = this.props
     this.setState({ dateFilterActive: false, datesRange: '' })
-    let url = '/noticeboard/?page=' + INTIAL_PAGE
-    if (searchKeyword) url += '&search=' + encodeURIComponent(searchKeyword)
-    if (bannerId) url += '&bannerId=' + encodeURIComponent(bannerId)
-    if (mainCategorySlug) url += '&mainCategorySlug=' + encodeURIComponent(mainCategorySlug)
+    const url = buildNoticeboardUrl({
+      page: INTIAL_PAGE,
+      searchKeyword,
+      bannerId,
+      mainCategorySlug,
+      expired
+    })
     history.push(url)
   }
 
   expiredNotices = path => {
-    this.props.history.push(path + '?page=' + INTIAL_PAGE + '&expired=true')
+    const { history } = this.props
+    const url = buildNoticeboardUrl({
+      page: INTIAL_PAGE,
+      expired: true
+    })
+    history.push(url)
   }
 
   filterNotices = (bannerId, path) => {
-    const { searchKeyword, history } = this.props
-    let url = path + '?page=' + INTIAL_PAGE
-    if (searchKeyword) url += '&search=' + encodeURIComponent(searchKeyword)
-    url += '&bannerId=' + encodeURIComponent(bannerId)
+    const { searchKeyword, history, expired } = this.props
+    const url = buildNoticeboardUrl({
+      page: INTIAL_PAGE,
+      searchKeyword,
+      bannerId,
+      expired
+    })
     history.push(url)
   }
 
@@ -182,13 +273,14 @@ class DropdownView extends Component {
 
     this.setState({ searchDone: false, value: '' })
     
-    // Build URL with query parameters
-    let url = '/noticeboard/?page=' + INTIAL_PAGE
-    if (bannerId) url += '&bannerId=' + encodeURIComponent(bannerId)
-    if (mainCategorySlug) url += '&mainCategorySlug=' + encodeURIComponent(mainCategorySlug)
-    if (dateRange) url += '&dateRange=' + encodeURIComponent(dateRange.start + ',' + dateRange.end)
-    if (expired) url += '&expired=true'
-    
+    const url = buildNoticeboardUrl({
+      page: INTIAL_PAGE,
+      bannerId,
+      mainCategorySlug,
+      dateRange,
+      expired
+    })
+
     history.push(url)
   }
 
@@ -212,21 +304,26 @@ class DropdownView extends Component {
 
     this.setState({ searchDone: searchDone })
     
-    // Build URL with query parameters instead of state
-    let url = '/noticeboard/?page=' + INTIAL_PAGE
-    if (value) url += '&search=' + encodeURIComponent(value)
-    if (bannerId) url += '&bannerId=' + encodeURIComponent(bannerId)
-    if (mainCategorySlug) url += '&mainCategorySlug=' + encodeURIComponent(mainCategorySlug)
-    if (dateRange) url += '&dateRange=' + encodeURIComponent(dateRange.start + ',' + dateRange.end)
-    if (expired) url += '&expired=true'
-    
+    const url = buildNoticeboardUrl({
+      page: INTIAL_PAGE,
+      searchKeyword: value,
+      bannerId,
+      mainCategorySlug,
+      dateRange,
+      expired
+    })
+
     history.push(url)
   }
   handleImportant = () => {
     const { history, setPosition, showImportant } = this.props
     setPosition('important')
     showImportant()
-    history.push('/noticeboard/?page=' + INTIAL_PAGE + '&showImp=true')
+    const url = buildNoticeboardUrl({
+      page: INTIAL_PAGE,
+      showImp: true
+    })
+    history.push(url)
   }
 
   render() {
@@ -369,6 +466,7 @@ const mapStateToProps = state => {
     mainCategorySlug: state.allNotices.mainCategorySlug,
     bannerId: state.allNotices.bannerId,
     showImp: state.allNotices.showImp,
+     expired: state.allNotices.expired,
     permission: state.permission.permission,
     importantUnreadCount: state.allNotices.importantUnreadCount
   }

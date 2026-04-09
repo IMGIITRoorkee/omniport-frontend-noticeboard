@@ -9,6 +9,49 @@ import EditModal from './notice-modal'
 import backlink from '../css/notice.css'
 import { HIDE_IMP } from '../constants/action-types'
 
+const buildNoticeboardUrl = ({
+  page,
+  searchKeyword,
+  bannerId,
+  mainCategorySlug,
+  dateRange,
+  expired,
+  bookmark
+} = {}) => {
+  const params = new URLSearchParams()
+
+  if (page) {
+    params.set('page', page)
+  }
+
+  if (searchKeyword) {
+    params.set('search', searchKeyword)
+  }
+
+  if (bannerId) {
+    params.set('bannerId', bannerId)
+  }
+
+  if (mainCategorySlug) {
+    params.set('mainCategorySlug', mainCategorySlug)
+  }
+
+  if (dateRange && dateRange.start && dateRange.end) {
+    params.set('dateRange', `${dateRange.start},${dateRange.end}`)
+  }
+
+  if (expired) {
+    params.set('expired', 'true')
+  }
+
+  if (bookmark) {
+    params.set('bookmark', 'true')
+  }
+
+  const queryString = params.toString()
+  return queryString ? `/noticeboard/?${queryString}` : '/noticeboard/'
+}
+
 class BackLink extends Component {
   constructor (props) {
     super(props)
@@ -17,7 +60,7 @@ class BackLink extends Component {
     }
     this.modalRef = React.createRef()
   }
-  allNotices = (path, position) => {
+  allNotices = () => {
     const {
       page,
       searchKeyword,
@@ -29,35 +72,52 @@ class BackLink extends Component {
       history,
       setPosition,
       important,
-      hideImportant
+      hideImportant,
+      match,
+      location
     } = this.props
 
-    let narrowTemp = narrowBookmark
-    if (narrowTemp) {
-      narrowTemp = !narrowTemp
+    // Leaving important view should clear the important flag in Redux
+    if (important === false) {
+      hideImportant()
     }
 
-    important === false ? hideImportant() : null
+    const isDetailView =
+      location && location.pathname &&
+      location.pathname.startsWith('/noticeboard/notice/')
+    const fromBookmarkDetail =
+      isDetailView &&
+      location &&
+      location.state &&
+      location.state.bookmark
 
-    setPosition(position)
+    let targetPosition = 'home'
+    let targetBookmark = false
+    let targetExpired = false
 
-    let expiredTemp = expired
-    if (expiredTemp) {
-      expiredTemp = !expired
-    }
-
-    history.push({
-      pathname: path,
-      state: {
-        page: page,
-        searchKeyword: searchKeyword,
-        narrowBookmark: narrowTemp,
-        bannerId: bannerId,
-        mainCategorySlug: mainCategorySlug,
-        expired: expiredTemp,
-        dateRange: dateRange
+    if (isDetailView) {
+      if (fromBookmarkDetail) {
+        targetPosition = 'bookmark'
+        targetBookmark = true
+      } else if (expired) {
+        targetPosition = 'expired'
+        targetExpired = true
       }
+    }
+
+    setPosition(targetPosition)
+
+    const url = buildNoticeboardUrl({
+      page,
+      searchKeyword,
+      bannerId,
+      mainCategorySlug,
+      dateRange,
+      expired: targetExpired,
+      bookmark: targetBookmark
     })
+
+    history.push(url)
   }
   toggleEditModal = () => {
     const { showEditModal } = this.state
@@ -74,7 +134,7 @@ class BackLink extends Component {
         <Menu.Item styleName='backlink.back-button backlink.back-wrapper'>
           <Button
             styleName='backlink.menu-button-border backlink.tab-button'
-            onClick={() => this.allNotices('/noticeboard/', 'home')}
+            onClick={this.allNotices}
             icon='arrow left'
             content='Back'
           />

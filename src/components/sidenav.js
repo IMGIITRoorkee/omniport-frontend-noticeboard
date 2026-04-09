@@ -9,41 +9,92 @@ import { SHOW_IMP, HIDE_IMP } from '../constants/action-types'
 import sidenav from '../css/sidenav.css'
 import 'rc-calendar/assets/index.css'
 
+const buildNoticeboardUrl = ({
+  page = INTIAL_PAGE,
+  searchKeyword,
+  bannerId,
+  mainCategorySlug,
+  dateRange,
+  expired,
+  bookmark,
+  showImp
+} = {}) => {
+  const params = new URLSearchParams()
+
+  if (page) {
+    params.set('page', page)
+  }
+
+  if (searchKeyword) {
+    params.set('search', searchKeyword)
+  }
+
+  if (bannerId) {
+    params.set('bannerId', bannerId)
+  }
+
+  if (mainCategorySlug) {
+    params.set('mainCategorySlug', mainCategorySlug)
+  }
+
+  if (dateRange && dateRange.start && dateRange.end) {
+    params.set('dateRange', `${dateRange.start},${dateRange.end}`)
+  }
+
+  if (expired) {
+    params.set('expired', 'true')
+  }
+
+  if (bookmark) {
+    params.set('bookmark', 'true')
+  }
+
+  if (showImp) {
+    params.set('showImp', 'true')
+  }
+
+  const queryString = params.toString()
+  return queryString ? `/noticeboard/?${queryString}` : '/noticeboard/'
+}
+
 class SideNav extends Component {
   goHome = (path, string) => {
     const { showImportant, hideImportant, history, setPosition } = this.props
     setPosition(string)
     string === 'important' ? showImportant() : hideImportant()
-    history.push({
-      pathname: path,
-      state: {
-        page: INTIAL_PAGE,
-        searchKeyword: '',
-        narrowBookmark: false,
-        expired: false,
-        showImp: string === 'important'
-      }
+
+    const url = buildNoticeboardUrl({
+      page: INTIAL_PAGE,
+      showImp: string === 'important'
     })
+
+    history.push(url)
   }
 
   expiredNotices = path => {
     const { history, setPosition, hideImportant } = this.props
     setPosition('expired')
     hideImportant()
-    history.push({
-      pathname: path,
-      state: { page: INTIAL_PAGE, expired: true, showImp: false }
+
+    const url = buildNoticeboardUrl({
+      page: INTIAL_PAGE,
+      expired: true
     })
+
+    history.push(url)
   }
 
   narrowBookmarks (path) {
     const { history, setPosition, hideImportant } = this.props
     setPosition('bookmark')
     hideImportant()
-    history.push({
-      pathname: path,
-      state: { page: INTIAL_PAGE, narrowBookmark: true, showImp: false }
+
+    const url = buildNoticeboardUrl({
+      page: INTIAL_PAGE,
+      bookmark: true
     })
+
+    history.push(url)
   }
 
   filterNotices = (bannerId, all, path, position = '', subPosition = '') => {
@@ -56,16 +107,16 @@ class SideNav extends Component {
     } = this.props
     setPosition(position, subPosition)
     hideImportant()
-    history.push({
-      pathname: path,
-      state: {
-        page: INTIAL_PAGE,
-        searchKeyword: searchKeyword,
-        dateRange: dateRange,
-        mainCategorySlug: all,
-        bannerId: bannerId
-      }
+
+    const url = buildNoticeboardUrl({
+      page: INTIAL_PAGE,
+      searchKeyword,
+      dateRange,
+      mainCategorySlug: all,
+      bannerId
     })
+
+    history.push(url)
   }
 
   renderInnerDropdownItems = items => {

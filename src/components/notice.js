@@ -18,7 +18,7 @@ class Notice extends Component {
   }
 
   openNotice = e => {
-    const { id, history, expired } = this.props
+    const { id, history, expired, narrowBookmark } = this.props
     let path
     if (expired) {
       path = '/noticeboard/notice/old/' + id
@@ -27,7 +27,7 @@ class Notice extends Component {
     }
     history.push({
       pathname: path,
-      state: { page: INTIAL_PAGE, expired: expired }
+      state: { page: INTIAL_PAGE, expired: expired, bookmark: narrowBookmark }
     })
   }
 
@@ -206,6 +206,7 @@ class Notice extends Component {
 const mapStateToProps = state => {
   return {
     expired: state.allNotices.expired,
+    narrowBookmark: state.allNotices.narrowBookmark,
     selectAllActive: state.allNotices.selectAllActive,
     selectedNotices: state.allNotices.selectedNotices,
     user: state.user.user,

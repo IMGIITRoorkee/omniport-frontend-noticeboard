@@ -34,8 +34,7 @@ class NoticeListView extends Component {
       editId: -1,
       showEditModal: false,
       open: false,
-      deleteId: -1,
-      activePage: 1
+      deleteId: -1
     }
     this.modalRef = React.createRef()
   }
@@ -61,9 +60,7 @@ class NoticeListView extends Component {
       expired,
       showImp
     } = this.props
-    this.setState({
-      activePage: activePage
-    })
+
     getNotices(
       activePage,
       searchKeyword,
@@ -335,7 +332,6 @@ class NoticeListView extends Component {
               icon='trash alternate'
               content="Delete, I'm sure"
               negative
-              content='Yes'
               onClick={this.handleConfirm}
             />
           </Modal.Actions>
@@ -347,7 +343,7 @@ class NoticeListView extends Component {
               styleName='notice.pagination'
               totalPages={totalPages}
               firstItem={null}
-              activePage={this.state.activePage}
+              activePage={page}
               onPageChange={this.handlePaginationChange}
               defaultActivePage={1}
               lastItem={null}

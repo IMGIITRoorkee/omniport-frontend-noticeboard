@@ -20,7 +20,8 @@ import {
   getFilters,
   getPermissions,
   getUser,
-  toggleSidenav
+  toggleSidenav,
+  setPosition
 } from '../actions/index'
 
 import sidenav from '../css/sidenav.css'
@@ -38,6 +39,62 @@ const getIdFromNoticeUrl = (url, expired) => {
 }
 
 class App extends React.PureComponent {
+  handleLocationChange = location => {
+    const { getNotice, getNotices, setPosition } = this.props
+
+    const params = new URLSearchParams(location.search)
+    const page = parseInt(params.get('page')) || INTIAL_PAGE
+    const searchKeyword = params.get('search')
+    const bannerId = params.get('bannerId')
+    const mainCategorySlug = params.get('mainCategorySlug')
+    const dateRangeStr = params.get('dateRange')
+    const expiredParam = params.get('expired') === 'true'
+    const bookmarkParam = params.get('bookmark') === 'true'
+    const showImp = params.get('showImp') === 'true'
+
+    const expiredByPath = location.pathname.startsWith(
+      '/noticeboard/notice/old/'
+    )
+    const expired = expiredByPath || expiredParam
+
+    if (location.pathname.startsWith('/noticeboard/notice/')) {
+      const id = getIdFromNoticeUrl(location.pathname, expired)
+      getNotice(id, expired, () => {})
+      return
+    }
+
+    let position = 'home'
+    if (expiredParam) {
+      position = 'expired'
+    } else if (bookmarkParam) {
+      position = 'bookmark'
+    } else if (showImp) {
+      position = 'important'
+    }
+    setPosition(position)
+
+    let dateRange = null
+    if (dateRangeStr) {
+      const [start, end] = dateRangeStr.split(',')
+      if (start && end) {
+        dateRange = { start, end }
+      }
+    }
+
+    const narrowBookmark = bookmarkParam
+
+    getNotices(
+      page,
+      searchKeyword,
+      narrowBookmark,
+      expired,
+      bannerId,
+      mainCategorySlug,
+      dateRange,
+      showImp
+    )
+  }
+
   componentDidMount () {
     const {
       getFilters,
@@ -52,51 +109,11 @@ class App extends React.PureComponent {
     getUser()
     getPermissions()
 
-    // Direct url hit
-    if (location.pathname.startsWith('/noticeboard/notice/')) {
-      if (location.pathname.startsWith('/noticeboard/notice/old/')) {
-        let id = getIdFromNoticeUrl(location.pathname, true)
-        getNotice(id, true, () => {})
-      } else {
-        let id = getIdFromNoticeUrl(location.pathname, false)
-        getNotice(id, false, () => {})
-      }
-    } else {
-      getNotices(INTIAL_PAGE)
-    }
+    // Initial URL load
+    this.handleLocationChange(location)
 
-    // on page change
-    history.listen(location => {
-      const params = new URLSearchParams(location.search)
-      const page = parseInt(params.get('page')) || INTIAL_PAGE
-      const searchKeyword = params.get('search')
-      const bannerId = params.get('bannerId')
-      const mainCategorySlug = params.get('mainCategorySlug')
-      const dateRangeStr = params.get('dateRange')
-      const expired = params.get('expired') === 'true'
-      
-      if (location.pathname.startsWith('/noticeboard/notice/')) {
-        let id = getIdFromNoticeUrl(location.pathname, expired)
-        getNotice(id, expired, () => {})
-      } else {
-        let dateRange = null
-        if (dateRangeStr) {
-          const [start, end] = dateRangeStr.split(',')
-          dateRange = { start, end }
-        }
-        
-        getNotices(
-          page,
-          searchKeyword,
-          false,  // narrowBookmark
-          expired,
-          bannerId,
-          mainCategorySlug,
-          dateRange,
-          false  // showImp
-        )
-      }
-    })
+    // Subsequent URL changes
+    history.listen(this.handleLocationChange)
   }
 
   render () {
@@ -208,6 +225,9 @@ const mapDispatchToProps = dispatch => {
           showImp
         )
       )
+    },
+    setPosition: (position, subPosition) => {
+      dispatch(setPosition(position, subPosition))
     },
     getNotice: (noticeId, expired, callback) => {
       dispatch(getNotice(noticeId, expired, callback))
