@@ -92,7 +92,7 @@ class TabList extends Component {
     }
 
     handleDateFilterSubmit = (value) => {
-        const { searchKeyword, page, history } = this.props
+        const { searchKeyword, history } = this.props
         let dateRange, dateRangeActive
         dateRange = dateFormatMatch(value)
         if (dateRange) {
@@ -101,7 +101,7 @@ class TabList extends Component {
             dateRangeActive = false
         }
         if (dateRangeActive) {
-            let url = `${location.pathname}?page=${page}&date=${dateRange.start + '/' + dateRange.end}`
+            let url = `${location.pathname}?page=1&date=${dateRange.start + '/' + dateRange.end}`
             if (searchKeyword) {
                 url += `&search=${searchKeyword}`
             }
@@ -135,13 +135,13 @@ class TabList extends Component {
     }
 
     handleDateDelete = () => {
-        const { page, searchKeyword, history } = this.props
+        const { searchKeyword, history } = this.props
         this.setState({ 
             dateRangeActive: false, 
             datesRange: '',
             ownUpdateDate: true
         })
-        let url = `${location.pathname}?page=${page}`
+        let url = `${location.pathname}?page=1`
         if (searchKeyword) {
             url += `&search=${searchKeyword}`
         }
@@ -156,10 +156,10 @@ class TabList extends Component {
     }
 
     handleSearchSubmit = () => {
-        const { page, date, history, location } = this.props
+        const { date, history, location } = this.props
         let { value } = this.state
         value = encodeURIComponent(value)
-        let url = `${location.pathname}?page=${page}&search=${value}`
+        let url = `${location.pathname}?page=1&search=${value}`
         if (date) {
             url += `&date=${date.start + '/' + date.end}`
         }
@@ -171,8 +171,8 @@ class TabList extends Component {
             value: '',
             ownUpdate: true 
         })
-        const { page, date, history, location } = this.props
-        let url = `${location.pathname}?page=${page}`
+        const { date, history, location } = this.props
+        let url = `${location.pathname}?page=1`
         if (date) {
             url += `&date=${date.start + '/' + date.end}`
         }
