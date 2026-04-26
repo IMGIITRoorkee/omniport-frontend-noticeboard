@@ -58,7 +58,7 @@ export function addImportantUrl(url) {
 
 export function searchGetParamUrl(url, search_keyword) {
     if (search_keyword) {
-        url += `&keyword=${search_keyword}`
+        url += `&keyword=${encodeURIComponent(search_keyword)}`
     }
     return url
 }
@@ -111,10 +111,10 @@ export const bannerUrl = (bannerId = null, searchKeyword = null, dateFilter = nu
     }
     url += `?page=1`
     if(dateFilter) {
-        url += `&date=${dateFilter.start+'/'+dateFilter.end}`
+        url += `&date=${encodeURIComponent(dateFilter.start + '/' + dateFilter.end)}`
     }
     if(searchKeyword) {
-        url += `&search=${searchKeyword}`
+        url += `&search=${encodeURIComponent(searchKeyword)}`
     }
     return url
 }
