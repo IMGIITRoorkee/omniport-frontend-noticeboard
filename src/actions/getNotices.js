@@ -9,12 +9,13 @@ import {
 import { toast } from 'react-semantic-toasts'
 import { no_of_notices } from '../const'
 
-function requestNotices(page, searchKeyword) {
+function requestNotices(page, searchKeyword, sortMode) {
     return {
         type: 'FETCH_NOTICES_REQUEST',
         payload: {
             page: page,
-            searchKeyword: searchKeyword
+            searchKeyword: searchKeyword,
+            sortMode: sortMode
         }
     }
 }
@@ -27,7 +28,8 @@ function receiveNotices(
     bannerId,
     dateRange,
     mainCategorySlug,
-    showImp
+    showImp,
+    sortMode
 ) {
     let totalPages = Math.ceil(noticeDataList.count / no_of_notices)
     if (totalPages === 0) {
@@ -46,6 +48,7 @@ function receiveNotices(
             notices: noticeDataList.results,
             importantUnreadCount: noticeDataList.importantUnreadCount,
             searchKeyword: searchKeyword,
+            sortMode: sortMode,
             totalPages: totalPages,
             showImp: showImp
         }
@@ -61,11 +64,12 @@ export const getNotices = () => (dispatch, getState) => {
     const mainCategorySlug = getState().notices.mainCategorySlug
     const dateRange = getState().notices.dateRange
     const showImp = getState().notices.showImp
+    const sortMode = getState().notices.sortMode || 'date'
 
-    dispatch(requestNotices(page, searchKeyword))
+    dispatch(requestNotices(page, searchKeyword, sortMode))
     let url
     if (expired) {
-        url = expiredNoticesUrl(page, searchKeyword)
+        url = expiredNoticesUrl(page, searchKeyword, sortMode)
     } else if (dateRange) {
         url = dateFilterUrl(
             page,
@@ -73,16 +77,17 @@ export const getNotices = () => (dispatch, getState) => {
             dateRange.end,
             bannerId,
             mainCategorySlug,
-            searchKeyword
+            searchKeyword,
+            sortMode
         )
     } else if (bannerId) {
-        url = filterUrl(page, bannerId, searchKeyword, mainCategorySlug)
+        url = filterUrl(page, bannerId, searchKeyword, mainCategorySlug, sortMode)
     } else if (narrowBookmark) {
         url = bookmarkedNoticesUrl(page)
     } else if (showImp) {
-        url = importantNoticesUrl(page)
+        url = importantNoticesUrl(page, searchKeyword, sortMode)
     } else {
-        url = noticesUrl(page, searchKeyword)
+        url = noticesUrl(page, searchKeyword, sortMode)
     }
 
     return fetch(url)
@@ -97,7 +102,8 @@ export const getNotices = () => (dispatch, getState) => {
                     bannerId,
                     dateRange,
                     mainCategorySlug,
-                    showImp
+                    showImp,
+                    sortMode
                 )
             )
         )

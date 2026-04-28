@@ -5,6 +5,7 @@ const initialState = {
     notices: [],
     showImp: false,
     searchKeyword: null,
+    sortMode: 'date',
     narrowBookmark: false,
     expired: false,
     bannerId: null,
@@ -24,6 +25,7 @@ const noticesReducer = (state = initialState, action) => {
             let newState = {
                 ...state,
                 searchKeyword: action.payload.searchKeyword,
+                sortMode: action.payload.sortMode || 'date',
                 isFetchingNotices: false,
                 selectAllActive: false,
                 expired: action.payload.expired,
@@ -44,7 +46,8 @@ const noticesReducer = (state = initialState, action) => {
                 isFetchingNotices: true,
                 notices: [],
                 page: action.payload.page,
-                searchKeyword: action.payload.searchKeyword
+                searchKeyword: action.payload.searchKeyword,
+                sortMode: action.payload.sortMode || 'date'
             }
 
         case 'FETCH_NOTICES_FAILURE':
@@ -118,6 +121,7 @@ const noticesReducer = (state = initialState, action) => {
                 page: action.payload.page,
                 dateRange: action.payload.date,
                 searchKeyword: action.payload.searchKeyword,
+                sortMode: action.payload.sortMode || 'date',
                 showImp: action.payload.showImp,
                 expired: action.payload.expired,
                 narrowBookmark: action.payload.narrowBookmark,

@@ -76,8 +76,9 @@ class NoticeList extends Component {
             }
         }
         const searchKeyword = query.get('search')
+        const sortMode = (query.get('sortMode') || 'date').toLowerCase()
         setPosition(position)
-        setFilters(page, dateFilter, searchKeyword, showImp, expired, narrowBookmark, mainCategorySlug, bannerId)
+        setFilters(page, dateFilter, searchKeyword, showImp, expired, narrowBookmark, mainCategorySlug, bannerId, sortMode)
         if (url[2] == 'notice') {
             null
         }
@@ -112,12 +113,15 @@ class NoticeList extends Component {
     // }
 
     handlePaginationChange = (e, data) => {
-        const { date, history, location, searchKeyword } = this.props
+        const { date, history, location, searchKeyword, sortMode } = this.props
         const { pathname } = location
         const { activePage } = data
         let url = `${pathname}?page=${activePage}`
         if(date) url += `&date=${date.start + '/' + date.end}`
-        if(searchKeyword) url += `&search=${searchKeyword}`
+        if(searchKeyword) {
+            url += `&search=${encodeURIComponent(searchKeyword)}`
+            url += `&sortMode=${encodeURIComponent(sortMode || 'date')}`
+        }
         history.push(url)
     }
 
@@ -377,7 +381,6 @@ class NoticeList extends Component {
                             icon='trash alternate'
                             content="Delete, I'm sure"
                             negative
-                            content='Yes'
                             onClick={this.handleConfirm}
                         />
                     </Modal.Actions>
@@ -416,6 +419,7 @@ const mapStateToProps = state => {
         user: state.user.user,
         isFetchingUser: state.user.isFetchingUser,
         searchKeyword: state.notices.searchKeyword,
+        sortMode: state.notices.sortMode,
         date: state.notices.dateRange
     }
 }
@@ -434,8 +438,8 @@ const mapDispatchToProps = dispatch => {
         noticeRead: (list) => {
             dispatch(noticeRead(list))
         },
-        setFilters: (page, dateFilter, searchKeyword, showImp, expired, narrowBookmark, mainCategorySlug, bannerId) => {
-            dispatch(setFilters(page, dateFilter, searchKeyword, showImp, expired, narrowBookmark, mainCategorySlug, bannerId))
+        setFilters: (page, dateFilter, searchKeyword, showImp, expired, narrowBookmark, mainCategorySlug, bannerId, sortMode) => {
+            dispatch(setFilters(page, dateFilter, searchKeyword, showImp, expired, narrowBookmark, mainCategorySlug, bannerId, sortMode))
         },
         setPosition: (position) => {
             dispatch(setPosition(position))

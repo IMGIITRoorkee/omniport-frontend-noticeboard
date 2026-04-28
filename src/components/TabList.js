@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Container, Menu, Button, Icon, Form, Input, Label } from 'semantic-ui-react'
+import { Container, Menu, Button, Icon, Form, Input, Label, Dropdown } from 'semantic-ui-react'
 import { DatesRangeInput } from 'semantic-ui-calendar-react'
 import { dateFormatMatch } from '../utils'
 
@@ -22,6 +22,7 @@ class TabList extends Component {
         datesRange: '',
         ownUpdateDate: false,
         dateRangeActive: false,
+        sortMode: 'date',
         edit: false,
         noticeId: null
     }
@@ -31,7 +32,8 @@ class TabList extends Component {
         if(!state.ownUpdate) {
             newState = {
                 ...newState,
-                value: nextProps.searchKeyword
+                value: nextProps.searchKeyword,
+                sortMode: nextProps.sortMode || 'date'
             }
         }
         if(!state.ownUpdateDate) {
@@ -92,7 +94,10 @@ class TabList extends Component {
     }
 
     handleDateFilterSubmit = (value) => {
-        const { searchKeyword, history } = this.props
+        const { searchKeyword, history, sortMode } = this.props
+        if (typeof value !== 'string') {
+            value = this.state.datesRange
+        }
         let dateRange, dateRangeActive
         dateRange = dateFormatMatch(value)
         if (dateRange) {
@@ -103,7 +108,8 @@ class TabList extends Component {
         if (dateRangeActive) {
             let url = `${location.pathname}?page=1&date=${dateRange.start + '/' + dateRange.end}`
             if (searchKeyword) {
-                url += `&search=${searchKeyword}`
+                url += `&search=${encodeURIComponent(searchKeyword)}`
+                url += `&sortMode=${encodeURIComponent(sortMode || 'date')}`
             }
             history.push(url)
         }
@@ -135,7 +141,7 @@ class TabList extends Component {
     }
 
     handleDateDelete = () => {
-        const { searchKeyword, history } = this.props
+        const { searchKeyword, history, sortMode } = this.props
         this.setState({ 
             dateRangeActive: false, 
             datesRange: '',
@@ -143,7 +149,8 @@ class TabList extends Component {
         })
         let url = `${location.pathname}?page=1`
         if (searchKeyword) {
-            url += `&search=${searchKeyword}`
+            url += `&search=${encodeURIComponent(searchKeyword)}`
+            url += `&sortMode=${encodeURIComponent(sortMode || 'date')}`
         }
         history.push(url)
     }
@@ -157,9 +164,9 @@ class TabList extends Component {
 
     handleSearchSubmit = () => {
         const { date, history, location } = this.props
-        let { value } = this.state
-        value = encodeURIComponent(value)
-        let url = `${location.pathname}?page=1&search=${value}`
+        let { value, sortMode } = this.state
+        let url = `${location.pathname}?page=1&search=${encodeURIComponent(value)}`
+        url += `&sortMode=${encodeURIComponent(sortMode || 'date')}`
         if (date) {
             url += `&date=${date.start + '/' + date.end}`
         }
@@ -169,7 +176,8 @@ class TabList extends Component {
     handleSearchDelete = () => {
         this.setState({
             value: '',
-            ownUpdate: true 
+            ownUpdate: true,
+            sortMode: 'date'
         })
         const { date, history, location } = this.props
         let url = `${location.pathname}?page=1`
@@ -179,9 +187,33 @@ class TabList extends Component {
         history.push(url)
     }
 
+    handleSortModeChange = (event, { value }) => {
+        const { date, history, location, searchKeyword } = this.props
+        const keyword = this.state.value || searchKeyword
+
+        this.setState({
+            sortMode: value
+        })
+
+        if (!keyword) {
+            return
+        }
+
+        let url = `${location.pathname}?page=1&search=${encodeURIComponent(keyword)}`
+        url += `&sortMode=${encodeURIComponent(value)}`
+        if (date) {
+            url += `&date=${date.start + '/' + date.end}`
+        }
+        history.push(url)
+    }
+
     render() {
-        const { back, value, datesRange, dateRangeActive, edit, noticeId } = this.state
+        const { back, value, datesRange, dateRangeActive, sortMode, edit, noticeId } = this.state
         const { importantUnreadCount, searchKeyword, permission } = this.props
+        const sortOptions = [
+            { key: 'date', text: 'Most recent', value: 'date' },
+            { key: 'relevance', text: 'Most relevant', value: 'relevance' }
+        ]
         
         return (
             <Container styleName='tablist.notice-container-width'>
@@ -296,6 +328,17 @@ class TabList extends Component {
                                             </Form>
                                         )} 
                                     </Menu.Item>
+                                    {searchKeyword ? (
+                                        <Menu.Item>
+                                            <Dropdown
+                                                selection
+                                                compact
+                                                options={sortOptions}
+                                                value={sortMode}
+                                                onChange={this.handleSortModeChange}
+                                            />
+                                        </Menu.Item>
+                                    ) : null}
                                     {permission.length > 0 ? 
                                         (
                                             <Menu.Item
@@ -321,6 +364,7 @@ const mapStateToProps = state => {
     return {
         importantUnreadCount: state.notices.importantUnreadCount,
         searchKeyword: state.notices.searchKeyword,
+        sortMode: state.notices.sortMode,
         page: state.notices.page,
         date: state.notices.dateRange,
         permission: state.permission.permission
