@@ -145,9 +145,7 @@ class NoticeCell extends Component {
                     collapsing
                     styleName='notice.cell-width-2 notice.cell-hover'
                 >
-                    {moment(date).format(
-                        Date.now().year === moment(date).year() ? 'DD/MM/YY' : 'MMM Do'
-                    )}
+                    {moment(date).format('MMM Do, YYYY')}
                 </Table.Cell>
                 {permission.length > 0 ? 
                     (
