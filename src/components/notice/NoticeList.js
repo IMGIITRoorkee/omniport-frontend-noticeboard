@@ -204,9 +204,9 @@ class NoticeList extends Component {
         }
         if (dateRange) {
             dateDisplay =
-                moment(dateRange.start).format('MMM Do') +
-                ' to ' +
-                moment(dateRange.end).format('MMM Do')
+                moment(dateRange.start).format('MMM Do, YYYY') +
+                ' - ' +
+                moment(dateRange.end).format('MMM Do, YYYY')
         }
         
         return (
