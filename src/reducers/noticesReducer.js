@@ -67,7 +67,7 @@ const noticesReducer = (state = initialState, action) => {
                 isFetchingNotice: false,
                 notice: action.payload.notice,
                 noticeExists: action.payload.noticeExists,
-                mediaPath: action.payload.notice.mediaPath
+                mediaPath: action.payload.notice && action.payload.notice.mediaPath
             }
         case 'FETCH_NOTICE_FAILURE':
             return {
