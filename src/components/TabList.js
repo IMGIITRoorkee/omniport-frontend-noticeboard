@@ -329,7 +329,7 @@ class TabList extends Component {
                                         )} 
                                     </Menu.Item>
                                     {searchKeyword ? (
-                                        <Menu.Item>
+                                        <Menu.Item styleName='dropdown.sort-menu-item'>
                                             <Dropdown
                                                 selection
                                                 compact
