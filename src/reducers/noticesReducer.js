@@ -1,3 +1,5 @@
+import { default_sort_mode } from '../const'
+
 const initialState = {
     isFetchingNotices: true,
     totalPages: 0,
@@ -5,7 +7,7 @@ const initialState = {
     notices: [],
     showImp: false,
     searchKeyword: null,
-    sortMode: 'date',
+    sortMode: default_sort_mode,
     narrowBookmark: false,
     expired: false,
     bannerId: null,
@@ -25,7 +27,7 @@ const noticesReducer = (state = initialState, action) => {
             let newState = {
                 ...state,
                 searchKeyword: action.payload.searchKeyword,
-                sortMode: action.payload.sortMode || 'date',
+                sortMode: action.payload.sortMode || default_sort_mode,
                 isFetchingNotices: false,
                 selectAllActive: false,
                 expired: action.payload.expired,
@@ -47,7 +49,7 @@ const noticesReducer = (state = initialState, action) => {
                 notices: [],
                 page: action.payload.page,
                 searchKeyword: action.payload.searchKeyword,
-                sortMode: action.payload.sortMode || 'date'
+                sortMode: action.payload.sortMode || default_sort_mode
             }
 
         case 'FETCH_NOTICES_FAILURE':
@@ -121,7 +123,7 @@ const noticesReducer = (state = initialState, action) => {
                 page: action.payload.page,
                 dateRange: action.payload.date,
                 searchKeyword: action.payload.searchKeyword,
-                sortMode: action.payload.sortMode || 'date',
+                sortMode: action.payload.sortMode || default_sort_mode,
                 showImp: action.payload.showImp,
                 expired: action.payload.expired,
                 narrowBookmark: action.payload.narrowBookmark,
