@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import BackLink from './BackLink'
 import UploadNotice from './upload/UploadNotice'
 import { baseNavUrl } from '../urls'
+import { default_sort_mode } from '../const'
 
 import tablist from '../css/notice.css'
 import dropdown from '../css/notice.css'
@@ -22,7 +23,7 @@ class TabList extends Component {
         datesRange: '',
         ownUpdateDate: false,
         dateRangeActive: false,
-        sortMode: 'date',
+        sortMode: default_sort_mode,
         edit: false,
         noticeId: null
     }
@@ -33,7 +34,7 @@ class TabList extends Component {
             newState = {
                 ...newState,
                 value: nextProps.searchKeyword,
-                sortMode: nextProps.sortMode || 'date'
+                sortMode: nextProps.sortMode || default_sort_mode
             }
         }
         if(!state.ownUpdateDate) {
@@ -109,7 +110,7 @@ class TabList extends Component {
             let url = `${location.pathname}?page=1&date=${dateRange.start + '/' + dateRange.end}`
             if (searchKeyword) {
                 url += `&search=${encodeURIComponent(searchKeyword)}`
-                url += `&sortMode=${encodeURIComponent(sortMode || 'date')}`
+                url += `&sortMode=${encodeURIComponent(sortMode || default_sort_mode)}`
             }
             history.push(url)
         }
@@ -150,7 +151,7 @@ class TabList extends Component {
         let url = `${location.pathname}?page=1`
         if (searchKeyword) {
             url += `&search=${encodeURIComponent(searchKeyword)}`
-            url += `&sortMode=${encodeURIComponent(sortMode || 'date')}`
+            url += `&sortMode=${encodeURIComponent(sortMode || default_sort_mode)}`
         }
         history.push(url)
     }
@@ -166,7 +167,7 @@ class TabList extends Component {
         const { date, history, location } = this.props
         let { value, sortMode } = this.state
         let url = `${location.pathname}?page=1&search=${encodeURIComponent(value)}`
-        url += `&sortMode=${encodeURIComponent(sortMode || 'date')}`
+        url += `&sortMode=${encodeURIComponent(sortMode || default_sort_mode)}`
         if (date) {
             url += `&date=${date.start + '/' + date.end}`
         }
@@ -177,7 +178,7 @@ class TabList extends Component {
         this.setState({
             value: '',
             ownUpdate: true,
-            sortMode: 'date'
+            sortMode: default_sort_mode
         })
         const { date, history, location } = this.props
         let url = `${location.pathname}?page=1`

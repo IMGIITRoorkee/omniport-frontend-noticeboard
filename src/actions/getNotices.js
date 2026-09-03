@@ -7,7 +7,7 @@ import {
     dateFilterUrl
 } from '../urls'
 import { toast } from 'react-semantic-toasts'
-import { no_of_notices } from '../const'
+import { no_of_notices, default_sort_mode } from '../const'
 
 function requestNotices(page, searchKeyword, sortMode) {
     return {
@@ -64,7 +64,7 @@ export const getNotices = () => (dispatch, getState) => {
     const mainCategorySlug = getState().notices.mainCategorySlug
     const dateRange = getState().notices.dateRange
     const showImp = getState().notices.showImp
-    const sortMode = getState().notices.sortMode || 'date'
+    const sortMode = getState().notices.sortMode || default_sort_mode
 
     dispatch(requestNotices(page, searchKeyword, sortMode))
     let url

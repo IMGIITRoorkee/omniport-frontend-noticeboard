@@ -3,12 +3,13 @@ import { Dropdown, Menu, Divider, Icon, Image } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 
 import { bannerUrl } from '../urls'
+import { default_sort_mode } from '../const'
 
 import sidenav from '../css/sidenav.css'
 
 class SideNav extends Component {
 
-    filterNotices = (bannerId, searchKeyword = null, dateFilter = null, sortMode = 'date') => {
+    filterNotices = (bannerId, searchKeyword = null, dateFilter = null, sortMode = default_sort_mode) => {
         const { history } = this.props
         history.push(bannerUrl(bannerId, searchKeyword, dateFilter, sortMode))
     }

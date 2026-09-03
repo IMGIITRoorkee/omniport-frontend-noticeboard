@@ -1,4 +1,5 @@
 import config from '../config.json'
+import { default_sort_mode } from './const'
 
 //Backend
 export const baseApiUrl = () => {
@@ -21,7 +22,7 @@ export function filterListUrl() {
     return `${baseApiUrl()}filter_list/`
 }
 
-export function filterUrl(page, banner_id, search_keyword, main_category_slug, sortMode = 'date') {
+export function filterUrl(page, banner_id, search_keyword, main_category_slug, sortMode = default_sort_mode) {
     let url
     if (main_category_slug) {
         url = `${baseApiUrl()}filter/?main_category=${banner_id}&page=${page}`
@@ -38,7 +39,7 @@ export function dateFilterUrl(
     banner_id,
     main_category_slug,
     search_keyword,
-    sortMode = 'date'
+    sortMode = default_sort_mode
 ) {
     let url
     url = `${baseApiUrl()}date_filter_view/?start=${start}&end=${end}&page=${page}`
@@ -57,25 +58,25 @@ export function addImportantUrl(url) {
     return url
 }
 
-export function searchGetParamUrl(url, search_keyword, sortMode = 'date') {
+export function searchGetParamUrl(url, search_keyword, sortMode = default_sort_mode) {
     if (search_keyword) {
         url += `&keyword=${encodeURIComponent(search_keyword)}`
-        url += `&sort=${encodeURIComponent(sortMode || 'date')}`
+        url += `&sort=${encodeURIComponent(sortMode || default_sort_mode)}`
     }
     return url
 }
 
-export function expiredNoticesUrl(page, search_keyword, sortMode = 'date') {
+export function expiredNoticesUrl(page, search_keyword, sortMode = default_sort_mode) {
     let url = `${baseApiUrl()}old/?page=${page}`
     return searchGetParamUrl(url, search_keyword, sortMode)
 }
 
-export function importantNoticesUrl(page = 1, search_keyword, sortMode = 'date') {
+export function importantNoticesUrl(page = 1, search_keyword, sortMode = default_sort_mode) {
     let url = `${baseApiUrl()}new/?important=true&page=${page}`
     return searchGetParamUrl(url, search_keyword, sortMode)
 }
 
-export function noticesUrl(page, search_keyword, sortMode = 'date') {
+export function noticesUrl(page, search_keyword, sortMode = default_sort_mode) {
     let url = `${baseApiUrl()}new/?page=${page}`
     return searchGetParamUrl(url, search_keyword, sortMode)
 }
@@ -106,7 +107,7 @@ export const baseNavUrl = forwardLink => {
     return `${config.baseUrl}${forwardLink}`
 }
 
-export const bannerUrl = (bannerId = null, searchKeyword = null, dateFilter = null, sortMode = 'date') => {
+export const bannerUrl = (bannerId = null, searchKeyword = null, dateFilter = null, sortMode = default_sort_mode) => {
     let url = baseNavUrl('/')
     if(bannerId) {
         url += `${bannerId}/`
@@ -117,7 +118,7 @@ export const bannerUrl = (bannerId = null, searchKeyword = null, dateFilter = nu
     }
     if(searchKeyword) {
         url += `&search=${encodeURIComponent(searchKeyword)}`
-        url += `&sortMode=${encodeURIComponent(sortMode || 'date')}`
+        url += `&sortMode=${encodeURIComponent(sortMode || default_sort_mode)}`
     }
     return url
 }

@@ -25,6 +25,7 @@ import { setFilters } from '../../actions/setFilters'
 import { setPosition } from '../../actions/setPosition'
 import { deleteNotice } from '../../actions/deleteNotice'
 import { iconName, headingName } from '../../utils'
+import { default_sort_mode } from '../../const'
 import { ifRole } from 'formula_one'
 
 import notice from '../../css/notice.css'
@@ -76,7 +77,7 @@ class NoticeList extends Component {
             }
         }
         const searchKeyword = query.get('search')
-        const sortMode = (query.get('sortMode') || 'date').toLowerCase()
+        const sortMode = (query.get('sortMode') || default_sort_mode).toLowerCase()
         setPosition(position)
         setFilters(page, dateFilter, searchKeyword, showImp, expired, narrowBookmark, mainCategorySlug, bannerId, sortMode)
         if (url[2] == 'notice') {
@@ -120,7 +121,7 @@ class NoticeList extends Component {
         if(date) url += `&date=${date.start + '/' + date.end}`
         if(searchKeyword) {
             url += `&search=${encodeURIComponent(searchKeyword)}`
-            url += `&sortMode=${encodeURIComponent(sortMode || 'date')}`
+            url += `&sortMode=${encodeURIComponent(sortMode || default_sort_mode)}`
         }
         history.push(url)
     }
