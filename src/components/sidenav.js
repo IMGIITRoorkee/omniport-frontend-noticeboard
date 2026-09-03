@@ -8,9 +8,9 @@ import sidenav from '../css/sidenav.css'
 
 class SideNav extends Component {
 
-    filterNotices = (bannerId, searchKeyword = null, dateFilter = null) => {
+    filterNotices = (bannerId, searchKeyword = null, dateFilter = null, sortMode = 'date') => {
         const { history } = this.props
-        history.push(bannerUrl(bannerId, searchKeyword, dateFilter))
+        history.push(bannerUrl(bannerId, searchKeyword, dateFilter, sortMode))
     }
 
     linkUrl = (link, searchKeyword = null, dateFilter = null) => {
@@ -18,14 +18,14 @@ class SideNav extends Component {
     }
 
     renderInnerDropdownItems = items => {
-        const { position, searchKeyword, dateFilter } = this.props
+        const { position, searchKeyword, dateFilter, sortMode } = this.props
         if (items.length) {
             return items.map((item, index) => (
                 <Dropdown.Item
                     key={index}
                     active={position == item.id}
                     onClick={() =>
-                        this.filterNotices(item.id, searchKeyword, dateFilter)
+                        this.filterNotices(item.id, searchKeyword, dateFilter, sortMode)
                     }
                 >
                     {item.name}
@@ -41,14 +41,14 @@ class SideNav extends Component {
     }
 
     renderInnerDropdownAll = item => {
-        const { position, searchKeyword, dateFilter } = this.props
+        const { position, searchKeyword, dateFilter, sortMode } = this.props
         if (item.banner.length) {
             return (
                 <Dropdown.Item
                     key={0}
                     active={position === item.slug}
                     onClick={() =>
-                        this.filterNotices(item.slug, searchKeyword, dateFilter)
+                        this.filterNotices(item.slug, searchKeyword, dateFilter, sortMode)
                     }
                 >
                     All {item.name}
@@ -89,7 +89,7 @@ class SideNav extends Component {
     }
     
     render() {
-        const { filters, searchKeyword, dateFilter, position } = this.props
+        const { filters, searchKeyword, dateFilter, position, sortMode } = this.props
         const { filterNotices } = this
         let outerPosition
         if(filters){
@@ -127,7 +127,7 @@ class SideNav extends Component {
                             ? 'sidenav.sidenav-active-item'
                             : 'sidenav.sidenav-items'
                     }
-                    onClick={() => filterNotices(null, searchKeyword, dateFilter)}
+                    onClick={() => filterNotices(null, searchKeyword, dateFilter, sortMode)}
                 >
                     <Icon styleName='sidenav.sidenav-icon-styling' name='home' />
                     All Notices
@@ -204,6 +204,7 @@ const mapStateToProps = state => {
     return {
         filters: state.filters.filters,
         searchKeyword: state.notices.searchKeyword,
+        sortMode: state.notices.sortMode,
         dateFilter: state.notices.dateRange,
         position: state.position.position
     }

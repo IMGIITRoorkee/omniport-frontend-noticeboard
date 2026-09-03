@@ -1,4 +1,4 @@
-export const setFilters = (page, date, searchKeyword, showImp, expired, narrowBookmark, mainCategorySlug, bannerId) => (dispatch) => {
+export const setFilters = (page, date, searchKeyword, showImp, expired, narrowBookmark, mainCategorySlug, bannerId, sortMode = 'date') => (dispatch) => {
     if(!page){
         page = 1
     }
@@ -12,7 +12,8 @@ export const setFilters = (page, date, searchKeyword, showImp, expired, narrowBo
             expired, 
             narrowBookmark, 
             mainCategorySlug, 
-            bannerId
+            bannerId,
+            sortMode
         }
     })
 }

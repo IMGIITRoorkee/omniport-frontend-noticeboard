@@ -21,14 +21,14 @@ export function filterListUrl() {
     return `${baseApiUrl()}filter_list/`
 }
 
-export function filterUrl(page, banner_id, search_keyword, main_category_slug) {
+export function filterUrl(page, banner_id, search_keyword, main_category_slug, sortMode = 'date') {
     let url
     if (main_category_slug) {
         url = `${baseApiUrl()}filter/?main_category=${banner_id}&page=${page}`
     } else {
         url = `${baseApiUrl()}filter/?banner=${banner_id}&page=${page}`
     }
-    return searchGetParamUrl(url, search_keyword)
+    return searchGetParamUrl(url, search_keyword, sortMode)
 }
 
 export function dateFilterUrl(
@@ -37,7 +37,8 @@ export function dateFilterUrl(
     end,
     banner_id,
     main_category_slug,
-    search_keyword
+    search_keyword,
+    sortMode = 'date'
 ) {
     let url
     url = `${baseApiUrl()}date_filter_view/?start=${start}&end=${end}&page=${page}`
@@ -47,7 +48,7 @@ export function dateFilterUrl(
     } else if (banner_id) {
         url += `&banner=${banner_id}`
     }
-    return searchGetParamUrl(url, search_keyword)
+    return searchGetParamUrl(url, search_keyword, sortMode)
 }
 
 export function addImportantUrl(url) {
@@ -56,26 +57,27 @@ export function addImportantUrl(url) {
     return url
 }
 
-export function searchGetParamUrl(url, search_keyword) {
+export function searchGetParamUrl(url, search_keyword, sortMode = 'date') {
     if (search_keyword) {
-        url += `&keyword=${search_keyword}`
+        url += `&keyword=${encodeURIComponent(search_keyword)}`
+        url += `&sort=${encodeURIComponent(sortMode || 'date')}`
     }
     return url
 }
 
-export function expiredNoticesUrl(page, search_keyword) {
+export function expiredNoticesUrl(page, search_keyword, sortMode = 'date') {
     let url = `${baseApiUrl()}old/?page=${page}`
-    return searchGetParamUrl(url, search_keyword)
+    return searchGetParamUrl(url, search_keyword, sortMode)
 }
 
-export function importantNoticesUrl(page = 1, search_keyword) {
+export function importantNoticesUrl(page = 1, search_keyword, sortMode = 'date') {
     let url = `${baseApiUrl()}new/?important=true&page=${page}`
-    return searchGetParamUrl(url, search_keyword)
+    return searchGetParamUrl(url, search_keyword, sortMode)
 }
 
-export function noticesUrl(page, search_keyword) {
+export function noticesUrl(page, search_keyword, sortMode = 'date') {
     let url = `${baseApiUrl()}new/?page=${page}`
-    return searchGetParamUrl(url, search_keyword)
+    return searchGetParamUrl(url, search_keyword, sortMode)
 }
 
 export function bookmarkedNoticesUrl(page) {
@@ -104,17 +106,18 @@ export const baseNavUrl = forwardLink => {
     return `${config.baseUrl}${forwardLink}`
 }
 
-export const bannerUrl = (bannerId = null, searchKeyword = null, dateFilter = null) => {
+export const bannerUrl = (bannerId = null, searchKeyword = null, dateFilter = null, sortMode = 'date') => {
     let url = baseNavUrl('/')
     if(bannerId) {
         url += `${bannerId}/`
     }
     url += `?page=1`
     if(dateFilter) {
-        url += `&date=${dateFilter.start+'/'+dateFilter.end}`
+        url += `&date=${encodeURIComponent(dateFilter.start + '/' + dateFilter.end)}`
     }
     if(searchKeyword) {
-        url += `&search=${searchKeyword}`
+        url += `&search=${encodeURIComponent(searchKeyword)}`
+        url += `&sortMode=${encodeURIComponent(sortMode || 'date')}`
     }
     return url
 }
