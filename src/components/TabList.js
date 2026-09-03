@@ -212,8 +212,8 @@ class TabList extends Component {
         const { back, value, datesRange, dateRangeActive, sortMode, edit, noticeId } = this.state
         const { importantUnreadCount, searchKeyword, permission } = this.props
         const sortOptions = [
-            { key: 'date', text: 'Most recent', value: 'date' },
-            { key: 'relevance', text: 'Most relevant', value: 'relevance' }
+            { key: 'relevance', text: 'Most relevant', value: 'relevance' },
+            { key: 'date', text: 'Most recent', value: 'date' }
         ]
         
         return (
